@@ -5,7 +5,7 @@ from utilidades import *
 from configuracion import *
 from pydub import AudioSegment
 from pydub.playback import play
-
+from proyectil import Proyectil
 sonido_pasos = pygame.mixer.Sound('sonido\correr.wav')
 sonido_poder = pygame.mixer.Sound('sonido\poder.wav')
 sonido_salto = pygame.mixer.Sound('sonido\salto.wav')
@@ -36,6 +36,8 @@ class Personaje:
         self.shot_on = False
         self.shot_time = 20
         self.shot_time_limit = 20
+        self.proyectil_frame = 0
+        self.proyectil_en_aire = False
         self.dx = 0
         self.dy = 0
         self.limites_frames_por_segundo  = 10
@@ -55,6 +57,8 @@ class Personaje:
         self.rectangulo_principal.y = 650
         ################################
         self.diccionario_rectangulo_colisiones = obtener_rectangulos_colision(self.rectangulo_principal)
+
+        self.proyectil = Proyectil(self.orientacion_x, 0, 0)
 
     def acciones(self, accion: str):
 
@@ -130,6 +134,7 @@ class Personaje:
         print(self.shot_time)
         print(self.desplazamiento_x)
         if(self.shot_on and self.shot_time > 0):
+            self.proyectil_frame += 1
             self.shot_time -= 1
             if self.shot_time <= 0:
                 if(self.orientacion_x == 1):
@@ -184,17 +189,24 @@ class Personaje:
 
         self.dibujar_en_pantalla(screen)
         
-        
-       #rompia:  index fuera de rango
-    def dibujar_en_pantalla(self, screen):
-        self.imagen = self.animacion[self.frame]
-        screen.blit(self.imagen, self.rectangulo_principal)
 
     def dibujar_en_pantalla(self, screen):
-      
+        if(self.shot_on):
+            if(self.proyectil_frame < len(self.proyectil.animacion) - 1):
+                self.proyectil.rectangulo_principal.y = self.rectangulo_principal.y
+                self.proyectil.rectangulo_principal.x += 5
+                imagenes = self.proyectil.animacion[self.proyectil_frame]
+                screen.blit(imagenes, self.proyectil.rectangulo_principal)
+                self.proyectil_en_aire = True
+            else:
+                self.proyectil_frame = 0
+        else:
+            self.proyectil.rectangulo_principal.x = 0
+          
+
         self.verificar_frames()
         screen.blit(self.imagen, self.rectangulo_principal)
-    
+
     def verificar_frames(self):
         if(self.time_frame <= 0):
             if(self.frame < len(self.animacion)):
