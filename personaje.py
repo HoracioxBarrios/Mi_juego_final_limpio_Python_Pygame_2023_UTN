@@ -24,9 +24,9 @@ class Personaje:
         self.shot_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, True)
         self.shot_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, False)
         self.frame = 0
-        self.velocidad_caminar = 5
+        self.velocidad_caminar = 7
         self.potencia_salto = 20
-        self.limite_altura_salto = 5
+        self.limite_altura_salto = 6
         ###########################
         self.desplazamiento_x = 0
         self.desplazamiento_y = 0
@@ -44,7 +44,7 @@ class Personaje:
         self.dx = 0
         self.dy = 0
         self.limites_frames_por_segundo  = 10
-        self.time_frame = 10
+        # self.time_frame = 10
         self.proyectil_colisiono = False
         ############################
         self.time_sound = 20
@@ -222,29 +222,33 @@ class Personaje:
                     self.proyectil_colisiono = True
 
         ############ COLISION ENEMIGO
+            if piso[1].colliderect(self.enemigo.rectangulo_principal.x + self.dx_enemigo, self.enemigo.rectangulo_principal.y, self.enemigo.alto_imagen, self.enemigo.alto_imagen):
+                self.dx_enemigo= 0
+                
+            #Corroboramos colision en Y
             if piso[1].colliderect(self.enemigo.rectangulo_principal.x, self.enemigo.rectangulo_principal.y + self.dy_enemigo, self.enemigo.ancho_imagen, self.enemigo.alto_imagen):
-                if piso[1].colliderect(self.enemigo.rectangulo_principal.x + self.dx_enemigo, self.enemigo.rectangulo_principal.y, self.enemigo.ancho_imagen, self.enemigo.alto_imagen):
-                    self.dx_enemigo = 0
-
-                # Check if below the ground (jumping)
-                if self.gravity_vel_y_enemigo < 0:
+                # corroboramos en el salto 
+                if self.enemigo.vel_y < 0:
                     self.dy_enemigo = piso[1].bottom - self.enemigo.rectangulo_principal.top
-                    self.gravity_vel_y_enemigo = 0
-
-                # Check if above the ground (falling)
-                elif self.gravity_vel_y_enemigo >= 0:
+                    self.enemigo.vel_y  = 0
+                # corroboramos en la caida
+                elif self.enemigo.vel_y  >= 0:
                     self.dy_enemigo = piso[1].top - self.enemigo.rectangulo_principal.bottom
-                    self.gravity_vel_y_enemigo = 0
+                    self.enemigo.vel_y  = 0
+                    # self.esta_en_aire = False
 
         ############# COLISION PERSONAJE CON BLOCKS
+        #Corroboramos colision en X
+            if piso[1].colliderect(self.rectangulo_principal.x + self.dx, self.rectangulo_principal.y, self.ancho_imagen, self.alto_imagen):
+                self.dx = 0
+                
+            #Corroboramos colision en Y
             if piso[1].colliderect(self.rectangulo_principal.x, self.rectangulo_principal.y + self.dy, self.ancho_imagen, self.alto_imagen):
-                if piso[1].colliderect(self.rectangulo_principal.x + self.dx, self.rectangulo_principal.y, self.ancho_imagen, self.alto_imagen):
-                    self.dx = 0
-                # Check if below the ground (jumping)
+                # corroboramos en el salto 
                 if self.gravity_vel_y < 0:
                     self.dy = piso[1].bottom - self.rectangulo_principal.top
                     self.gravity_vel_y = 0
-                # Check if above the ground (falling)
+                # corroboramos en la caida
                 elif self.gravity_vel_y >= 0:
                     self.dy = piso[1].top - self.rectangulo_principal.bottom
                     self.gravity_vel_y = 0
@@ -282,7 +286,7 @@ class Personaje:
                 self.time_frame -= 1
             self.desplazamiento_x_enemigo = -5
             # if self.enemigo.rectangulo_principal.x >= 50 and self.direccion_enemigo == 1:
-            #     self.desplazamiento_x_enemigo -= 5
+            #     
             #     self.imagenes_enemigo = self.enemigo.animacion_l[self.frame_enemigo]
             # elif self.enemigo.rectangulo_principal.x <= screen.get_width() - 100 and self.direccion_enemigo == -1:
             #     self.imagenes_enemigo = self.enemigo.animacion_r[self.frame_enemigo]

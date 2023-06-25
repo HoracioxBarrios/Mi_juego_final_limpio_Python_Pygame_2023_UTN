@@ -19,7 +19,7 @@ personaje = Personaje()
 
 world_data = leerJson('stages.json')
 stage = world_data["stages"][0]["stage_1"]
-print(stage)
+# print(stage)
 
 tile_size = 50
 margen = 0
@@ -57,6 +57,6 @@ while running:
     pygame.display.update()
 
     ms = relog.tick(FPS)
-
+    print(ms)
 
 pygame.quit()
