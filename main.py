@@ -26,6 +26,7 @@ margen = 0
 path_music_world = world_data["stages"][0]["musica_path"] 
 world = World(stage, tile_size, 'asset\StoneBlock.png', screen, path_music_world)
 pygame.mixer.music.play()
+pygame.mixer.music.set_volume(0.5)
 flag = True
 while running:
 
