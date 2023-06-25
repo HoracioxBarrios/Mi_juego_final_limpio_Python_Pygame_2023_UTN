@@ -63,10 +63,10 @@ class Personaje:
         self.diccionario_rectangulo_colisiones = obtener_rectangulos_colision(self.rectangulo_principal)
 
         self.proyectil = Proyectil(self.orientacion_x, 0, 0)
-
+        #enemigo
         self.frame_enemigo = 0
         self.pos_enemigo_x = 800
-        self.pos_enemigo_y =  527
+        self.pos_enemigo_y =  400
         self.enemigo = Enemigo(self.pos_enemigo_x, self.pos_enemigo_y, 40)
         self.time_frame = 10
         self.time_frame_limit = 10
@@ -75,6 +75,10 @@ class Personaje:
         self.enemigo_time_respawn_limit = 500
         self.enemigo_time_respawn = 500
         self.enemigo_respawn = True
+        self.dy_enemigo = 0
+        self.dx_enemigo = 0
+        self.gravity_vel_y_enemigo = 0
+        self.desplazamiento_x_enemigo = 0
     def acciones(self, accion: str):
 
         match(accion):
@@ -151,8 +155,14 @@ class Personaje:
 
     def updater(self, screen_height, pisos, screen):
         self.controlar_sonido_caminar()
+
         self.dx = self.desplazamiento_x
         self.dy = 0
+
+        #enemigo pos
+        self.dx_enemigo = self.desplazamiento_x_enemigo
+        self.dy_enemigo = 0
+
         if(self.shot_on and self.shot_time > 0):
             self.proyectil_frame += 1
             self.shot_time -= 1
@@ -174,6 +184,15 @@ class Personaje:
         ###################
         self.dy += self.gravity_vel_y
 
+        ######### ENEMIGO ##########
+        self.gravity_vel_y_enemigo += 1
+        ###################
+        if self.gravity_vel_y_enemigo > 10:
+            self.gravity_vel_y_enemigo = 10
+
+        self.dy_enemigo += self.gravity_vel_y_enemigo
+        ###################
+
         if(self.dy > 1):
             self.esta_en_aire = True
             if(self.orientacion_x == 1):
@@ -192,11 +211,8 @@ class Personaje:
                         self.enemigo.set_damage(self.proyectil.damage)
                         self.proyectil_colisiono = True
 
-        #######################
+        ######### COLISION PROYECTIL
         for piso in pisos:
-            if piso[1].colliderect(self.rectangulo_principal.x + self.dx, self.rectangulo_principal.y, self.ancho_imagen, self.alto_imagen):
-                self.dx = 0
-
             if piso[1].colliderect(self.proyectil.rectangulo_principal):
                if(self.orientacion_x == 1):
                     self.proyectil.rectangulo_principal.x = piso[1].x - 50
@@ -205,11 +221,25 @@ class Personaje:
                     self.proyectil.rectangulo_principal.x = piso[1].x
                     self.proyectil_colisiono = True
 
-            
+        ############ COLISION ENEMIGO
+            if piso[1].colliderect(self.enemigo.rectangulo_principal.x, self.enemigo.rectangulo_principal.y + self.dy_enemigo, self.enemigo.ancho_imagen, self.enemigo.alto_imagen):
+                if piso[1].colliderect(self.enemigo.rectangulo_principal.x + self.dx_enemigo, self.enemigo.rectangulo_principal.y, self.enemigo.ancho_imagen, self.enemigo.alto_imagen):
+                    self.dx_enemigo = 0
 
+                # Check if below the ground (jumping)
+                if self.gravity_vel_y_enemigo < 0:
+                    self.dy_enemigo = piso[1].bottom - self.enemigo.rectangulo_principal.top
+                    self.gravity_vel_y_enemigo = 0
 
+                # Check if above the ground (falling)
+                elif self.gravity_vel_y_enemigo >= 0:
+                    self.dy_enemigo = piso[1].top - self.enemigo.rectangulo_principal.bottom
+                    self.gravity_vel_y_enemigo = 0
 
+        ############# COLISION PERSONAJE CON BLOCKS
             if piso[1].colliderect(self.rectangulo_principal.x, self.rectangulo_principal.y + self.dy, self.ancho_imagen, self.alto_imagen):
+                if piso[1].colliderect(self.rectangulo_principal.x + self.dx, self.rectangulo_principal.y, self.ancho_imagen, self.alto_imagen):
+                    self.dx = 0
                 # Check if below the ground (jumping)
                 if self.gravity_vel_y < 0:
                     self.dy = piso[1].bottom - self.rectangulo_principal.top
@@ -224,6 +254,9 @@ class Personaje:
         #######################
         self.rectangulo_principal.y += self.dy
         self.rectangulo_principal.x += self.dx
+        ######### ENEMIGO ################
+        self.enemigo.rectangulo_principal.x += self.dx_enemigo
+        self.enemigo.rectangulo_principal.y += self.dy_enemigo
 
         if self.rectangulo_principal.bottom > screen_height:
             self.rectangulo_principal.bottom = screen_height
@@ -247,16 +280,16 @@ class Personaje:
                     self.frame_enemigo = 0
             else:
                 self.time_frame -= 1
-            
-            if self.enemigo.rectangulo_principal.x >= 50 and self.direccion_enemigo == 1:
-                self.enemigo.rectangulo_principal.x -= 5
-                self.imagenes_enemigo = self.enemigo.animacion_l[self.frame_enemigo]
-            elif self.enemigo.rectangulo_principal.x <= screen.get_width() - 100 and self.direccion_enemigo == -1:
-                self.imagenes_enemigo = self.enemigo.animacion_r[self.frame_enemigo]
-                self.enemigo.rectangulo_principal.x += 5
-            else:
-                # Cambiar la dirección cuando se alcanza un límite
-                self.direccion_enemigo *= -1
+            self.desplazamiento_x_enemigo = -5
+            # if self.enemigo.rectangulo_principal.x >= 50 and self.direccion_enemigo == 1:
+            #     self.desplazamiento_x_enemigo -= 5
+            #     self.imagenes_enemigo = self.enemigo.animacion_l[self.frame_enemigo]
+            # elif self.enemigo.rectangulo_principal.x <= screen.get_width() - 100 and self.direccion_enemigo == -1:
+            #     self.imagenes_enemigo = self.enemigo.animacion_r[self.frame_enemigo]
+            #     self.desplazamiento_x_enemigo += 5
+            # else:
+            #     # Cambiar la dirección cuando se alcanza un límite
+            #     self.direccion_enemigo *= -1
             screen.blit(self.imagenes_enemigo, self.enemigo.rectangulo_principal)
         else:
             self.enemigo.enemigo_murio()
