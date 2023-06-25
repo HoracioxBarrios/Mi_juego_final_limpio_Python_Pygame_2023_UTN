@@ -65,11 +65,16 @@ class Personaje:
         self.proyectil = Proyectil(self.orientacion_x, 0, 0)
 
         self.frame_enemigo = 0
-        self.enemigo = Enemigo(800,527, 40)
+        self.pos_enemigo_x = 800
+        self.pos_enemigo_y =  527
+        self.enemigo = Enemigo(self.pos_enemigo_x, self.pos_enemigo_y, 40)
         self.time_frame = 10
         self.time_frame_limit = 10
         self.direccion_enemigo = 1
         self.imagenes_enemigo = self.enemigo.animacion_l[self.frame_enemigo]
+        self.enemigo_time_respawn_limit = 500
+        self.enemigo_time_respawn = 500
+        self.enemigo_respawn = True
     def acciones(self, accion: str):
 
         match(accion):
@@ -233,7 +238,7 @@ class Personaje:
         screen.blit(self.imagen, self.rectangulo_principal)
         #dibujar enemigo
         print(self.enemigo.vida)
-        if(self.enemigo.get_vida() > 0):
+        if(self.enemigo.get_vida() > 0 and self.enemigo_respawn):
             if(self.time_frame <= 0):
                 if(self.frame_enemigo < len(self.enemigo.animacion_l) -1):
                     self.frame_enemigo += 1
@@ -253,7 +258,17 @@ class Personaje:
                 # Cambiar la dirección cuando se alcanza un límite
                 self.direccion_enemigo *= -1
             screen.blit(self.imagenes_enemigo, self.enemigo.rectangulo_principal)
-        
+        else:
+            self.enemigo.enemigo_murio()
+            self.enemigo_respawn = False
+            self.enemigo.rectangulo_principal.x = self.pos_enemigo_x
+            self.enemigo.rectangulo_principal.y = self.pos_enemigo_y
+            if(self.enemigo_time_respawn <= 0):
+                self.enemigo_respawn = True
+                self.enemigo.set_vida(40)
+                self.enemigo_time_respawn = self.enemigo_time_respawn_limit
+            else:
+                self.enemigo_time_respawn -= 1
 
 
         #dibujar proyectil

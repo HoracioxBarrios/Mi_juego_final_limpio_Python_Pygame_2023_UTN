@@ -28,5 +28,6 @@ class Enemigo:
     def get_vida(self):
         return self.vida
     
-    def
+    def enemigo_murio(self):
+        self.vida = 0
             
