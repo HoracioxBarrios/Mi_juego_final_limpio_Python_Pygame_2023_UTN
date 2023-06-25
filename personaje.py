@@ -59,7 +59,7 @@ class Personaje:
         self.diccionario_rectangulo_colisiones = obtener_rectangulos_colision(self.rectangulo_principal)
 
         self.proyectil = Proyectil(self.orientacion_x, 0, 0)
-
+        self.proyectil.rectangulo_principal.x =  100
     def acciones(self, accion: str):
 
         match(accion):
@@ -191,21 +191,27 @@ class Personaje:
         
 
     def dibujar_en_pantalla(self, screen):
+        self.verificar_frames()
+        screen.blit(self.imagen, self.rectangulo_principal)
+
         if(self.shot_on):
             if(self.proyectil_frame < len(self.proyectil.animacion) - 1):
-                self.proyectil.rectangulo_principal.y = self.rectangulo_principal.y
+                self.proyectil.rectangulo_principal.y = self.rectangulo_principal.y + 35
+                if(not self.proyectil_en_aire):
+                    self.proyectil_en_aire = True
+                    posicion_inicial = self.rectangulo_principal.right - 70
+                    self.proyectil.rectangulo_principal.x = posicion_inicial
                 self.proyectil.rectangulo_principal.x += 5
                 imagenes = self.proyectil.animacion[self.proyectil_frame]
                 screen.blit(imagenes, self.proyectil.rectangulo_principal)
-                self.proyectil_en_aire = True
             else:
                 self.proyectil_frame = 0
         else:
             self.proyectil.rectangulo_principal.x = 0
+            self.proyectil_en_aire = False
           
 
-        self.verificar_frames()
-        screen.blit(self.imagen, self.rectangulo_principal)
+        
 
     def verificar_frames(self):
         if(self.time_frame <= 0):

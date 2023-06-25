@@ -16,7 +16,7 @@ class Proyectil:
         self.ancho_imagen = self.imagen_proyectil.get_width()
         self.alto_imagen = self.imagen_proyectil.get_height()
         self.rectangulo_principal = self.imagen_proyectil.get_rect()
-        self.rectangulo_principal.x = pos_char_x
+        self.rectangulo_principal.x = 100
         self.rectangulo_principal.y = pos_char_y
 
     def start_proyectile(self):
