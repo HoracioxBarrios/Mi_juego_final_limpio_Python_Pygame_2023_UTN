@@ -6,6 +6,7 @@ from configuracion import *
 from pydub import AudioSegment
 from pydub.playback import play
 from proyectil import Proyectil
+from enemigo import Enemigo
 sonido_pasos = pygame.mixer.Sound('sonido\correr.wav')
 sonido_poder = pygame.mixer.Sound('sonido\poder.wav')
 sonido_kame = pygame.mixer.Sound("sonido\kame.wav")
@@ -62,6 +63,13 @@ class Personaje:
         self.diccionario_rectangulo_colisiones = obtener_rectangulos_colision(self.rectangulo_principal)
 
         self.proyectil = Proyectil(self.orientacion_x, 0, 0)
+
+        self.frame_enemigo = 0
+        self.enemigo = Enemigo(800,527, 40)
+        self.time_frame = 10
+        self.time_frame_limit = 10
+        self.direccion_enemigo = 1
+        self.imagenes_enemigo = self.enemigo.animacion_l[self.frame_enemigo]
     def acciones(self, accion: str):
 
         match(accion):
@@ -168,7 +176,17 @@ class Personaje:
             else:
                 self.cambiar_animacion(self.saltando_l)
         
-        
+        if(self.shot_on):
+            if self.enemigo.rectangulo_principal.colliderect(self.proyectil.rectangulo_principal):
+                if(self.orientacion_x == 1):
+                        self.proyectil.rectangulo_principal.x = self.enemigo.rectangulo_principal.x - 50
+                        self.enemigo.set_damage(self.proyectil.damage)
+                        self.proyectil_colisiono = True
+                else:
+                        self.proyectil.rectangulo_principal.x = self.enemigo.rectangulo_principal.x
+                        self.enemigo.set_damage(self.proyectil.damage)
+                        self.proyectil_colisiono = True
+
         #######################
         for piso in pisos:
             if piso[1].colliderect(self.rectangulo_principal.x + self.dx, self.rectangulo_principal.y, self.ancho_imagen, self.alto_imagen):
@@ -181,6 +199,8 @@ class Personaje:
                else:
                     self.proyectil.rectangulo_principal.x = piso[1].x
                     self.proyectil_colisiono = True
+
+            
 
 
 
@@ -208,9 +228,35 @@ class Personaje:
         
 
     def dibujar_en_pantalla(self, screen):
+        #Dibujar personaje
         self.verificar_frames()
         screen.blit(self.imagen, self.rectangulo_principal)
+        #dibujar enemigo
+        print(self.enemigo.vida)
+        if(self.enemigo.get_vida() > 0):
+            if(self.time_frame <= 0):
+                if(self.frame_enemigo < len(self.enemigo.animacion_l) -1):
+                    self.frame_enemigo += 1
+                    self.time_frame = self.time_frame_limit
+                else:
+                    self.frame_enemigo = 0
+            else:
+                self.time_frame -= 1
+            
+            if self.enemigo.rectangulo_principal.x >= 50 and self.direccion_enemigo == 1:
+                self.enemigo.rectangulo_principal.x -= 5
+                self.imagenes_enemigo = self.enemigo.animacion_l[self.frame_enemigo]
+            elif self.enemigo.rectangulo_principal.x <= screen.get_width() - 100 and self.direccion_enemigo == -1:
+                self.imagenes_enemigo = self.enemigo.animacion_r[self.frame_enemigo]
+                self.enemigo.rectangulo_principal.x += 5
+            else:
+                # Cambiar la dirección cuando se alcanza un límite
+                self.direccion_enemigo *= -1
+            screen.blit(self.imagenes_enemigo, self.enemigo.rectangulo_principal)
+        
 
+
+        #dibujar proyectil
         if(self.shot_on):
             #incia en proyectil
             if(self.proyectil_frame < len(self.proyectil.animacion_r) - 1):

@@ -2,7 +2,7 @@ from utilidades import *
 
 class Proyectil:
     def __init__(self, orientacion_x_char, pos_char_x, pos_char_y) -> None:
-        self.damage = 10
+        self.damage = 1
         self.vel_y = 0
         self.vel_x = 5
         self.pos_x = pos_char_x
