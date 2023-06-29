@@ -4,6 +4,7 @@ from creador_mundo import *
 from personaje import Personaje
 from enemigo import Enemigo
 from stage import Stage
+from proyectil import Proyectil
 pygame.init()
 
 ancho_pantalla = 1000
@@ -21,6 +22,7 @@ bg_fondo = pygame.transform.scale(bg_fondo, (ancho_pantalla, alto_pantalla))
 
 world_data = leerJson('stages.json')
 stage = world_data["stages"][0]["stage_1"]
+
 # print(stage)
 
 tile_size = 50
@@ -32,8 +34,11 @@ pygame.mixer.music.set_volume(0.5)
 flag = True
 
 char_list = []
-personaje = Personaje(50, 50, world.tile_list)
+personaje = Personaje(500, 50, world.tile_list)
 enemigo = Enemigo(800, 50, world.tile_list)
+poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
+poder_list:list[Proyectil] = []
+poder_list.append(poder)
 stage = Stage()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(personaje, enemigo)
@@ -60,14 +65,21 @@ while running:
             if evento.key == pygame.K_SPACE:
                 personaje.acciones("saltar")
             elif evento.key == pygame.K_w:
-                personaje.acciones("shot")
+                if(not poder.proyectil_en_aire):
+                    poder_list[0].rect.x = personaje.rect.x + 15 
+                    poder_list[0].rect.y = personaje.rect.y + 29
+                    poder_list[0].proyectil_en_aire = True
+                    personaje.acciones("shot", poder.proyectil_en_aire)
+                
 
 
     pygame.draw.rect(screen, (255, 255, 255), personaje.get_rect, 2)
     pygame.draw.rect(screen, (255, 255, 255), enemigo.get_rect, 2)
 
+    poder.draw_proyectil(screen, personaje.orientacion_x)
     
     # stage.verificar_colision(lista_pisos, enemigo)
+    poder.update()
 
     all_sprites.update()
     all_sprites.draw(screen)

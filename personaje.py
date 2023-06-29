@@ -1,6 +1,6 @@
 import pygame
 from utilidades import *
-
+from proyectil import Proyectil
 
 class Personaje(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, lista_pisos):
@@ -99,7 +99,7 @@ class Personaje(pygame.sprite.Sprite):
         self.rect.x += self.dx
         self.rect.y += self.dy
     
-    def acciones(self, accion: str):
+    def acciones(self, accion: str, shot_en_aire = False):
 
         match(accion):
             case "caminar_r":
@@ -111,7 +111,7 @@ class Personaje(pygame.sprite.Sprite):
             case "quieto":
                 self.quieto()
             case "shot":
-                self.shot()
+                self.shot(shot_en_aire)
 
     def caminar(self, accion):
         if(not self.esta_en_aire and self.control_personaje):
@@ -150,6 +150,20 @@ class Personaje(pygame.sprite.Sprite):
                 self.gravity_vel_y  = -self.potencia_salto
                 self.cambiar_animacion(self.saltando_l)
 
+    def shot(self, esta_en_aire):
+        if(esta_en_aire):
+            self.control_personaje = False
+            self.shot_on = True
+            self.sonido_poder.play()
+            self.sonido_poder.set_volume(0.1)
+            self.sonido_kame.play()
+            self.sonido_kame.set_volume(0.5)
+            self.desplazamiento_x = 0
+            if(self.orientacion_x == 1):
+                self.cambiar_animacion(self.shot_r)
+            else:
+                self.cambiar_animacion(self.shot_l)
+
     def shotTimeState(self):
         if(self.shot_on and self.shot_time > 0):
             self.shot_time -= 1
@@ -162,6 +176,9 @@ class Personaje(pygame.sprite.Sprite):
                 self.shot_on = False
                 self.shot_time = self.shot_time_limit
 
+    
+
+
     def quieto(self):
         if(not self.esta_en_aire and not self.shot_on):
             self.esta_caminando = False
@@ -172,19 +189,7 @@ class Personaje(pygame.sprite.Sprite):
                 self.desplazamiento_x = 0
                 self.cambiar_animacion(self.quieto_l)
 
-    def shot(self):
-        if(not self.esta_en_aire):
-            self.control_personaje = False
-            self.shot_on = True
-            self.sonido_poder.play()
-            self.sonido_poder.set_volume(0.1)
-            self.sonido_kame.play()
-            self.sonido_kame.set_volume(0.5)
-            self.desplazamiento_x = 0
-            if(self.orientacion_x == 1):
-                self.cambiar_animacion(self.shot_r)
-            else:
-                self.cambiar_animacion(self.shot_l)
+    
 
     def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
         self.animacion = nueva_lista_animaciones    
