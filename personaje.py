@@ -14,6 +14,17 @@ class Personaje(pygame.sprite.Sprite):
         self.gravity_vel_y = 0
         self.valocidad_caminar = 5
         self.desplazamiento_x = 0
+        self.velocidad_caminar = 5
+        self.potencia_salto = 15
+        self.limites_frames_por_segundo = 10
+        self.time_frame = 10
+        self.orientacion_x = 1
+        self.shot_on = False
+        self.esta_caminando = False
+        self.esta_en_aire = True
+        self.control_personaje = True
+        self.shot_time = 30
+        self.shot_time_limit = 30
         self.dy = 0
         self.dx = 0
         self.frame = 0
@@ -24,10 +35,6 @@ class Personaje(pygame.sprite.Sprite):
         self.rect.y = pos_y
         self.imagen_width = self.image.get_width()
         self.imagen_height = self.image.get_height()
-
-
-
-
         self.lista_pisos = lista_pisos
 
 
@@ -51,41 +58,127 @@ class Personaje(pygame.sprite.Sprite):
                 elif self.gravity_vel_y >= 0:
                     self.dy = piso[1].top - self.rect.bottom
                     self.gravity_vel_y = 0
+                    self.esta_en_aire = False
                     
-
-
-
     def update(self):
         self.dx = self.desplazamiento_x
         self.dy = 0
-
+        self.shotTimeState()
+        self.verificar_frames()
         self.add_gravity()
         self.verificar_colision(self.lista_pisos)
-        self.rect.x += self.dx
-        self.rect.y += self.dy
-        
-
         
         keys = pygame.key.get_pressed()
 
         if(keys[pygame.K_RIGHT]):
-            self.desplazamiento_x = self.valocidad_caminar
+            if(keys[pygame.K_SPACE]):
+                self.acciones('saltar')
+            if(keys[pygame.K_w]):
+                self.acciones('shot')
+            self.acciones('caminar_r')
         elif(keys[pygame.K_LEFT]):
-            self.desplazamiento_x = -self.valocidad_caminar
+            if(keys[pygame.K_SPACE]):
+                self.acciones('saltar')
+            if(keys[pygame.K_w]):
+                self.acciones('shot')
+            self.acciones('caminar_l')
+        elif(keys[pygame.K_SPACE]):
+            self.acciones('saltar')
+        elif(keys[pygame.K_w]):
+            self.acciones('shot')
         else:
-            self.desplazamiento_x = 0
+            self.acciones('quieto')
 
 
-        if(keys[pygame.K_SPACE]):
-            self.gravity_vel_y = -5
-
+            
+        self.rect.x += self.dx
+        self.rect.y += self.dy
     
+    def acciones(self, accion: str):
 
+        match(accion):
+            case "caminar_r":
+                self.caminar(accion)
+            case "caminar_l":
+                self.caminar(accion)
+            case "saltar":
+                self.saltar()
+            case "quieto":
+                self.quieto()
+            case "shot":
+                self.shot()
 
+    def caminar(self, accion):
+        if(not self.esta_en_aire and self.control_personaje):
+            if(accion == "caminar_r"):
+                self.orientacion_x = 1
+                self.cambiar_animacion(self.corriendo_r)
+                self.desplazamiento_x = self.velocidad_caminar
+                self.esta_caminando = True
+            else:
+                self.orientacion_x = -1
+                self.cambiar_animacion(self.corriendo_l)
+                self.desplazamiento_x = -self.velocidad_caminar
+                self.esta_caminando = True
+
+    def saltar(self):
+        if(not self.esta_en_aire and self.control_personaje):
+            self.esta_en_aire = True
+            if(self.orientacion_x == 1):
+                self.gravity_vel_y = -self.potencia_salto
+                self.cambiar_animacion(self.saltando_r)
+            else:
+                self.gravity_vel_y  = -self.potencia_salto
+                self.cambiar_animacion(self.saltando_l)
+
+    def shotTimeState(self):
+        if(self.shot_on and self.shot_time > 0):
+            self.shot_time -= 1
+            if self.shot_time <= 0:
+                if(self.orientacion_x == 1):
+                    self.cambiar_animacion(self.quieto_r)
+                else:
+                    self.cambiar_animacion(self.quieto_l)
+                self.control_personaje = True
+                self.shot_on = False
+                self.shot_time = self.shot_time_limit
+
+    def quieto(self):
+        if(not self.esta_en_aire and not self.shot_on):
+            self.esta_caminando = False
+            if(self.orientacion_x == 1):
+                self.desplazamiento_x = 0
+                self.cambiar_animacion(self.quieto_r)
+            elif(self.orientacion_x == -1):
+                self.desplazamiento_x = 0
+                self.cambiar_animacion(self.quieto_l)
+
+    def shot(self):
+        if(not self.esta_en_aire):
+            self.control_personaje = False
+            self.shot_on = True
+            self.desplazamiento_x = 0
+            if(self.orientacion_x == 1):
+                self.cambiar_animacion(self.shot_r)
+            else:
+                self.cambiar_animacion(self.shot_l)
+
+    def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
+        self.animacion = nueva_lista_animaciones    
 
     def draw(self, screen):
         screen.blit(self.image, self.rect_main)
-    
+
+    def verificar_frames(self):
+        if(self.time_frame <= 0):
+            if(self.frame < len(self.animacion)):
+                self.image = self.animacion[self.frame]
+                self.time_frame = self.limites_frames_por_segundo
+                self.frame += 1
+            else:
+                self.frame = 0
+        else:
+            self.time_frame -= 1
     @property
     def get_dy(self):
         return self.dy

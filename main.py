@@ -33,7 +33,7 @@ flag = True
 
 char_list = []
 personaje = Personaje(50, 50, world.tile_list)
-enemigo = Enemigo(600, 50, world.tile_list)
+enemigo = Enemigo(800, 50, world.tile_list)
 stage = Stage()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(personaje, enemigo)
@@ -60,9 +60,9 @@ while running:
 
     
     # stage.verificar_colision(lista_pisos, enemigo)
-    all_sprites.draw(screen)
 
     all_sprites.update()
+    all_sprites.draw(screen)
     pygame.display.update()
 
     ms = relog.tick(FPS)
