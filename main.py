@@ -55,6 +55,12 @@ while running:
         #gravedad
         #colision
         #incremento o decrementos de los rect en y, x
+        if evento.type == pygame.KEYDOWN:
+
+            if evento.key == pygame.K_SPACE:
+                personaje.acciones("saltar")
+
+
     pygame.draw.rect(screen, (255, 255, 255), personaje.get_rect, 2)
     pygame.draw.rect(screen, (255, 255, 255), enemigo.get_rect, 2)
 

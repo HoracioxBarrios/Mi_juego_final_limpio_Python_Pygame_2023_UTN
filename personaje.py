@@ -1,5 +1,7 @@
 import pygame
 from utilidades import *
+
+
 class Personaje(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, lista_pisos):
         super().__init__()
@@ -15,9 +17,10 @@ class Personaje(pygame.sprite.Sprite):
         self.valocidad_caminar = 5
         self.desplazamiento_x = 0
         self.velocidad_caminar = 5
-        self.potencia_salto = 15
-        self.limites_frames_por_segundo = 10
-        self.time_frame = 10
+        self.potencia_salto = 25
+        # self.time_limit_salto = 5
+        self.limites_frames_por_segundo = 5
+        self.time_frame = 5
         self.orientacion_x = 1
         self.shot_on = False
         self.esta_caminando = False
@@ -37,6 +40,13 @@ class Personaje(pygame.sprite.Sprite):
         self.imagen_height = self.image.get_height()
         self.lista_pisos = lista_pisos
 
+        self.sonido_pasos = pygame.mixer.Sound('sonido\correr.wav')
+        self.sonido_poder = pygame.mixer.Sound('sonido\poder.wav')
+        self.sonido_kame = pygame.mixer.Sound("sonido\kame.wav")
+        self.sonido_salto = pygame.mixer.Sound('sonido\salto.wav')
+        self.sonido_salto_grito = pygame.mixer.Sound("sonido\salto_voz.wav")
+        self.sonido_explosion = pygame.mixer.Sound("sonido\explocion.wav")
+        self.time_sound = 10
 
     def add_gravity(self):
         #char representa a cualquier tipo de personaje
@@ -61,6 +71,7 @@ class Personaje(pygame.sprite.Sprite):
                     self.esta_en_aire = False
                     
     def update(self):
+        self.controlar_sonido_caminar()
         self.dx = self.desplazamiento_x
         self.dy = 0
         self.shotTimeState()
@@ -71,19 +82,16 @@ class Personaje(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if(keys[pygame.K_RIGHT]):
-            if(keys[pygame.K_SPACE]):
-                self.acciones('saltar')
+            
             if(keys[pygame.K_w]):
                 self.acciones('shot')
             self.acciones('caminar_r')
         elif(keys[pygame.K_LEFT]):
-            if(keys[pygame.K_SPACE]):
-                self.acciones('saltar')
+            
             if(keys[pygame.K_w]):
                 self.acciones('shot')
             self.acciones('caminar_l')
-        elif(keys[pygame.K_SPACE]):
-            self.acciones('saltar')
+        
         elif(keys[pygame.K_w]):
             self.acciones('shot')
         else:
@@ -121,9 +129,23 @@ class Personaje(pygame.sprite.Sprite):
                 self.desplazamiento_x = -self.velocidad_caminar
                 self.esta_caminando = True
 
+    def controlar_sonido_caminar(self):
+        if(self.esta_caminando and self.time_sound <= 0 and not self.esta_en_aire):
+                self.sonido_pasos.set_volume(0.3)
+                self.sonido_pasos.play()
+                self.time_sound = 10
+        else:
+            self.time_sound -= 1
+
     def saltar(self):
         if(not self.esta_en_aire and self.control_personaje):
             self.esta_en_aire = True
+            self.sonido_salto_grito.play()
+            self.sonido_salto_grito.set_volume(0.8)
+            self.sonido_salto.set_volume(0.2)
+            self.sonido_salto.play()
+            
+
             if(self.orientacion_x == 1):
                 self.gravity_vel_y = -self.potencia_salto
                 self.cambiar_animacion(self.saltando_r)

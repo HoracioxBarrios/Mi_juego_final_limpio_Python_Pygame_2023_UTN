@@ -38,6 +38,7 @@ class Enemigo(pygame.sprite.Sprite):
     def verificar_colision(self, lista_pisos):
         self.colision_x = False
         for piso in lista_pisos:
+            #x
             if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
                 self.dx = 0
                 if self.time_colision == 0:
@@ -56,13 +57,9 @@ class Enemigo(pygame.sprite.Sprite):
                     self.time_colision = self.limite_colision
                     self.time_colision -= 1
 
-
-                # elif (self.orientacion_x == 1 or self.colision_x == False):
-                #     self.orientacion_x *= -1
-                
                 
             
-                    
+            #y        
             if piso[1].colliderect(self.rect.x, self.rect.y + self.dy, self.imagen_width, self.imagen_height):
                 if self.gravity_vel_y < 0:
                     self.dy = piso[1].bottom - self.rect.top
@@ -83,7 +80,7 @@ class Enemigo(pygame.sprite.Sprite):
 
         
  
-        print(self.orientacion_x)
+        # print(self.orientacion_x)
         if(self.orientacion_x != 1):
             self.acciones('caminar_l')
         elif(self.orientacion_x == 1):
@@ -92,7 +89,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.limitar_frames()
         self.add_gravity()
         self.verificar_colision(self.lista_pisos)
-        print(self.dx)
+        # print(self.dx)
 
         self.rect.x += self.dx
         self.rect.y += self.dy
@@ -111,13 +108,13 @@ class Enemigo(pygame.sprite.Sprite):
                     self.orientacion_x = 1
                     self.cambiar_animacion(self.caminando_r)
                     self.desplazamiento_x = self.velocidad_caminar
-                    print(self.desplazamiento_x)
+                    # print(self.desplazamiento_x)
                     self.esta_caminando = True
                 else:
                     self.orientacion_x = -1
                     self.cambiar_animacion(self.caminando_l)
                     self.desplazamiento_x = -self.velocidad_caminar
-                    print(self.desplazamiento_x)
+                    # print(self.desplazamiento_x)
                     self.esta_caminando = True
 
     def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
