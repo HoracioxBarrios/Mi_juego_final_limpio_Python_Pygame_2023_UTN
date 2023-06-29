@@ -76,13 +76,13 @@ while running:
     pygame.draw.rect(screen, (255, 255, 255), personaje.get_rect, 2)
     pygame.draw.rect(screen, (255, 255, 255), enemigo.get_rect, 2)
 
-    poder.draw_proyectil(screen, personaje.orientacion_x)
-    
     # stage.verificar_colision(lista_pisos, enemigo)
-    poder.update()
 
     all_sprites.update()
     all_sprites.draw(screen)
+    poder.update()
+    poder.verificar_colision(enemigo.rect, screen)
+    poder.draw_proyectil(screen, personaje.orientacion_x)
     pygame.display.update()
 
     ms = relog.tick(FPS)

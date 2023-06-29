@@ -12,8 +12,8 @@ class Proyectil:
         self.explocion = get_surface_form_sprite_sheet('asset\poder_colision_enemigo\sprite_explocion.png', 5, 1, 0, 0, 4, True)
         self.animacion = self.imagen_r
         self.image = self.animacion[self.frame]#el frame inicia arranca en 0, por ende se renderiza la pocision 0 de la lista de animaciones
-        self.ancho_imagen = self.image.get_width()
-        self.alto_imagen = self.image.get_height()
+        self.imagen_width = self.image.get_width()
+        self.imagen_height = self.image.get_height()
         self.rect = self.image.get_rect()
         self.desplazamiento_x = 0
         self.dx = 0
@@ -21,11 +21,20 @@ class Proyectil:
         self.rect.y = pos_char_y
         self.proyectil_en_aire = False
         self.dibujando = False
-
+        self.time_explocion = 10
         self.limites_frames_por_segundo = 10
         self.time_frame = 10
+        self.impacto = False
     def update(self):
         self.dx = self.desplazamiento_x
+    
+        if(self.impacto):
+            self.time_explocion -= 1
+            if(self.time_explocion <= 0):
+                self.time_explocion = 10
+                self.impacto = False
+
+        print(self.dx)
         self.verificar_frames()
         print(self.proyectil_en_aire)
         self.rect.x += self.dx
@@ -48,6 +57,7 @@ class Proyectil:
             else:
                 self.proyectil_en_aire = False
                 self.dibujando = False
+                
     def set_animacion(self, num_frame):
         self.frame = num_frame
                 
@@ -65,4 +75,15 @@ class Proyectil:
     def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
         self.animacion = nueva_lista_animaciones
 
-            
+    def draw_explocion(self, screen):
+        self.cambiar_animacion(self.explocion)
+        screen.blit(self.image, self.rect)
+    def verificar_colision(self, char, screen):
+        print(char)
+        if self.rect.colliderect(char):
+            self.desplazamiento_x = 0
+            if(self.time_explocion > 0):
+                self.impacto = True
+                self.dibujando = False
+                self.proyectil_en_aire = False
+                self.draw_explocion(screen)
