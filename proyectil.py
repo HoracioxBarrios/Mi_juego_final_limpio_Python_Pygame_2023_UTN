@@ -15,11 +15,12 @@ class Proyectil:
         self.ancho_imagen = self.image.get_width()
         self.alto_imagen = self.image.get_height()
         self.rect = self.image.get_rect()
-        self.desplazamiento_x = 10
+        self.desplazamiento_x = 0
         self.dx = 0
         self.rect.x = pos_char_x
         self.rect.y = pos_char_y
         self.proyectil_en_aire = False
+        self.dibujando = False
 
         self.limites_frames_por_segundo = 10
         self.time_frame = 10
@@ -35,15 +36,18 @@ class Proyectil:
             self.animacion = self.imagen_l
     def draw_proyectil(self, screen, orientacion_personaje_x):
         if self.proyectil_en_aire:
-            if self.rect.x < screen.get_width() and orientacion_personaje_x == 1:
-                self.cambiar_animacion(self.imagen_r)
-            # elif self.rect.x <= 0 and orientacion_personaje_x == -1:
-            #     screen.blit(self.image, self.rect)
-            #     self.cambiar_animacion(self.imagen_r)
-            elif(self.rect.x > screen.get_width()):
+            if(self.rect.x < screen.get_width() and self.rect.x > 0):
+                if orientacion_personaje_x == 1 and not self.dibujando:
+                    self.cambiar_animacion(self.imagen_r)
+                    self.desplazamiento_x = 10
+                elif orientacion_personaje_x == -1 and not self.dibujando: 
+                    self.cambiar_animacion(self.imagen_l)
+                    self.desplazamiento_x = -10
+                screen.blit(self.image, self.rect)
+                self.dibujando = True
+            else:
                 self.proyectil_en_aire = False
-            screen.blit(self.image, self.rect)
-            
+                self.dibujando = False
     def set_animacion(self, num_frame):
         self.frame = num_frame
                 
