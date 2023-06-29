@@ -59,6 +59,8 @@ while running:
 
             if evento.key == pygame.K_SPACE:
                 personaje.acciones("saltar")
+            elif evento.key == pygame.K_w:
+                personaje.acciones("shot")
 
 
     pygame.draw.rect(screen, (255, 255, 255), personaje.get_rect, 2)

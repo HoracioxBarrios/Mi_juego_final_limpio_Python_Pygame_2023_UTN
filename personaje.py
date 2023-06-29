@@ -17,7 +17,7 @@ class Personaje(pygame.sprite.Sprite):
         self.valocidad_caminar = 5
         self.desplazamiento_x = 0
         self.velocidad_caminar = 5
-        self.potencia_salto = 25
+        self.potencia_salto = 20
         # self.time_limit_salto = 5
         self.limites_frames_por_segundo = 5
         self.time_frame = 5
@@ -26,8 +26,8 @@ class Personaje(pygame.sprite.Sprite):
         self.esta_caminando = False
         self.esta_en_aire = True
         self.control_personaje = True
-        self.shot_time = 30
-        self.shot_time_limit = 30
+        self.shot_time = 25
+        self.shot_time_limit = 25
         self.dy = 0
         self.dx = 0
         self.frame = 0
@@ -91,9 +91,6 @@ class Personaje(pygame.sprite.Sprite):
             if(keys[pygame.K_w]):
                 self.acciones('shot')
             self.acciones('caminar_l')
-        
-        elif(keys[pygame.K_w]):
-            self.acciones('shot')
         else:
             self.acciones('quieto')
 
@@ -141,7 +138,7 @@ class Personaje(pygame.sprite.Sprite):
         if(not self.esta_en_aire and self.control_personaje):
             self.esta_en_aire = True
             self.sonido_salto_grito.play()
-            self.sonido_salto_grito.set_volume(0.8)
+            self.sonido_salto_grito.set_volume(1)
             self.sonido_salto.set_volume(0.2)
             self.sonido_salto.play()
             
@@ -179,6 +176,10 @@ class Personaje(pygame.sprite.Sprite):
         if(not self.esta_en_aire):
             self.control_personaje = False
             self.shot_on = True
+            self.sonido_poder.play()
+            self.sonido_poder.set_volume(0.1)
+            self.sonido_kame.play()
+            self.sonido_kame.set_volume(0.5)
             self.desplazamiento_x = 0
             if(self.orientacion_x == 1):
                 self.cambiar_animacion(self.shot_r)
