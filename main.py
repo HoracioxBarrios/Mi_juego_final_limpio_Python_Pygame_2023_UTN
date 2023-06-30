@@ -5,6 +5,7 @@ from personaje import Personaje
 from enemigo import Enemigo
 from stage import Stage
 from proyectil import Proyectil
+from clase_vida import BarraVida
 pygame.init()
 
 ancho_pantalla = 1000
@@ -34,14 +35,16 @@ pygame.mixer.music.set_volume(0.5)
 flag = True
 
 char_list = []
-personaje = Personaje(500, 50, world.tile_list)
-enemigo = Enemigo(800, 50, world.tile_list)
+personaje = Personaje(500, 50, world.tile_list, screen)
+enemigo = Enemigo(screen, 800, 50, world.tile_list)
 poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
 poder_list:list[Proyectil] = []
 poder_list.append(poder)
 stage = Stage()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(personaje, enemigo)
+
+
 
 while running:
 
@@ -75,14 +78,17 @@ while running:
 
     pygame.draw.rect(screen, (255, 255, 255), personaje.get_rect, 2)
     pygame.draw.rect(screen, (255, 255, 255), enemigo.get_rect, 2)
-
+    
     # stage.verificar_colision(lista_pisos, enemigo)
 
-    all_sprites.update()
+    all_sprites.update(screen)
     all_sprites.draw(screen)
     poder.update()
     poder.verificar_colision(enemigo.rect, screen)
     poder.draw_proyectil(screen, personaje.orientacion_x)
+
+   
+
     pygame.display.update()
 
     ms = relog.tick(FPS)

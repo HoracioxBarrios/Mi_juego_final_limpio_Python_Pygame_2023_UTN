@@ -1,9 +1,9 @@
 import pygame
 from utilidades import *
-from proyectil import Proyectil
-
+# from proyectil import Proyectil
+from clase_vida import BarraVida
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, lista_pisos):
+    def __init__(self, pos_x, pos_y, lista_pisos, screen):
         super().__init__()
         self.quieto_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, True)
         self.quieto_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, False)
@@ -47,6 +47,13 @@ class Personaje(pygame.sprite.Sprite):
         self.sonido_salto_grito = pygame.mixer.Sound("sonido\salto_voz.wav")
         self.sonido_explosion = pygame.mixer.Sound("sonido\explocion.wav")
         self.time_sound = 10
+        
+        self.vida = 1000
+        self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
+        
+        
+        
+
 
     def add_gravity(self):
         #char representa a cualquier tipo de personaje
@@ -70,7 +77,7 @@ class Personaje(pygame.sprite.Sprite):
                     self.gravity_vel_y = 0
                     self.esta_en_aire = False
                     
-    def update(self):
+    def update(self, screen):
         self.controlar_sonido_caminar()
         self.dx = self.desplazamiento_x
         self.dy = 0
@@ -98,7 +105,11 @@ class Personaje(pygame.sprite.Sprite):
             
         self.rect.x += self.dx
         self.rect.y += self.dy
-    
+
+        self.barra_vida.update(self.rect.x -2, self.rect.y)
+        self.barra_vida.draw(screen)
+
+
     def acciones(self, accion: str, shot_en_aire = False):
 
         match(accion):

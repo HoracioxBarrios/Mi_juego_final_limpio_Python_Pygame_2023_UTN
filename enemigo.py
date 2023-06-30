@@ -1,7 +1,8 @@
 import pygame
 from utilidades import *
+from clase_vida import BarraVida
 class Enemigo(pygame.sprite.Sprite):  
-    def __init__(self, pos_x, pos_y, lista_pisos) -> None:
+    def __init__(self, screen, pos_x, pos_y, lista_pisos) -> None:
         super().__init__()
         self.caminando_r = get_surface_form_sprite_sheet('asset\enemigo\spites_enemigo.png', 8, 1, 0, 0, 7, False)
         self.caminando_l = get_surface_form_sprite_sheet('asset\enemigo\spites_enemigo.png', 8, 1, 0, 0, 7, True)
@@ -27,6 +28,11 @@ class Enemigo(pygame.sprite.Sprite):
         self.limite_colision = 5
         self.time_frame = 5
         self.lista_pisos = lista_pisos
+
+        self.vida = 1000
+        self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
+
+
     def add_gravity(self):
     #char representa a cualquier tipo de personaje
     #velocidad de caida final = 10
@@ -74,7 +80,7 @@ class Enemigo(pygame.sprite.Sprite):
     
 
 
-    def update(self):
+    def update(self, screen):
         self.dx = self.desplazamiento_x
         self.dy = 0
 
@@ -94,6 +100,8 @@ class Enemigo(pygame.sprite.Sprite):
         self.rect.x += self.dx
         self.rect.y += self.dy
 
+        self.barra_vida.update(self.rect.x -10, self.rect.y)
+        self.barra_vida.draw(screen)
 
     def acciones(self, accion: str):
         match(accion):
