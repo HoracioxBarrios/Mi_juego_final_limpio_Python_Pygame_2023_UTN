@@ -12,7 +12,6 @@ class Enemigo(pygame.sprite.Sprite):
         self.orientacion_x = -1
         self.esta_en_aire = True
         self.esta_caminando = False
-        self.colision_x = False
         self.animacion = self.caminando_l
         self.image = self.animacion[self.frame]#el frame inicia arranca en 0, por ende se renderiza la pocision 0 de la lista de animaciones
         self.imagen_width = self.image.get_width()
@@ -24,7 +23,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.dy = 0
         self.dx = 0
         self.limites_frames_por_segundo = 5
-        self.time_colision = 5
+        self.time_colision = 0
         self.limite_colision = 5
         self.time_frame = 5
         self.lista_pisos = lista_pisos
@@ -42,27 +41,30 @@ class Enemigo(pygame.sprite.Sprite):
         self.dy = self.gravity_vel_y
         
     def verificar_colision(self, lista_pisos):
-        self.colision_x = False
+        
         for piso in lista_pisos:
             #x
             if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
                 self.dx = 0
-                if self.time_colision == 0:
-                    self.colision_x = True#colisiona y va a la  la izquierda
+                if self.time_colision == 5:
+                    #colisiona y va a la  la izquierda
                     self.orientacion_x *= -1
-                    self.time_colision = self.limite_colision
-                else:
+                    
                     self.time_colision -= 1
+                    
+                else:
+                    self.time_colision = self.limite_colision
 
             if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
                 self.dx = 0
-                if(self.orientacion_x == 1 and self.time_colision == 10):
-                    self.colision_x = True #colisiona y va a la  la izquierda
+                if self.orientacion_x == 1 and self.time_colision == 5:
+                    #colisiona y va a la  la izquierda
                     self.orientacion_x *= 1
                 
-                    self.time_colision = self.limite_colision
+                    
                     self.time_colision -= 1
-
+                else:
+                    self.time_colision = self.limite_colision
                 
             
             #y        

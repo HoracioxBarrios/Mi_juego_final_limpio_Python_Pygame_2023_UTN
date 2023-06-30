@@ -14,7 +14,7 @@ alto_pantalla = 700
 screen = pygame.display.set_mode((ancho_pantalla, alto_pantalla))
 
 running = True
-FPS = 60
+FPS = 90
 BLANCO = (255, 255, 255)
 relog = pygame.time.Clock()
 bg_fondo = pygame.image.load("asset\game_background_1.png")
@@ -92,5 +92,5 @@ while running:
     pygame.display.update()
 
     ms = relog.tick(FPS)
-
+    print("ms", ms)
 pygame.quit()
