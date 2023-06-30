@@ -43,7 +43,7 @@ class Proyectil:
             self.animacion = self.imagen_r
         else:
             self.animacion = self.imagen_l
-    def draw_proyectil(self, screen, orientacion_personaje_x):
+    def draw_proyectil(self, screen : pygame.surface.Surface, orientacion_personaje_x):
         if self.proyectil_en_aire:
             if(self.rect.x < screen.get_width() and self.rect.x > 0):
                 if orientacion_personaje_x == 1 and not self.dibujando:
