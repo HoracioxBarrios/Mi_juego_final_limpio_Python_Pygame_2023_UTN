@@ -8,7 +8,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.caminando_l = get_surface_form_sprite_sheet('asset\enemigo\spites_enemigo.png', 8, 1, 0, 0, 7, True)
         self.gravity_vel_y = 0
         self.frame = 5
-        self.velocidad_caminar = 7
+        self.velocidad_caminar = 10
         self.orientacion_x = -1
         self.esta_en_aire = True
         self.esta_caminando = False
@@ -31,7 +31,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.vida = 1000
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
 
-
+        self.delta_ms = 0
     def add_gravity(self):
     #char representa a cualquier tipo de personaje
     #velocidad de caida final = 10
@@ -94,7 +94,7 @@ class Enemigo(pygame.sprite.Sprite):
         elif(self.orientacion_x == 1):
             self.acciones('caminar_r')
             
-        self.limitar_frames()
+        self.verificar_frames()
         self.add_gravity()
         self.verificar_colision(self.lista_pisos)
         # print(self.dx)
@@ -131,7 +131,13 @@ class Enemigo(pygame.sprite.Sprite):
         self.animacion = nueva_lista_animaciones  
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-    def limitar_frames(self):
+    def verificar_frames(self):
+        '''
+        El personaje se moverá y se animará correctamente con respecto 
+        al tiempo transcurrido, lo que resultará en un movimiento más suave 
+        y consistente sin depender de la tasa de cuadros (FPS) del juego
+        
+        '''
         if(self.time_frame <= 0):
             if(self.frame < len(self.animacion)):
                 self.image = self.animacion[self.frame]
@@ -140,7 +146,7 @@ class Enemigo(pygame.sprite.Sprite):
             else:
                 self.frame = 0
         else:
-            self.time_frame -= 1       
+            self.time_frame -= self.delta_ms      
   
 
     @property

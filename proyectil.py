@@ -25,6 +25,8 @@ class Proyectil:
         self.limites_frames_por_segundo = 10
         self.time_frame = 10
         self.impacto = False
+        
+        self.delta_ms = 0
     def update(self):
         self.dx = self.desplazamiento_x
     
@@ -70,7 +72,7 @@ class Proyectil:
             else:
                 self.frame = 0
         else:
-            self.time_frame -= 1
+            self.time_frame -= self.delta_ms
 
     def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
         self.animacion = nueva_lista_animaciones

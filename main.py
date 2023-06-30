@@ -14,7 +14,7 @@ alto_pantalla = 700
 screen = pygame.display.set_mode((ancho_pantalla, alto_pantalla))
 
 running = True
-FPS = 90
+FPS = 60
 BLANCO = (255, 255, 255)
 relog = pygame.time.Clock()
 bg_fondo = pygame.image.load("asset\game_background_1.png")
@@ -34,6 +34,7 @@ pygame.mixer.music.play()
 pygame.mixer.music.set_volume(0.5)
 flag = True
 
+#Instancias
 char_list = []
 personaje = Personaje(500, 50, world.tile_list, screen)
 enemigo = Enemigo(screen, 800, 50, world.tile_list)
@@ -41,8 +42,8 @@ poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
 poder_list:list[Proyectil] = []
 poder_list.append(poder)
 stage = Stage()
-all_sprites = pygame.sprite.Group()
-all_sprites.add(personaje, enemigo)
+sprites_personajes = pygame.sprite.Group()
+sprites_personajes.add(personaje, enemigo)
 
 
 
@@ -81,8 +82,8 @@ while running:
     
     # stage.verificar_colision(lista_pisos, enemigo)
 
-    all_sprites.update(screen)
-    all_sprites.draw(screen)
+    sprites_personajes.update(screen)
+    sprites_personajes.draw(screen)
     poder.update()
     poder.verificar_colision(enemigo.rect, screen)
     poder.draw_proyectil(screen, personaje.orientacion_x)
@@ -91,6 +92,11 @@ while running:
 
     pygame.display.update()
 
-    ms = relog.tick(FPS)
-    print("ms", ms)
+    delta_ms = relog.tick(FPS)
+    
+    
+    personaje.delta_ms = delta_ms
+    enemigo.delta_ms = delta_ms
+    poder.delta_ms = delta_ms
+
 pygame.quit()

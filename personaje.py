@@ -14,9 +14,8 @@ class Personaje(pygame.sprite.Sprite):
         self.shot_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, True)
         self.shot_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, False)
         self.gravity_vel_y = 0
-        self.valocidad_caminar = 5
+        self.velocidad_caminar = 9
         self.desplazamiento_x = 0
-        self.velocidad_caminar = 5
         self.potencia_salto = 20
         # self.time_limit_salto = 5
         self.limites_frames_por_segundo = 5
@@ -51,7 +50,7 @@ class Personaje(pygame.sprite.Sprite):
         self.vida = 1000
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
         
-        
+        self.delta_ms = 0
         
 
 
@@ -102,8 +101,7 @@ class Personaje(pygame.sprite.Sprite):
             self.acciones('quieto')
 
 
-            
-        self.rect.x += self.dx
+        self.rect.x += self.dx    
         self.rect.y += self.dy
 
         self.barra_vida.update(self.rect.x -2, self.rect.y)
@@ -209,6 +207,12 @@ class Personaje(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect_main)
 
     def verificar_frames(self):
+        '''
+        El personaje se moverá y se animará correctamente con respecto 
+        al tiempo transcurrido, lo que resultará en un movimiento más suave 
+        y consistente sin depender de la tasa de cuadros (FPS) del juego
+        
+        '''
         if(self.time_frame <= 0):
             if(self.frame < len(self.animacion)):
                 self.image = self.animacion[self.frame]
@@ -217,7 +221,7 @@ class Personaje(pygame.sprite.Sprite):
             else:
                 self.frame = 0
         else:
-            self.time_frame -= 1
+            self.time_frame -= self.delta_ms
     @property
     def get_dy(self):
         return self.dy
