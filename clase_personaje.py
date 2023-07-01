@@ -84,10 +84,10 @@ class Personaje(pygame.sprite.Sprite):
     def verificar_colision(self, lista_pisos):
         for piso in lista_pisos:
             piso : list[pygame.Rect]
-            if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
+            if piso[1].colliderect(self.rect.x + self.dx , self.rect.y, self.imagen_width // 1.5, self.imagen_height):# que no detecte teniendo el ancho de la img sino menos  :self.imagen_width // 1.5
                 self.dx = 0
                     
-            if piso[1].colliderect(self.rect.x, self.rect.y + self.dy, self.imagen_width, self.imagen_height):
+            if piso[1].colliderect(self.rect.x, self.rect.y + self.dy , self.imagen_width //1.5, self.imagen_height):
                 if self.gravity_vel_y < 0:
                     self.dy = piso[1].bottom - self.rect.top
                     self.gravity_vel_y = 0
