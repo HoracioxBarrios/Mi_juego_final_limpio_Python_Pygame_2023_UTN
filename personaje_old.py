@@ -5,7 +5,7 @@ from utilidades import *
 from configuracion import *
 from pydub import AudioSegment
 from pydub.playback import play
-from proyectil import Proyectil
+from clase_proyectil import Proyectil
 from enemigo_old import Enemigo
 sonido_pasos = pygame.mixer.Sound('sonido\correr.wav')
 sonido_poder = pygame.mixer.Sound('sonido\poder.wav')
