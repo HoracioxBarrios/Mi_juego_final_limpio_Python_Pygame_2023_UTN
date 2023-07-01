@@ -1,5 +1,6 @@
 import pygame
 from utilidades import *
+from configuracion import *
 from clase_proyectil import Proyectil
 from clase_vida import BarraVida
 from clase_enemigo import Enemigo
@@ -34,7 +35,19 @@ class Personaje(pygame.sprite.Sprite):
         self.frame = 0
         self.animacion = self.quieto_r
         self.image = self.animacion[self.frame]#el frame inicia arranca en 0, por ende se renderiza la pocision 0 de la lista de animaciones
-        self.rect = self.image.get_rect()
+        #--------------------------------
+        self.rect : pygame.Rect = self.image.get_rect()
+        self.new_width = 70
+
+        # Calcular el desplazamiento horizontal para centrar el rectángulo
+        horizontal_offset = (self.rect.width - self.new_width) // 2
+
+        # Actualizar el ancho del rectángulo
+        self.rect.width = self.new_width
+
+        # Ajustar la posición horizontal del rectángulo
+        self.rect.x += horizontal_offset
+        #--------------------------------
         self.rect.x = pos_x
         self.rect.y = pos_y
         self.imagen_width = self.image.get_width()
@@ -70,6 +83,7 @@ class Personaje(pygame.sprite.Sprite):
 
     def verificar_colision(self, lista_pisos):
         for piso in lista_pisos:
+            piso : list[pygame.Rect]
             if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
                 self.dx = 0
                     
@@ -81,6 +95,13 @@ class Personaje(pygame.sprite.Sprite):
                     self.dy = piso[1].top - self.rect.bottom
                     self.gravity_vel_y = 0
                     self.esta_en_aire = False
+        # que no salga de screen
+        if self.rect.left + self.dx < 0:
+            self.dx = 0
+        elif self.rect.right + self.dx > ANCHO_PANTALLA:
+            self.dx = 0
+    
+        
                     
     def update(self, screen):
         print(self.enemigo.vida)

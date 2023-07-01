@@ -1,5 +1,6 @@
 import pygame
 from utilidades import *
+from configuracion import *
 from clase_vida import BarraVida
 class Enemigo(pygame.sprite.Sprite):  
     def __init__(self, screen, pos_x, pos_y, lista_pisos) -> None:
@@ -46,7 +47,7 @@ class Enemigo(pygame.sprite.Sprite):
             if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
                 self.dx = 0
                 if self.time_colision == 5:
-                    #colisiona y va a la  la izquierda
+                    #colisiona y va a la  la der
                     self.orientacion_x *= -1
                     
                     self.time_colision -= 1
@@ -75,7 +76,25 @@ class Enemigo(pygame.sprite.Sprite):
                     self.dy = piso[1].top - self.rect.bottom
                     self.gravity_vel_y = 0
                     self.esta_en_aire = False
+                    
+        # Dentro de la función de colisión del enemigo:
+        if self.rect.left + self.dx < 0:
+            self.dx = 0
+            if self.time_colision == 5:
+                # Colisiona y cambia de dirección a la derecha
+                self.orientacion_x *= -1
+                self.time_colision -= 1
+            else:
+                self.time_colision = self.limite_colision
 
+        elif self.rect.right + self.dx > ANCHO_PANTALLA:
+            self.dx = 0
+            if self.time_colision == 5:
+                # Colisiona y cambia de dirección a la izquierda
+                self.orientacion_x *= -1
+                self.time_colision -= 1
+            else:
+                self.time_colision = self.limite_colision
 
 
     
