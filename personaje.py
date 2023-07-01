@@ -2,8 +2,9 @@ import pygame
 from utilidades import *
 from proyectil import Proyectil
 from clase_vida import BarraVida
+from enemigo import Enemigo
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo):
+    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo):
         super().__init__()
         self.quieto_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, True)
         self.quieto_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, False)
@@ -50,7 +51,7 @@ class Personaje(pygame.sprite.Sprite):
         
         self.vida = 1000
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
-        
+        self.daño = 100
         self.delta_ms = 0
         self.poder = Proyectil(self.orientacion_x, self.rect.x, self.rect.y)
         self.poder_list: list[Proyectil] = []
@@ -82,6 +83,7 @@ class Personaje(pygame.sprite.Sprite):
                     self.esta_en_aire = False
                     
     def update(self, screen):
+        print(self.enemigo.vida)
         self.controlar_sonido_caminar()
         self.dx = self.desplazamiento_x
         self.dy = 0
@@ -96,10 +98,10 @@ class Personaje(pygame.sprite.Sprite):
             self.poder_list[0].update(self.delta_ms)
             self.poder_list[0].verificar_colision(self.enemigo.rect, screen)
             self.poder_list[0].draw_proyectil(screen, self.orientacion_x)
-            if(len(self.poder_list) > 0):
-                print(self.poder_list[0].colision)
+    
         if(len(self.poder_list) > 0 and self.poder_list[0].tiempo_explocion <= 0):
             self.poder_list[0].tiempo_explocion = 10
+            self.hacer_daño()
             self.descargar_poder()
             
         
@@ -125,7 +127,7 @@ class Personaje(pygame.sprite.Sprite):
         self.rect.x += self.dx    
         self.rect.y += self.dy
 
-        self.barra_vida.update(self.rect.x -2, self.rect.y)
+        self.barra_vida.update(self.rect.x -2, self.rect.y, self.vida)
         self.barra_vida.draw(screen)
 
 
@@ -164,6 +166,8 @@ class Personaje(pygame.sprite.Sprite):
         else:
             self.time_sound -= 1
 
+    def hacer_daño(self):
+        self.enemigo.vida -= self.daño
     def saltar(self):
         if(not self.esta_en_aire and self.control_personaje):
             self.esta_en_aire = True

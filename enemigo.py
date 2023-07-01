@@ -30,7 +30,6 @@ class Enemigo(pygame.sprite.Sprite):
 
         self.vida = 1000
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
-
         self.delta_ms = 0
     def add_gravity(self):
     #char representa a cualquier tipo de personaje
@@ -102,7 +101,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.rect.x += self.dx
         self.rect.y += self.dy
 
-        self.barra_vida.update(self.rect.x -10, self.rect.y)
+        self.barra_vida.update(self.rect.x -10, self.rect.y, self.vida)
         self.barra_vida.draw(screen)
 
     def acciones(self, accion: str):
