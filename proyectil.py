@@ -80,13 +80,12 @@ class Proyectil:
         self.animacion = nueva_lista_animaciones
 
     def draw_explocion(self, screen):
-        if(self.tiempo_explocion > 0 and self.dibijando_animacion_explocion):
+        if(self.tiempo_explocion > 0):
             self.cambiar_animacion(self.explocion)
             screen.blit(self.image, self.rect)
             self.tiempo_explocion -= 1
         else:
             self.tiempo_explocion = self.limite_tiempo_explocion
-            self.dibijando_animacion_explocion = False
             
         
     def verificar_colision(self, char, screen):

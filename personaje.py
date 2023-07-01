@@ -98,8 +98,8 @@ class Personaje(pygame.sprite.Sprite):
             self.poder_list[0].draw_proyectil(screen, self.orientacion_x)
             if(len(self.poder_list) > 0):
                 print(self.poder_list[0].colision)
-        if(len(self.poder_list) > 0 and self.poder_list[0].colision):
-            self.poder_list[0].colision = False
+        if(len(self.poder_list) > 0 and self.poder_list[0].tiempo_explocion <= 0):
+            self.poder_list[0].tiempo_explocion = 10
             self.descargar_poder()
             
         
