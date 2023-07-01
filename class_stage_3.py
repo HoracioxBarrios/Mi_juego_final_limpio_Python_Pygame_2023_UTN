@@ -3,7 +3,7 @@ from utilidades import *
 from configuracion import *
 from class_world import *
 import json
-class Stage_1(StagePadre):
+class Stage_3(StagePadre):
     def __init__(self, screen : pygame.Surface):
         
         self.tile_list = []
