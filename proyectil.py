@@ -25,9 +25,12 @@ class Proyectil:
         self.limites_frames_por_segundo = 10
         self.time_frame = 10
         self.impacto = False
-        
+        self.limite_tiempo_explocion = 10
+        self.tiempo_explocion = 10
+        self.dibijando_animacion_explocion = False
         self.delta_ms = 0
-    def update(self):
+        self.colision = False
+    def update(self, delta_ms):
         self.dx = self.desplazamiento_x
     
         if(self.impacto):
@@ -35,10 +38,9 @@ class Proyectil:
             if(self.time_explocion <= 0):
                 self.time_explocion = 10
                 self.impacto = False
+                self.colision = False
 
-        print(self.dx)
-        self.verificar_frames()
-        print(self.proyectil_en_aire)
+        self.verificar_frames(delta_ms)
         self.rect.x += self.dx
     def start_proyectile(self):
         if(self.orientacion_x_char):
@@ -63,7 +65,7 @@ class Proyectil:
     def set_animacion(self, num_frame):
         self.frame = num_frame
                 
-    def verificar_frames(self):
+    def verificar_frames(self, delta_ms):
         if(self.time_frame <= 0):
             if(self.frame < len(self.animacion)):
                 self.image = self.animacion[self.frame]
@@ -72,20 +74,28 @@ class Proyectil:
             else:
                 self.frame = 0
         else:
-            self.time_frame -= self.delta_ms
+            self.time_frame -= delta_ms
 
     def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
         self.animacion = nueva_lista_animaciones
 
     def draw_explocion(self, screen):
-        self.cambiar_animacion(self.explocion)
-        screen.blit(self.image, self.rect)
+        if(self.tiempo_explocion > 0 and self.dibijando_animacion_explocion):
+            self.cambiar_animacion(self.explocion)
+            screen.blit(self.image, self.rect)
+            self.tiempo_explocion -= 1
+        else:
+            self.tiempo_explocion = self.limite_tiempo_explocion
+            self.dibijando_animacion_explocion = False
+            
+        
     def verificar_colision(self, char, screen):
-        print(char)
         if self.rect.colliderect(char):
             self.desplazamiento_x = 0
             if(self.time_explocion > 0):
+                self.colision = True
                 self.impacto = True
                 self.dibujando = False
                 self.proyectil_en_aire = False
+                self.fin_animacion_explocion = True
                 self.draw_explocion(screen)

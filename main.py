@@ -14,7 +14,7 @@ alto_pantalla = 700
 screen = pygame.display.set_mode((ancho_pantalla, alto_pantalla))
 
 running = True
-FPS = 60
+FPS = 40
 BLANCO = (255, 255, 255)
 relog = pygame.time.Clock()
 bg_fondo = pygame.image.load("asset\game_background_1.png")
@@ -36,8 +36,8 @@ flag = True
 
 #Instancias
 char_list = []
-personaje = Personaje(500, 50, world.tile_list, screen)
 enemigo = Enemigo(screen, 800, 50, world.tile_list)
+personaje = Personaje(500, 50, world.tile_list, screen, enemigo)
 poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
 poder_list:list[Proyectil] = []
 poder_list.append(poder)
@@ -69,24 +69,18 @@ while running:
             if evento.key == pygame.K_SPACE:
                 personaje.acciones("saltar")
             elif evento.key == pygame.K_w:
-                if(not poder.proyectil_en_aire):
-                    poder_list[0].rect.x = personaje.rect.x + 15 
-                    poder_list[0].rect.y = personaje.rect.y + 29
-                    poder_list[0].proyectil_en_aire = True
-                    personaje.acciones("shot", poder.proyectil_en_aire)
+                personaje.acciones("shot")
                 
 
 
     pygame.draw.rect(screen, (255, 255, 255), personaje.get_rect, 2)
     pygame.draw.rect(screen, (255, 255, 255), enemigo.get_rect, 2)
+    pygame.draw.rect(screen, (255, 255, 255), personaje.poder.rect, 2)
     
     # stage.verificar_colision(lista_pisos, enemigo)
 
     sprites_personajes.update(screen)
     sprites_personajes.draw(screen)
-    poder.update()
-    poder.verificar_colision(enemigo.rect, screen)
-    poder.draw_proyectil(screen, personaje.orientacion_x)
 
    
 

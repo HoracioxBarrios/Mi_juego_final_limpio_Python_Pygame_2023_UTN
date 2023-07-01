@@ -1,9 +1,9 @@
 import pygame
 from utilidades import *
-# from proyectil import Proyectil
+from proyectil import Proyectil
 from clase_vida import BarraVida
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, lista_pisos, screen):
+    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo):
         super().__init__()
         self.quieto_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, True)
         self.quieto_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, False)
@@ -18,12 +18,13 @@ class Personaje(pygame.sprite.Sprite):
         self.desplazamiento_x = 0
         self.potencia_salto = 20
         # self.time_limit_salto = 5
+        self.enemigo = enemigo
         self.limites_frames_por_segundo = 5
         self.time_frame = 5
         self.orientacion_x = 1
         self.shot_on = False
         self.esta_caminando = False
-        self.esta_en_aire = True
+        self.esta_en_aire = False
         self.control_personaje = True
         self.shot_time = 25
         self.shot_time_limit = 25
@@ -51,7 +52,11 @@ class Personaje(pygame.sprite.Sprite):
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
         
         self.delta_ms = 0
-        
+        self.poder = Proyectil(self.orientacion_x, self.rect.x, self.rect.y)
+        self.poder_list: list[Proyectil] = []
+        # poder_list[0].rect.x = personaje.rect.x + 15 
+        # poder_list[0].rect.y = personaje.rect.y + 29
+        # poder_list[0].proyectil_en_aire = True
 
 
     def add_gravity(self):
@@ -85,6 +90,22 @@ class Personaje(pygame.sprite.Sprite):
         self.add_gravity()
         self.verificar_colision(self.lista_pisos)
         
+        
+        print(self.poder_list)
+        if(len(self.poder_list) > 0):
+            self.poder_list[0].update(self.delta_ms)
+            self.poder_list[0].verificar_colision(self.enemigo.rect, screen)
+            self.poder_list[0].draw_proyectil(screen, self.orientacion_x)
+            if(len(self.poder_list) > 0):
+                print(self.poder_list[0].colision)
+        if(len(self.poder_list) > 0 and self.poder_list[0].colision):
+            self.poder_list[0].colision = False
+            self.descargar_poder()
+            
+        
+        print(self.poder_list)
+
+
         keys = pygame.key.get_pressed()
 
         if(keys[pygame.K_RIGHT]):
@@ -120,7 +141,7 @@ class Personaje(pygame.sprite.Sprite):
             case "quieto":
                 self.quieto()
             case "shot":
-                self.shot(shot_en_aire)
+                self.shot()
 
     def caminar(self, accion):
         if(not self.esta_en_aire and self.control_personaje):
@@ -151,16 +172,26 @@ class Personaje(pygame.sprite.Sprite):
             self.sonido_salto.set_volume(0.2)
             self.sonido_salto.play()
             
-
             if(self.orientacion_x == 1):
                 self.gravity_vel_y = -self.potencia_salto
                 self.cambiar_animacion(self.saltando_r)
             else:
                 self.gravity_vel_y  = -self.potencia_salto
                 self.cambiar_animacion(self.saltando_l)
+    def cargar_poder(self):
+        if(len(self.poder_list) < 1):
+            self.poder_list.append(self.poder)
 
-    def shot(self, esta_en_aire):
-        if(esta_en_aire):
+    def descargar_poder(self):
+        if(len(self.poder_list) > 0):
+            self.poder_list.pop(0)
+
+    def shot(self):
+        if(not self.esta_en_aire):
+            self.cargar_poder()
+            self.poder_list[0].rect.x = self.rect.x + 15 
+            self.poder_list[0].rect.y = self.rect.y + 29
+            self.poder_list[0].proyectil_en_aire = True
             self.control_personaje = False
             self.shot_on = True
             self.sonido_poder.play()
