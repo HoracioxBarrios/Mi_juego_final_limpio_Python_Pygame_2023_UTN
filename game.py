@@ -38,7 +38,7 @@ def game():
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     
-    enemigo = Enemigo(screen, 800, 50, stage_actual.tile_list)
+    enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
     personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo)
     poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
     poder_list:list[Proyectil] = []
