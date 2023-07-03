@@ -1,7 +1,7 @@
 from class_Stage import StagePadre
-from class_stage_1 import Stage_1
-from class_stage_2 import Stage_2
-from class_stage_3 import Stage_3
+from levels.class_stage_1 import Stage_1
+from levels.class_stage_2 import Stage_2
+from levels.class_stage_3 import Stage_3
 
 
 class AdminStages:

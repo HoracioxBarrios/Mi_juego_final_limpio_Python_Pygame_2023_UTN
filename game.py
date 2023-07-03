@@ -5,8 +5,7 @@ from class_world import *
 from class_personaje import Personaje
 from class_enemigo import Enemigo
 from class_proyectil import Proyectil
-from class_vida import BarraVida
-from class_stage_1 import Stage_1
+from levels.class_stage_1 import Stage_1
 from modo.modo_dev import *
 pygame.init()
 

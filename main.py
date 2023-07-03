@@ -10,7 +10,7 @@ pygame.init()
 SCREEN = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
 pygame.display.set_caption("Menu")
 
-background_main = pygame.image.load("asset\Backgroung_guku_chico.jpg")
+background_main = pygame.image.load("asset\Kid Goku Wallpaper.png")
 background_main_rescalado = pygame.transform.scale(background_main,(ANCHO_PANTALLA,ALTO_PANTALLA))
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font("asset/font.ttf", size)
@@ -70,15 +70,15 @@ def main_menu():
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(40).render("Dragon Ball Sprite", True, "#E74C3C")
+        MENU_TEXT = get_font(40).render("Dragon Ball Sprite", True, (247, 35, 12))#color tupla (0, 0, 0)o "white" literal
         MENU_RECT = MENU_TEXT.get_rect(center=(ANCHO_PANTALLA /2, 100))
 
         PLAY_BUTTON = Button(image=pygame.image.load("asset\Play Rect.png"), pos=(ANCHO_PANTALLA /2, 200), 
-                            text_input="PLAY", font=get_font(20), base_color="#2874A6", hovering_color="White")
+                            text_input="Jugar", font=get_font(20), base_color="White", hovering_color=(248, 209, 5))
         OPTIONS_BUTTON = Button(image=pygame.image.load("asset\Options Rect.png"), pos=(ANCHO_PANTALLA /2, 350), 
-                            text_input="OPTIONS", font=get_font(20), base_color="#2874A6", hovering_color="White")
+                            text_input="Opciones", font=get_font(20), base_color="White", hovering_color=(248, 209, 5))
         QUIT_BUTTON = Button(image=pygame.image.load("asset\Quit Rect.png"), pos=(ANCHO_PANTALLA /2, 500), 
-                            text_input="QUIT", font=get_font(20), base_color="#2874A6", hovering_color="White")
+                            text_input="Salir", font=get_font(20), base_color="White", hovering_color=(248, 209, 5))
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
 
@@ -102,8 +102,8 @@ def main_menu():
         pygame.display.update()
 
 def intro():
-    
-    vid = Video("vid\Dragon Ball Opening Latino HD 720p.mp4")# #vid\intro.mp4
+    #vid\Dragon Ball Opening Latino HD 720p.mp4
+    vid = Video("vid\intro.mp4")#vid\intro.mp4
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
     
     while True:
