@@ -1,7 +1,7 @@
 import pygame
 from utilidades import *
 from configuracion import *
-from clase_vida import BarraVida
+from class_vida import BarraVida
 class Enemigo(pygame.sprite.Sprite):  
     def __init__(self, screen, pos_x, pos_y, lista_pisos) -> None:
         super().__init__()

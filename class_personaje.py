@@ -1,9 +1,9 @@
 import pygame
 from utilidades import *
 from configuracion import *
-from clase_proyectil import Proyectil
-from clase_vida import BarraVida
-from clase_enemigo import Enemigo
+from class_proyectil import Proyectil
+from class_vida import BarraVida
+from class_enemigo import Enemigo
 class Personaje(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo):
         super().__init__()

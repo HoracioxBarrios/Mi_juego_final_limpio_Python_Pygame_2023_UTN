@@ -1,5 +1,5 @@
 from auxiliar import Auxiliar
-from clase_enemigo import Enemigo
+from class_enemigo import Enemigo
 import pygame as pg
 from constantes import (
     ANCHO_VENTANA, DEBUG, DIRECTION_L, DIRECTION_R

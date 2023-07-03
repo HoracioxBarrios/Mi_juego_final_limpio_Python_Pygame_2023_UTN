@@ -13,7 +13,7 @@ class Stage_3(StagePadre):
         self.bloque_img = pygame.image.load('asset\StoneBlock.png')
         self.tile_size = 50
         self.world_data = leerJson('stages.json')
-        self.mapa_list = self.world_data["stages"][0]["stage_1"]
+        self.mapa_list = self.world_data["stages"][0]["stage_3"]
         self.world_music = self.world_data["stages"][0]["musica_path"]
         self.row_count = 0
         self.music = pygame.mixer.music.load(self.world_music)
