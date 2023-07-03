@@ -1,12 +1,14 @@
-import pygame
+import pygame, sys
 from utilidades import *
 from configuracion import *
-from class_world import *
+from class_Stage import StagePadre
 from class_personaje import Personaje
 from class_enemigo import Enemigo
 from class_proyectil import Proyectil
 from levels.class_stage_1 import Stage_1
 from modo.modo_dev import *
+from class_tiempo_stages import TiempoStages
+
 pygame.init()
 
 def game():
@@ -35,10 +37,7 @@ def game():
     stage_actual = Stage_1(screen)
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
-
-
-
-
+    
     enemigo = Enemigo(screen, 800, 50, stage_actual.tile_list)
     personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo)
     poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
@@ -48,13 +47,22 @@ def game():
     sprites_personajes = pygame.sprite.Group()
     sprites_personajes.add(personaje, enemigo)
 
-
-
+    # time_stage instancia
+    tiempo_stage = TiempoStages(screen, 0, 0)
+    
+    
+    
     while running:
 
-        screen.blit(stage_actual.bg, (0, 0))
-        lista_pisos =  stage_actual.draw()
-
+        screen.blit(stage_actual.bg, (0, 0))#bg
+        
+        stage_actual.draw()#pisos
+        
+        #time_stage----
+        tiempo_stage.update_time()
+        #--------------
+        
+        
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 running = False

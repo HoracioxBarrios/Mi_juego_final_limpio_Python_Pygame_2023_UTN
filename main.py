@@ -8,7 +8,7 @@ pygame.init()
 
 
 SCREEN = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
-pygame.display.set_caption("Menu")
+pygame.display.set_caption("Dragon Ball Sprite")
 
 background_main = pygame.image.load("asset\Kid Goku Wallpaper.png")
 background_main_rescalado = pygame.transform.scale(background_main,(ANCHO_PANTALLA,ALTO_PANTALLA))
