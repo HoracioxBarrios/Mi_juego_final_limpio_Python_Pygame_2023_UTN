@@ -1,9 +1,8 @@
 import pygame
 from utilidades import *
-from configuracion import *
-from class_proyectil import Proyectil
-from class_vida import BarraVida
-from class_enemigo import Enemigo
+from proyectil import Proyectil
+from clase_vida import BarraVida
+from enemigo import Enemigo
 class Personaje(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo):
         super().__init__()
@@ -18,7 +17,7 @@ class Personaje(pygame.sprite.Sprite):
         self.gravity_vel_y = 0
         self.velocidad_caminar = 9
         self.desplazamiento_x = 0
-        self.potencia_salto = 19
+        self.potencia_salto = 20
         # self.time_limit_salto = 5
         self.enemigo = enemigo
         self.limites_frames_por_segundo = 5
@@ -35,19 +34,7 @@ class Personaje(pygame.sprite.Sprite):
         self.frame = 0
         self.animacion = self.quieto_r
         self.image = self.animacion[self.frame]#el frame inicia arranca en 0, por ende se renderiza la pocision 0 de la lista de animaciones
-        #--------------------------------
-        self.rect : pygame.Rect = self.image.get_rect()
-        self.new_width = 70
-
-        # Calcular el desplazamiento horizontal para centrar el rectángulo
-        horizontal_offset = (self.rect.width - self.new_width) // 2
-
-        # Actualizar el ancho del rectángulo
-        self.rect.width = self.new_width
-
-        # Ajustar la posición horizontal del rectángulo
-        self.rect.x += horizontal_offset
-        #--------------------------------
+        self.rect = self.image.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
         self.imagen_width = self.image.get_width()
@@ -64,7 +51,7 @@ class Personaje(pygame.sprite.Sprite):
         
         self.vida = 1000
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
-        self.daño = 500
+        self.daño = 100
         self.delta_ms = 0
         self.poder = Proyectil(self.orientacion_x, self.rect.x, self.rect.y)
         self.poder_list: list[Proyectil] = []
@@ -83,11 +70,10 @@ class Personaje(pygame.sprite.Sprite):
 
     def verificar_colision(self, lista_pisos):
         for piso in lista_pisos:
-            piso : list[pygame.Rect]
-            if piso[1].colliderect(self.rect.x + self.dx , self.rect.y, self.imagen_width // 1.5, self.imagen_height):# que no detecte teniendo el ancho de la img sino menos  :self.imagen_width // 1.5
+            if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
                 self.dx = 0
                     
-            if piso[1].colliderect(self.rect.x, self.rect.y + self.dy , self.imagen_width //1.5, self.imagen_height):
+            if piso[1].colliderect(self.rect.x, self.rect.y + self.dy, self.imagen_width, self.imagen_height):
                 if self.gravity_vel_y < 0:
                     self.dy = piso[1].bottom - self.rect.top
                     self.gravity_vel_y = 0
@@ -95,13 +81,6 @@ class Personaje(pygame.sprite.Sprite):
                     self.dy = piso[1].top - self.rect.bottom
                     self.gravity_vel_y = 0
                     self.esta_en_aire = False
-        # que no salga de screen
-        if self.rect.left + self.dx < 0:
-            self.dx = 0
-        elif self.rect.right + self.dx > ANCHO_PANTALLA:
-            self.dx = 0
-    
-        
                     
     def update(self, screen):
         self.controlar_sonido_caminar()

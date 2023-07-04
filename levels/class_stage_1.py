@@ -18,5 +18,6 @@ class Stage_1(StagePadre):
         self.row_count = 0
         self.music = pygame.mixer.music.load(self.world_music)
         self.generar_coordenadas_mapa()
+        self.run = True
         
     

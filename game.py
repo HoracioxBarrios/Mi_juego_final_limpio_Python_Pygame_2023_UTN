@@ -6,6 +6,8 @@ from class_personaje import Personaje
 from class_enemigo import Enemigo
 from class_proyectil import Proyectil
 from levels.class_stage_1 import Stage_1
+from levels.class_stage_2 import Stage_2
+from levels.class_stage_3 import Stage_3
 from modo.modo_dev import *
 from class_tiempo_stages import TiempoStages
 
@@ -28,26 +30,50 @@ def game():
     #Instancias
 
     #instancio el stage actual. luego podria tener varios stages en una lista y llamarlo segun elecion desde los indices
-    stage_actual = Stage_1(screen)
+    stage_1 = Stage_1(screen)
+    stage_2 = Stage_2(screen)
+    stage_3 = Stage_3(screen)
+    stage_list = [stage_1, stage_2, stage_3]
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     
-    enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
-    personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo)
-    poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
-    poder_list:list[Proyectil] = []
-    poder_list.append(poder)
+    # enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
+    # personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo)
+    # poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
+    # poder_list:list[Proyectil] = []
+    # poder_list.append(poder)
 
-    sprites_personajes = pygame.sprite.Group()
-    sprites_personajes.add(personaje, enemigo)
+    # sprites_personajes = pygame.sprite.Group()
+    # sprites_personajes.add(personaje, enemigo)
 
     # time_stage instancia
     tiempo_stage = TiempoStages(screen, 0, 0)
-    
-    
+    game_over = False
+    stage_run = False
+    index_stage = 0
     running = True
+    stage_actual = None
     while running:
+        # for index in range(len(stage_list)):
+        if not stage_run:
+            stage_run = True
+            stage_actual = stage_list[index_stage]
+            enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
+            personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo)
+            poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
+            poder_list:list[Proyectil] = []
+            poder_list.append(poder)
 
+            sprites_personajes = pygame.sprite.Group()
+            sprites_personajes.add(personaje, enemigo)
+                
+
+        
+        if(enemigo.vida <= 0):
+            if(index_stage < len(stage_list) -1):
+                index_stage += 1
+                stage_run = False
+        
         screen.blit(stage_actual.bg, (0, 0))#bg
         
         stage_actual.draw()#pisos
@@ -60,6 +86,7 @@ def game():
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 running = False
+                sys.exit()
         #orden de verificación
             #gravedad
             #colision

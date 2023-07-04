@@ -19,7 +19,7 @@ class AdminStages:
         obtiene el nombre del stage
         recibe : el nombre del stage
         devuelve: accede al elemento del diccionario y le pasa como
-        argumento la screen. esto mismo eslo que retorna
+        argumento la screen. esto mismo es lo que retorna
         '''
         return self.stages[nombre_stage](self.screen_slave)
         

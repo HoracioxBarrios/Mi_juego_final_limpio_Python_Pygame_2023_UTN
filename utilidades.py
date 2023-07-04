@@ -9,7 +9,6 @@ def get_surface_form_sprite_sheet(path, columnas, filas, cortar_en_fila: int, co
     fotograma_alto = int(superficie_imagen.get_height()/filas)
 
     for columna in range(cortar_columna_desde, cortar_columna_hasta + 1):
-        print('draw char')
         x = fotograma_ancho * columna
         y = fotograma_alto * cortar_en_fila
         superficie_fotograma = superficie_imagen.subsurface(
@@ -33,7 +32,6 @@ def get_surface_individual_imagen(path, flip, cant_imagens):
         fotograma_alto = int(superficie_imagen.get_height()/1)
         x = fotograma_ancho
         y = fotograma_alto
-        print(fotograma_alto, fotograma_ancho, x, y)
         superficie_fotograma = superficie_imagen.subsurface(x, y, fotograma_ancho, fotograma_alto)
         # if flip:
         #     superficie_fotograma = pygame.transform.flip(
