@@ -3,7 +3,7 @@ from class_boton import Button
 from configuracion import *
 from game import *
 from vid.pyvidplayer import Video
-
+from class_tiempo_stages import TiempoStages
 pygame.init()
 
 
@@ -124,6 +124,8 @@ def intro():
                 vid.close()
                 #llamada a main menu ()
                 main_menu()
+
+
 
 
 

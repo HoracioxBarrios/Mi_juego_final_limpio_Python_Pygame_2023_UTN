@@ -51,6 +51,21 @@ def obtener_rectangulos_colision(rectangulo_principal: pygame.Rect):
         rectangulo_principal.left, rectangulo_principal.top, rectangulo_principal.width, 10)
     return dicc_rectangulos_lados
 
+def show_game_over_screen(screen, width, height):
+    game_over_font = pygame.font.Font(None, 64)  # Fuente y tamaño del texto "Game Over"
+    game_over_text = game_over_font.render("Game Over", True, (255, 255, 255))  # Texto "Game Over" en blanco
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                return
+
+        screen.fill((0, 0, 0))  # Rellena la pantalla con negro
+        screen.blit(game_over_text, (width/2 - game_over_text.get_width()/2, height/2 - game_over_text.get_height()/2))  # Dibuja el texto centrado en la pantalla
+
+        pygame.display.flip()
+
 
 def obtener_ractangulo_principal(superficies, frame):
     animaciones = []

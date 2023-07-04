@@ -4,8 +4,9 @@ from configuracion import *
 from class_proyectil import Proyectil
 from class_vida import BarraVida
 from class_enemigo import Enemigo
+from class_esferas import Esferas
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo):
+    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo, lista_esferas):
         super().__init__()
         self.quieto_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, True)
         self.quieto_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, False)
@@ -68,10 +69,9 @@ class Personaje(pygame.sprite.Sprite):
         self.delta_ms = 0
         self.poder = Proyectil(self.orientacion_x, self.rect.x, self.rect.y)
         self.poder_list: list[Proyectil] = []
-        # poder_list[0].rect.x = personaje.rect.x + 15 
-        # poder_list[0].rect.y = personaje.rect.y + 29
-        # poder_list[0].proyectil_en_aire = True
 
+        self.lista_esferas : list[Esferas]= lista_esferas
+        self.contador_esferas = 0
 
     def add_gravity(self):
         #char representa a cualquier tipo de personaje
@@ -81,7 +81,7 @@ class Personaje(pygame.sprite.Sprite):
             self.gravity_vel_y = 10
         self.dy = self.gravity_vel_y
 
-    def verificar_colision(self, lista_pisos):
+    def verificar_colision(self, lista_pisos, lista_esferas):
         for piso in lista_pisos:
             piso : list[pygame.Rect]
             if piso[1].colliderect(self.rect.x + self.dx , self.rect.y, self.imagen_width // 1.5, self.imagen_height):# que no detecte teniendo el ancho de la img sino menos  :self.imagen_width // 1.5
@@ -100,9 +100,22 @@ class Personaje(pygame.sprite.Sprite):
             self.dx = 0
         elif self.rect.right + self.dx > ANCHO_PANTALLA:
             self.dx = 0
+
+
+        #verificamos si colisionamos con las esferas
+        for esfera in lista_esferas:
+            
+            if self.rect.colliderect(esfera.rect):
+                self.lista_esferas = self.filter_es(esfera.id)
+                self.contador_esferas += 1
+
+    def filter_es(self, id):
+        new_list = []
+        for esf in self.lista_esferas:
+            if(esf.id != id):
+                new_list.append(esf)
+        return new_list
     
-        
-                    
     def update(self, screen):
         self.controlar_sonido_caminar()
         self.dx = self.desplazamiento_x
@@ -110,7 +123,7 @@ class Personaje(pygame.sprite.Sprite):
         self.shotTimeState()
         self.verificar_frames()
         self.add_gravity()
-        self.verificar_colision(self.lista_pisos)
+        self.verificar_colision(self.lista_pisos, self.lista_esferas)
         
         if(len(self.poder_list) > 0):
             self.poder_list[0].update(self.delta_ms)
