@@ -36,19 +36,19 @@ def game():
 
 
     # Dimensiones de la pantalla
-    ancho_screen = 900
-    alto_screen = 500
+    ancho_screen_para_esferas = 950
+    alto_screen_para_esferas = 555
 
     # Lista para almacenar las instancias de las esferas
     esferas = []
 
     for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
         # Generar la ruta de la imagen de la esfera utilizando la variable 'i'
-        path_esfera = "asset/esferas/{i}.png".format(i=i)
+        path_esfera = "asset/esferas/{i}.png".format(i=i)#i reemplaza a i en cada iteracion
         
         # Generar coordenadas aleatorias dentro del rango de la pantalla
-        x = random.randint(0, ancho_screen)
-        y = random.randint(0, alto_screen)
+        x = random.randint(0, ancho_screen_para_esferas)
+        y = random.randint(0, alto_screen_para_esferas)
         
         # Crear instancia de la esfera con las coordenadas aleatorias
         esfera = Esferas(screen, x, y, path_esfera, ancho=40, alto=40)
