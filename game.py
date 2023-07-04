@@ -10,7 +10,9 @@ from levels.class_stage_2 import Stage_2
 from levels.class_stage_3 import Stage_3
 from modo.modo_dev import *
 from class_tiempo_stages import TiempoStages
+from class_esferas import Esferas
 
+import random
 pygame.init()
 
 def game():   
@@ -27,7 +29,36 @@ def game():
     relog = pygame.time.Clock()
 
 
-    #Instancias
+
+# Instancias
+    # Rutas de las imágenes de las esferas
+    
+
+
+    # Dimensiones de la pantalla
+    ancho_screen = 900
+    alto_screen = 500
+
+    # Lista para almacenar las instancias de las esferas
+    esferas = []
+
+    for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
+        # Generar la ruta de la imagen de la esfera utilizando la variable 'i'
+        path_esfera = "asset/esferas/{i}.png".format(i=i)
+        
+        # Generar coordenadas aleatorias dentro del rango de la pantalla
+        x = random.randint(0, ancho_screen)
+        y = random.randint(0, alto_screen)
+        
+        # Crear instancia de la esfera con las coordenadas aleatorias
+        esfera = Esferas(screen, x, y, path_esfera, ancho=40, alto=40)
+        
+        # Agregar la instancia a la lista de esferas
+        esferas.append(esfera)
+
+
+
+
 
     #instancio el stage actual. luego podria tener varios stages en una lista y llamarlo segun elecion desde los indices
     stage_1 = Stage_1(screen)
@@ -82,6 +113,8 @@ def game():
         tiempo_stage.update_time()
         #--------------
         
+
+
         
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -110,6 +143,10 @@ def game():
         sprites_personajes.update(screen)
         sprites_personajes.draw(screen)
 
+        #esfera 
+        # Dibujar todas las esferas en la pantalla
+        for esfera in esferas:
+            esfera.draw(screen)
     
 
         pygame.display.update()
