@@ -122,6 +122,7 @@ class Enemigo(pygame.sprite.Sprite):
 
         self.barra_vida.update(self.rect.x -10, self.rect.y, self.vida)
         self.barra_vida.draw(screen)
+        self.draw(screen)
 
     def acciones(self, accion: str):
         match(accion):

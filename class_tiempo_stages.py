@@ -18,8 +18,18 @@ class TiempoStages:
         self.y = y
         self.limit = limit
         self.elapsed_time = 0
+        self.sonido = pygame.mixer.Sound("sonido\sonido_radar.wav")
+        self.time_control = 60
+        self.time_control_limit = 60
+        
+
     def draw_time(self):
         self.screen.blit(self.time_text, (self.x, self.y))
+        if self.time_control <= 0:
+            self.sound()
+            self.time_control = self.time_control_limit
+        else:
+            self.time_control -= 1
     
     def update_time(self):
         current_time = pygame.time.get_ticks()
@@ -29,8 +39,12 @@ class TiempoStages:
         if self.elapsed_time >= self.limit:
             self.game_over = True
             self.time_text = self.fuente.render("Game Over", True, self.color_texto)
-        
+            
         self.draw_time()
+    
+    def sound(self):
+        self.sonido.set_volume(0.5)
+        self.sonido.play()
 
 
 

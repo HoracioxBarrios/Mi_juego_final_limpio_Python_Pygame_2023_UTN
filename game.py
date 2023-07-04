@@ -41,23 +41,23 @@ def game():
     alto_screen_para_esferas = 555
 
     # Lista para almacenar las instancias de las esferas
-    lista_esferas = []
+    
 
-    for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
-        # Generar la ruta de la imagen de la esfera utilizando la variable 'i'
-        path_esfera = "asset/esferas/{i}.png".format(i=i)#i reemplaza a i en cada iteracion
+    # for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
+    #     # Generar la ruta de la imagen de la esfera utilizando la variable 'i'
+    #     path_esfera = "asset/esferas/{i}.png".format(i=i)#i reemplaza a i en cada iteracion
         
-        # Generar coordenadas aleatorias dentro del rango de la pantalla
-        x = random.randint(0, ancho_screen_para_esferas)
-        y = random.randint(0, alto_screen_para_esferas)
+    #     # Generar coordenadas aleatorias dentro del rango de la pantalla
+    #     x = random.randint(0, ancho_screen_para_esferas)
+    #     y = random.randint(0, alto_screen_para_esferas)
         
-        # Crear instancia de la esfera con las coordenadas aleatorias
-        esfera = Esferas(screen, x, y, path_esfera, ancho=40, alto=40, id_propia = i)
+    #     # Crear instancia de la esfera con las coordenadas aleatorias
+    #     esfera = Esferas(screen, x, y, path_esfera, ancho=40, alto=40, id_propia = i)
         
-        # Agregar la instancia a la lista de esferas
-        lista_esferas.append(esfera)
-
-
+    #     # Agregar la instancia a la lista de esferas
+    #     lista_esferas.append(esfera)
+    
+    
 
 
 
@@ -80,28 +80,39 @@ def game():
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 10
-    gray_transparent = (128, 128, 128, 0)
+    time_limit = 30
+    lista_esferas = []
+    lista_esferas_generada = False
+        
     while running:
         # Estage
         if not stage_run:
             stage_run = True
             stage_actual = stage_list[index_stage]
             enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
-            personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo, lista_esferas)
+            personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo)
             poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
             poder_list:list[Proyectil] = []
+
             poder_list.append(poder)
 
             sprites_personajes = pygame.sprite.Group()
-            sprites_personajes.add(personaje, enemigo)
+            sprites_personajes.add(personaje)
+        
              
 
         
         if(personaje.contador_esferas >= 7):
             if(index_stage < len(stage_list) -1):
                 index_stage += 1
+                tiempo_stage = None
                 stage_run = False
+                crono_on = False
+                radar_on = False
+                start_time = False
+                lista_esferas_generada = False
+               
+
 
         if(enemigo.vida <= 0 and not radar_on and not enemigo.esta_muerto):
             radar = Radar(screen, enemigo.rect.x, enemigo.rect.y, "asset/radar.png", 50, 50, 10)
@@ -148,9 +159,9 @@ def game():
 
         #esfera 
         # Dibujar todas las esferas en la pantalla
-        for esfera in personaje.lista_esferas:
-            esfera.draw(screen)
-            
+        if(not enemigo.esta_muerto):
+            enemigo.update(screen)   
+             
         if(radar_on):
             print('dibujando')
             radar.update(screen, personaje)
@@ -167,8 +178,21 @@ def game():
             tiempo_stage.draw_time()
             if(tiempo_stage.elapsed_time >= time_limit):
                 show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
-
-        
+        if(start_time):
+            if(not lista_esferas_generada):
+                for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
+                    path_esfera = "asset/esferas/{i}.png".format(i=i)
+                    x = random.randint(0, ancho_screen_para_esferas)
+                    y = random.randint(0, alto_screen_para_esferas)
+                    esfera = Esferas(screen, x, y, path_esfera, ancho=40, alto=40, id_propia = i)
+                    lista_esferas.append(esfera)
+                    lista_esferas_generada = True
+            for esfera in lista_esferas:
+                esfera.update(screen, personaje)
+                if(esfera.return_ID):
+                    lista_esferas = filter_es(esfera.return_ID, lista_esferas)
+                    esfera.return_ID = None
+                    personaje.contador_esferas += 1
         pygame.display.update()
         delta_ms = relog.tick(fps)
         
@@ -194,6 +218,14 @@ def show_game_over_screen(screen, width, height):
         screen.blit(game_over_text, (width/2 - game_over_text.get_width()/2, height/2 - game_over_text.get_height()/2))  # Dibuja el texto centrado en la pantalla
 
         pygame.display.flip()
+
+def filter_es(id, lista_esferas: list[Esferas]):
+    new_list = []
+    for esf in lista_esferas:
+        if(esf.id != id):
+            new_list.append(esf)
+    return new_list
+
 
 
 pygame.quit()
