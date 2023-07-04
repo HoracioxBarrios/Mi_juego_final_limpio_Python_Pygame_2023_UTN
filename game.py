@@ -11,24 +11,18 @@ from class_tiempo_stages import TiempoStages
 
 pygame.init()
 
-def game():
-    
+def game():   
 
     
-
     ancho_pantalla = ANCHO_PANTALLA
     alto_pantalla = ALTO_PANTALLA
 
     screen = pygame.display.set_mode((ancho_pantalla, alto_pantalla))
 
-    running = True
+    
     fps = FPS
 
     relog = pygame.time.Clock()
-
-
-
-
 
 
     #Instancias
@@ -51,7 +45,7 @@ def game():
     tiempo_stage = TiempoStages(screen, 0, 0)
     
     
-    
+    running = True
     while running:
 
         screen.blit(stage_actual.bg, (0, 0))#bg
