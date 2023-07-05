@@ -90,6 +90,16 @@ def game():
     dx_slide_boss = 20
     texto = "Hola Mundo"
     lista_letras = list(texto)
+    balloon_position = (200, 250)
+    balloon_color = (255, 255, 255)
+    text_color = (0, 0, 0)
+    text_position = (balloon_position[0] + 20, balloon_position[1] + 20)
+    text = ["Has demostrado tu valentia\nllegando hasta aquí muchacho...", "Pero esta ves...\nno te sera tan facíl\npasar la prueba", "Asi que...\nPREPARATE!!", "A ver si puedes\ncontrarestar este ataque!!!"]
+    text_goku = ["No te tengo miedo...", "Pero tampoco puedo confiarme...", "Dare todo en este ultimo ataque!!!"]
+    time_text = 50
+    text_index = 0
+    boss_img = False
+    path = "asset\jacky-pose.png"
     print(lista_letras)
     while running:
         # Estage
@@ -105,7 +115,7 @@ def game():
             poder_list:list[Proyectil] = []
 
             poder_list.append(poder)
-        
+
              
 
         
@@ -202,15 +212,29 @@ def game():
                     personaje.contador_esferas += 1
         if(index_stage == 3):
             font = pygame.font.Font(None, 36)
-            image = pygame.image.load("asset\jacky-pose.png")
+            image = pygame.image.load(path)
             darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
             darken_surface.fill((0, 0, 0, 200))
             screen.blit(darken_surface, (0, 0))
             if(slide_boss > 200):
                 slide_boss -= dx_slide_boss
-            for letra in lista_letras:
-                draw_text_and_image(screen, letra , image, font, (255, 255, 255), (100, 100), slide_boss)
+           
+            draw_text_and_image(screen, image, slide_boss)
+            if(slide_boss == 200):
+                if(time_text > 0 ):
+                    if(text_index < len(text) ):
+                        draw_text2(screen, text[text_index], font, text_color, text_position, balloon_position, balloon_color, max_width = 350 )
+                        time_text -= 1
+                else:
+                    time_text = 150
+                    text_index += 1
+            if(text_index >= len(text)):
+                path = "asset\goku_chico.png"
+                slide_boss = 600
+                text_index = 0
+                text = text_goku
                 
+           
         pygame.display.update()
         delta_ms = relog.tick(fps)
         
@@ -220,41 +244,85 @@ def game():
         poder.delta_ms = delta_ms
 
     
-def draw_text_and_image(screen, text, image, text_font, text_color, text_position, slide_boss):
-    text_surface = text_font.render(text, True, text_color)
-    screen.blit(text_surface, text_position)
+# def draw_text_and_image(screen, text, image, text_font, text_color, text_position, slide_boss):
+#     text_surface = text_font.render(text, True, text_color)
+#     screen.blit(text_surface, text_position)
+#     image_rect = image.get_rect()
+#     image_rect.x = slide_boss
+#     image_rect.y = 0
+#     screen.blit(image, image_rect)
+
+def draw_text_and_image(screen, image, slide_boss):
     image_rect = image.get_rect()
     image_rect.x = slide_boss
     image_rect.y = 0
     screen.blit(image, image_rect)
+    pygame.display.flip()
+# def draw_text(screen, text, text_font, text_color, text_position):
+#     text_surface = text_font.render(text, True, text_color)
+#     screen.blit(text_surface, text_position)
+def draw_text2(screen, text, text_font, text_color, text_position, balloon_position, balloon_color, max_width):
+    balloon_padding_top = 20  # Ajusta el valor del padding superior del globo
+    balloon_padding_sides = 10  # Padding a los lados del globo
+    balloon_margin = 10
 
-def draw_text_and_image_with_transition(screen, text, image, text_font, text_color, text_position, image_position, transition_duration):
-    alpha = 0
-    target_alpha = 255
-    start_time = pygame.time.get_ticks()
-
-    while alpha < target_alpha:
-        current_time = pygame.time.get_ticks()
-        elapsed_time = current_time - start_time
-        if elapsed_time >= transition_duration:
-            alpha = target_alpha
+    # Dividir el texto en líneas según el ancho máximo
+    lines = []
+    words = text.split()
+    current_line = words[0]
+    for word in words[1:]:
+        if text_font.size(current_line + ' ' + word)[0] <= max_width - balloon_padding_sides * 2:
+            current_line += ' ' + word
         else:
-            alpha = int((elapsed_time / transition_duration) * target_alpha)
+            lines.append(current_line)
+            current_line = word
+    lines.append(current_line)
 
-        screen.fill((255, 255, 255))  # Rellena la pantalla de blanco con opacidad completa
+    # Calcular el alto del globo en función del número de líneas
+    balloon_height = len(lines) * text_font.get_height() + balloon_padding_top + balloon_padding_sides
 
-        # Calcular opacidad inversa para el texto
-        text_alpha = 255 - alpha
-        text_surface = text_font.render(text, True, (text_color[0], text_color[1], text_color[2], text_alpha))
-        screen.blit(text_surface, text_position)
+    balloon_rect = pygame.Rect(0, 0, max_width, balloon_height)
+    balloon_rect.midtop = balloon_position
 
-        # Calcular opacidad inversa para la imagen
-        image_alpha = 255 - alpha
-        image.set_alpha(image_alpha)
-        screen.blit(image, image_position)
+    balloon_radius = 10
 
-        pygame.display.flip()
+    pygame.draw.rect(screen, balloon_color, balloon_rect, border_radius=balloon_radius)
+    pygame.draw.polygon(screen, balloon_color, [(balloon_rect.bottomright[0], balloon_rect.bottomright[1] - balloon_padding_sides),
+                                                 (balloon_rect.bottomright[0] + balloon_margin, balloon_rect.bottomright[1]),
+                                                 (balloon_rect.bottomright[0], balloon_rect.bottomright[1] + balloon_padding_sides)])
 
+    line_height = text_font.get_height()
+    y = balloon_rect.y + balloon_padding_top // 2
+    for line in lines:
+        text_surface = text_font.render(line, True, text_color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (balloon_rect.centerx, y)
+        screen.blit(text_surface, text_rect)
+        y += line_height
+def draw_text(screen, text, text_font, text_color, text_position, balloon_position, balloon_color):
+    text_surface = text_font.render(text, True, text_color)
+
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = text_position
+
+    balloon_padding_top = 40  # Ajusta el valor del padding superior del globo
+
+    balloon_padding_sides = 10  # Padding a los lados del globo
+    balloon_margin = 10
+    balloon_width = text_surface.get_width() + balloon_padding_sides * 2
+    balloon_height = text_surface.get_height() + balloon_padding_top + balloon_padding_sides
+
+    balloon_rect = pygame.Rect(0, 0, balloon_width, balloon_height)
+    balloon_rect.topleft = balloon_position
+
+    balloon_radius = 10
+
+    pygame.draw.rect(screen, balloon_color, balloon_rect, border_radius=balloon_radius)
+    pygame.draw.polygon(screen, balloon_color, [(balloon_rect.bottomright[0], balloon_rect.bottomright[1] - balloon_padding_sides),
+                                                 (balloon_rect.bottomright[0] + balloon_margin, balloon_rect.bottomright[1]),
+                                                 (balloon_rect.bottomright[0], balloon_rect.bottomright[1] + balloon_padding_sides)])
+
+    screen.blit(text_surface, text_rect)
 
 def show_game_over_screen(screen, width, height):
     game_over_font = pygame.font.Font(None, 64)  # Fuente y tamaño del texto "Game Over"
