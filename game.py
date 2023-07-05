@@ -8,10 +8,12 @@ from class_proyectil import Proyectil
 from levels.class_stage_1 import Stage_1
 from levels.class_stage_2 import Stage_2
 from levels.class_stage_3 import Stage_3
+from levels.class_stage_4 import Stage_4
 from modo.modo_dev import *
 from class_tiempo_stages import TiempoStages
 from class_esferas import Esferas
 from class_radar import Radar
+from class_jacki import Boss
 
 import random
 pygame.init()
@@ -65,7 +67,8 @@ def game():
     stage_1 = Stage_1(screen)
     stage_2 = Stage_2(screen)
     stage_3 = Stage_3(screen)
-    stage_list = [stage_1, stage_2, stage_3]
+    stage_4 = Stage_4(screen)
+    stage_list = [stage_1, stage_2, stage_3, stage_4]
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     
@@ -74,30 +77,34 @@ def game():
     # time_stage instancia
     game_over = False
     stage_run = False
-    index_stage = 0
+    index_stage = 3
     running = True
     stage_actual = None
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 30
+    time_limit = 10
     lista_esferas = []
     lista_esferas_generada = False
-        
+    slide_boss = 600
+    dx_slide_boss = 20
+    texto = "Hola Mundo"
+    lista_letras = list(texto)
+    print(lista_letras)
     while running:
         # Estage
         if not stage_run:
             stage_run = True
             stage_actual = stage_list[index_stage]
-            enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
-            personaje = Personaje(5, 600, stage_actual.tile_list, screen, enemigo)
+            if(index_stage < 3):
+                enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
+            else:
+                enemigo = Boss(800, 570)
+            personaje = Personaje(150, 600, stage_actual.tile_list, screen, enemigo)
             poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
             poder_list:list[Proyectil] = []
 
             poder_list.append(poder)
-
-            sprites_personajes = pygame.sprite.Group()
-            sprites_personajes.add(personaje)
         
              
 
@@ -154,14 +161,14 @@ def game():
             pygame.draw.rect(screen, (255, 255, 255), personaje.poder.rect, 2)
             dibujar_grid(screen, BLANCO, stage_actual.tile_size, ancho_pantalla, alto_pantalla, 0)
 
-        sprites_personajes.update(screen)
-        sprites_personajes.draw(screen)
 
         #esfera 
         # Dibujar todas las esferas en la pantalla
+        personaje.update(screen, index_stage)
+
         if(not enemigo.esta_muerto):
             enemigo.update(screen)   
-             
+
         if(radar_on):
             print('dibujando')
             radar.update(screen, personaje)
@@ -193,6 +200,17 @@ def game():
                     lista_esferas = filter_es(esfera.return_ID, lista_esferas)
                     esfera.return_ID = None
                     personaje.contador_esferas += 1
+        if(index_stage == 3):
+            font = pygame.font.Font(None, 36)
+            image = pygame.image.load("asset\jacky-pose.png")
+            darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
+            darken_surface.fill((0, 0, 0, 200))
+            screen.blit(darken_surface, (0, 0))
+            if(slide_boss > 200):
+                slide_boss -= dx_slide_boss
+            for letra in lista_letras:
+                draw_text_and_image(screen, letra , image, font, (255, 255, 255), (100, 100), slide_boss)
+                
         pygame.display.update()
         delta_ms = relog.tick(fps)
         
@@ -202,6 +220,40 @@ def game():
         poder.delta_ms = delta_ms
 
     
+def draw_text_and_image(screen, text, image, text_font, text_color, text_position, slide_boss):
+    text_surface = text_font.render(text, True, text_color)
+    screen.blit(text_surface, text_position)
+    image_rect = image.get_rect()
+    image_rect.x = slide_boss
+    image_rect.y = 0
+    screen.blit(image, image_rect)
+
+def draw_text_and_image_with_transition(screen, text, image, text_font, text_color, text_position, image_position, transition_duration):
+    alpha = 0
+    target_alpha = 255
+    start_time = pygame.time.get_ticks()
+
+    while alpha < target_alpha:
+        current_time = pygame.time.get_ticks()
+        elapsed_time = current_time - start_time
+        if elapsed_time >= transition_duration:
+            alpha = target_alpha
+        else:
+            alpha = int((elapsed_time / transition_duration) * target_alpha)
+
+        screen.fill((255, 255, 255))  # Rellena la pantalla de blanco con opacidad completa
+
+        # Calcular opacidad inversa para el texto
+        text_alpha = 255 - alpha
+        text_surface = text_font.render(text, True, (text_color[0], text_color[1], text_color[2], text_alpha))
+        screen.blit(text_surface, text_position)
+
+        # Calcular opacidad inversa para la imagen
+        image_alpha = 255 - alpha
+        image.set_alpha(image_alpha)
+        screen.blit(image, image_position)
+
+        pygame.display.flip()
 
 
 def show_game_over_screen(screen, width, height):
@@ -214,7 +266,7 @@ def show_game_over_screen(screen, width, height):
                 pygame.quit()
                 return
 
-        screen.fill((0, 0, 0))  # Rellena la pantalla con negro
+        screen.fill((0, 0, 0, 0.5))  # Rellena la pantalla con negro
         screen.blit(game_over_text, (width/2 - game_over_text.get_width()/2, height/2 - game_over_text.get_height()/2))  # Dibuja el texto centrado en la pantalla
 
         pygame.display.flip()

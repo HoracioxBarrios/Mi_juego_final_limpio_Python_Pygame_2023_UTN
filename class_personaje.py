@@ -16,6 +16,7 @@ class Personaje(pygame.sprite.Sprite):
         self.saltando_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 6, 6, True)
         self.shot_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, True)
         self.shot_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, False)
+        self.estatico = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 2, 3, 3, True)
         self.gravity_vel_y = 0
         self.velocidad_caminar = 9
         self.desplazamiento_x = 0
@@ -100,7 +101,7 @@ class Personaje(pygame.sprite.Sprite):
         elif self.rect.right + self.dx > ANCHO_PANTALLA:
             self.dx = 0
 
-    def update(self, screen):
+    def update(self, screen, index_stage):
         self.controlar_sonido_caminar()
         self.dx = self.desplazamiento_x
         self.dy = 0
@@ -120,27 +121,35 @@ class Personaje(pygame.sprite.Sprite):
             self.descargar_poder()
             
         keys = pygame.key.get_pressed()
-
-        if(keys[pygame.K_RIGHT]):
-            
-            if(keys[pygame.K_w]):
-                self.acciones('shot')
-            self.acciones('caminar_r')
-        elif(keys[pygame.K_LEFT]):
-            
-            if(keys[pygame.K_w]):
-                self.acciones('shot')
-            self.acciones('caminar_l')
-        else:
-            self.acciones('quieto')
+        if(index_stage == 3):
+            print(index_stage)
+            self.cambiar_animacion(self.estatico)
+            self.control_personaje = False
+        if(self.control_personaje):
+            if(keys[pygame.K_RIGHT]):
+                
+                if(keys[pygame.K_w]):
+                    self.acciones('shot')
+                self.acciones('caminar_r')
+            elif(keys[pygame.K_LEFT]):
+                
+                if(keys[pygame.K_w]):
+                    self.acciones('shot')
+                self.acciones('caminar_l')
+            else:
+                self.acciones('quieto')
 
 
         self.rect.x += self.dx    
         self.rect.y += self.dy
 
         self.barra_vida.update(self.rect.x -2, self.rect.y, self.vida)
-        self.barra_vida.draw(screen)
+        if(index_stage != 3):
+            self.barra_vida.draw(screen)
+        self.draw(screen)
 
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
     def acciones(self, accion: str, shot_en_aire = False):
 
@@ -249,8 +258,6 @@ class Personaje(pygame.sprite.Sprite):
     def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
         self.animacion = nueva_lista_animaciones    
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect_main)
 
     def verificar_frames(self):
         '''
