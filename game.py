@@ -79,13 +79,13 @@ def game():
     # time_stage instancia
     game_over = False
     stage_run = False
-    index_stage = 3
+    index_stage = 0
     running = True
     stage_actual = None
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 10
+    time_limit = 25
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
@@ -263,7 +263,7 @@ def game():
                     parte_final_2 = True
         if(parte_final_2):
             poder_final.update()
-        poder_kame.update()
+            poder_kame.update()
         print("contador esc ",contador_escena)
                 
         
