@@ -2,7 +2,6 @@ import pygame, sys
 from class_boton import Button
 from configuracion import *
 from game import *
-from vid.pyvidplayer import Video
 from class_tiempo_stages import TiempoStages
 pygame.init()
 
@@ -110,7 +109,7 @@ def intro():
         #donde corre el video
         
         if vid.active == True: # si es true cirre ek video
-            vid.draw(SCREEN, (0, 0)) 
+            vid.draw(SCREEN, (0, 0))
         else:
             vid.close()
             main_menu()

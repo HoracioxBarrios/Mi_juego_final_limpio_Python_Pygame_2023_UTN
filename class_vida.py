@@ -2,7 +2,6 @@ import pygame
 
 class BarraVida:
     def __init__(self, screen, vida_maxima, ancho_bar, alto_bar, pos_x, pos_y, ):
-        super().__init__()
         self.x = pos_x
         self.y = pos_y
         self.ancho = ancho_bar

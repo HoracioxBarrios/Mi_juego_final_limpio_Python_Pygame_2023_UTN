@@ -74,7 +74,7 @@
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
             ],
-            "musica_path": "sonido/intro_dbz.mp3"
+            "musica_path": "sonido/intro_music.wav"
         }
     ]
 }

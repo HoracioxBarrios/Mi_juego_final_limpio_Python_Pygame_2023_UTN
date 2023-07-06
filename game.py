@@ -1,7 +1,6 @@
 import pygame, sys
 from utilidades import *
 from configuracion import *
-from class_Stage import StagePadre
 from class_personaje import Personaje
 from class_enemigo import Enemigo
 from class_proyectil import Proyectil
@@ -14,8 +13,11 @@ from class_tiempo_stages import TiempoStages
 from class_esferas import Esferas
 from class_radar import Radar
 from class_jacki import Boss
-
+from vid.pyvidplayer import Video
+from class_poder_final import PoderFinalVid
+from class_kame import Kame
 import random
+
 pygame.init()
 
 def game():   
@@ -69,10 +71,10 @@ def game():
     stage_3 = Stage_3(screen)
     stage_4 = Stage_4(screen)
     stage_list = [stage_1, stage_2, stage_3, stage_4]
+    poder_final = PoderFinalVid(0,0, screen)
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
-    
-
+    poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 650)
 
     # time_stage instancia
     game_over = False
@@ -96,11 +98,17 @@ def game():
     text_position = (balloon_position[0] + 20, balloon_position[1] + 20)
     text = ["Has demostrado tu valentia\nllegando hasta aquí muchacho...", "Pero esta ves...\nno te sera tan facíl\npasar la prueba", "Asi que...\nPREPARATE!!", "A ver si puedes\ncontrarestar este ataque!!!"]
     text_goku = ["No te tengo miedo...", "Pero tampoco puedo confiarme...", "Dare todo en este ultimo ataque!!!"]
-    time_text = 50
+    time_text = 84
+    time_text_limit = 84
     text_index = 0
     boss_img = False
+    load_musica_battle = False
+    load_music_intro = False
     path = "asset\jacky-pose.png"
     print(lista_letras)
+    parte_final_2 = False
+    contador_escena = 0
+    flag_video_final = False
     while running:
         # Estage
         if not stage_run:
@@ -210,7 +218,14 @@ def game():
                     lista_esferas = filter_es(esfera.return_ID, lista_esferas)
                     esfera.return_ID = None
                     personaje.contador_esferas += 1
-        if(index_stage == 3):
+
+
+        if(index_stage == 3 and contador_escena < 2):
+            if(not load_music_intro):
+                load_music_intro = True
+                pygame.mixer.music.load("sonido\intro_music.wav")
+                pygame.mixer.music.play()
+                pygame.mixer.music.set_volume(0.5)
             font = pygame.font.Font(None, 36)
             image = pygame.image.load(path)
             darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
@@ -226,15 +241,30 @@ def game():
                         draw_text2(screen, text[text_index], font, text_color, text_position, balloon_position, balloon_color, max_width = 350 )
                         time_text -= 1
                 else:
-                    time_text = 150
+                    time_text = time_text_limit
                     text_index += 1
-            if(text_index >= len(text)):
+            if(text_index >= len(text)):# voz goku
                 path = "asset\goku_chico.png"
                 slide_boss = 600
                 text_index = 0
                 text = text_goku
                 
-           
+                contador_escena += 1
+            if contador_escena == 2 and not flag_video_final :
+                flag_video_final = True
+                video_pelea_final_1()
+                if(not load_musica_battle):
+                    load_musica_battle = True
+                    pygame.mixer.music.load("sonido\musica_resto_pelea.wav")
+                    pygame.mixer.music.play()
+                    pygame.mixer.music.set_volume(0.5)
+                    parte_final_2 = True
+        if(parte_final_2):
+            poder_final.update()
+            poder_kame.update()
+        print("contador esc ",contador_escena)
+                
+        
         pygame.display.update()
         delta_ms = relog.tick(fps)
         
@@ -346,6 +376,82 @@ def filter_es(id, lista_esferas: list[Esferas]):
             new_list.append(esf)
     return new_list
 
+#------------------------------------------------  vid
+
+
+
+
+
+def video_pelea_final_2():
+    pygame.init()
+    ancho = 1000
+    alto = 700
+    pygame.mixer.music.load("vid/video final goku vs roshi- cortado -parte 2.wav")
+    # vid_2 = Video("vid\goku vs roshi video con audio completo .mp4")#vid final con
+    # vid_2.set_size((ancho, alto))
+    pygame.mixer.music.play()
+    screen = pygame.display.set_mode((ancho, alto))
+    while True:
+        screen.fill("White")
+        
+        # if vid_2.active == True: # si es true cirre ek video
+        #         vid_2.draw(screen, (0, 0))
+        # else:
+        #     vid_2.close()
+            
+            # main_menu()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     vid.close()
+                #llamada a main menu ()
+                # main_menu()
+        pygame.display.update()
+
+    pygame.quit()
+
+# pygame.mixer.music.load("vid\intrio video epic.wav")
+# pygame.mixer.music.play()
+
+def video_pelea_final_1():
+    pygame.init()
+    ancho = 1000
+    alto = 700
+    screen = pygame.display.set_mode((ancho, alto))
+    pygame.display.set_caption("Epic Vid")
+
+    vid_1 = Video("vid/video final goku vs roshi-coratodo-parte-1.avi")#vid final con
+    vid_1.set_size((ancho, alto))
+
+    runnig = True
+    while runnig:
+        
+        pygame.display.update()
+        if vid_1.active == True: # si es true cirre ek video
+                vid_1.draw(screen, (0, 0))
+                vid_1.set_volume(0.5)
+        else:
+            vid_1.close()
+            # video_pelea_final_2()
+            runnig = False
+            # main_menu()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     vid.close()
+                #llamada a main menu ()
+                # main_menu()
+    
+
+
+
+# video_pelea_final_1()
+
+#------------------------------------------------
 
 
 pygame.quit()
