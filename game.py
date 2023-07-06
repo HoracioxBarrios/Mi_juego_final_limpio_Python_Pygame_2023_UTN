@@ -75,7 +75,7 @@ def game():
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
-    over_game = GameOver(screen, 1000)
+    over_game = GameOver(screen, 5540) #score ejemplo 
 
 
     # time_stage instancia
@@ -200,7 +200,7 @@ def game():
             
         if(crono_on):
             if(not start_time):
-                tiempo_stage = TiempoStages(screen, 0, 0, time_limit)
+                tiempo_stage = TiempoStages(screen,420, 50, time_limit)
                 start_time = True
             tiempo_stage.update_time()
             tiempo_stage.draw_time()
