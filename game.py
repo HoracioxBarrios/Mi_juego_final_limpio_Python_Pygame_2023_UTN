@@ -74,7 +74,7 @@ def game():
     poder_final = PoderFinalVid(0,0, screen)
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
-    poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 650)
+    poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
 
     # time_stage instancia
     game_over = False
