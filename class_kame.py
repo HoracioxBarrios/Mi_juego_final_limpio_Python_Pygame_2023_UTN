@@ -42,6 +42,13 @@ class Kame:
         self.rect.x = pos_x
         self.rect.y = pos_y
 
+        self.time_render = 5
+        self.time_render_limit = 5
+        self.color_texto = (238, 51, 10)
+        self.tamanio_fuente = 45
+        self.type_fuente = "Impact"
+        self.fuente = pygame.font.SysFont(self.type_fuente, self.tamanio_fuente)
+
     def draw(self, screen : pygame.Surface):
         screen.blit(self.image_goku, self.rect_goku)
         screen.blit(self.image_jack, self.rect_jack)
@@ -49,7 +56,12 @@ class Kame:
         screen.blit(self.image_1, self.rect)# celeste Goku 
         self.verificar_frames()
         self.draw_choque()
-
+        if(self.time_render > 0):
+            text = self.fuente.render("PRESS E!!", True, self.color_texto)
+            screen.blit(text, (100,530))
+            self.time_render -= 1
+        else:
+            self.time_render = self.time_render_limit
 
     def update(self):
         # self.ancho_bar_2 = self.poder_personaje * 100 / self.poder_enemigo
@@ -58,14 +70,7 @@ class Kame:
             self.image_2.fill((39, 117, 211))
         self.caida_poder()
         self.draw(self.screen) 
-
-        # key = pygame.key.get_pressed()
-
-        # if(key[pygame.K_e]):
-        #     self.ancho += self.aumento_kame
-        #     print('ANCHO:::>',self.ancho)
-
-        # print("dibujando barra kame")
+       
     def caida_poder(self):
         if(self.image_1.get_width() > 0):
             self.ancho -= self.caida_kame
