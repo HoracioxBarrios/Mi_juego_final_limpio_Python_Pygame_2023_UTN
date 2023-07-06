@@ -33,8 +33,9 @@ Ejecuta el archivo main.py con Python:
 
 Controla al personaje principal con las teclas:
 
-- [W] Poder 
-- [ESPACE] Slatar
+- [W] Poder -Kame
+- [ESPACE] Saltar
+- [E] Poder - (Secreto)
 - Mover hacia arriba: ↑
 - Mover hacia abajo: ↓
 - Mover hacia la izquierda: ←
