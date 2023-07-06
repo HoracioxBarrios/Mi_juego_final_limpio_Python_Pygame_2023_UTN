@@ -87,7 +87,7 @@ def game():
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 25
+    time_limit = 5 # relog limite time
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
@@ -269,7 +269,7 @@ def game():
         print("contador esc ",contador_escena)
                 
         
-        pygame.display.update()
+        pygame.display.flip()
         delta_ms = relog.tick(fps)
         
         
