@@ -17,7 +17,7 @@ from vid.pyvidplayer import Video
 from class_poder_final import PoderFinalVid
 from class_kame import Kame
 import random
-
+from class_game_over import GameOver
 pygame.init()
 
 def game():   
@@ -75,6 +75,8 @@ def game():
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
+    over_game = GameOver(screen, 1000)
+
 
     # time_stage instancia
     game_over = False
@@ -203,7 +205,8 @@ def game():
             tiempo_stage.update_time()
             tiempo_stage.draw_time()
             if(tiempo_stage.elapsed_time >= time_limit):
-                show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
+                # show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
+                over_game.show_game_over()
         if(start_time):
             if(not lista_esferas_generada):
                 for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
@@ -355,20 +358,8 @@ def draw_text(screen, text, text_font, text_color, text_position, balloon_positi
 
     screen.blit(text_surface, text_rect)
 
-def show_game_over_screen(screen, width, height):
-    game_over_font = pygame.font.Font(None, 64)  # Fuente y tamaño del texto "Game Over"
-    game_over_text = game_over_font.render("Game Over", True, (255, 255, 255))  # Texto "Game Over" en blanco
+# game over def
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
-
-        screen.fill((0, 0, 0, 0.5))  # Rellena la pantalla con negro
-        screen.blit(game_over_text, (width/2 - game_over_text.get_width()/2, height/2 - game_over_text.get_height()/2))  # Dibuja el texto centrado en la pantalla
-
-        pygame.display.flip()
 
 def filter_es(id, lista_esferas: list[Esferas]):
     new_list = []

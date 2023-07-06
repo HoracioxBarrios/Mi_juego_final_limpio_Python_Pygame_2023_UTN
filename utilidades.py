@@ -73,3 +73,19 @@ def leerJson(path):
     with open(path, 'r') as archivo:
         contenido = json.load(archivo)
     return contenido
+
+#---------------------------------- se reemplaza por la class
+# def show_game_over_screen(screen, width, height):
+#     game_over_font = pygame.font.Font(None, 64)  # Fuente y tamaño del texto "Game Over"
+#     game_over_text = game_over_font.render("Game Over", True, (255, 255, 255))  # Texto "Game Over" en blanco
+
+#     while True:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 pygame.quit()
+#                 return
+
+#         screen.fill((0, 0, 0, 0.5))  # Rellena la pantalla con negro
+#         screen.blit(game_over_text, (width/2 - game_over_text.get_width()/2, height/2 - game_over_text.get_height()/2))  # Dibuja el texto centrado en la pantalla
+
+#         pygame.display.flip()
