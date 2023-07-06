@@ -18,6 +18,7 @@ class Radar(pygame.sprite.Sprite):
         self.dx = 0
         self.id = id_propia
         self.catch_radar = False
+        self.sonido = pygame.mixer.Sound("sonido\obtencion_radar.mp3")
     def add_gravity(self):
         #char representa a cualquier tipo de personaje
         #velocidad de caida final = 10
@@ -34,4 +35,6 @@ class Radar(pygame.sprite.Sprite):
 
     def colison_personaje(self, personaje: Personaje):
         if self.rect.colliderect(personaje.rect):
-                self.catch_radar = True
+            self.catch_radar = True
+            self.sonido.set_volume(1)
+            self.sonido.play()

@@ -2,17 +2,19 @@ import pygame, sys
 from class_boton import Button
 from configuracion import *
 from game import *
+
 from class_tiempo_stages import TiempoStages
+
 pygame.init()
 
-
+font_obtenida = "fonts/font.ttf"
 SCREEN = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
 pygame.display.set_caption("Dragon Ball Sprite")
 
 background_main = pygame.image.load("asset\Kid Goku Wallpaper.png")
 background_main_rescalado = pygame.transform.scale(background_main,(ANCHO_PANTALLA,ALTO_PANTALLA))
 def get_font(size): # Returns Press-Start-2P in the desired size
-    return pygame.font.Font("asset/font.ttf", size)
+    return pygame.font.Font(font_obtenida, size)
 
 def play():
     while True:

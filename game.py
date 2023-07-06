@@ -90,8 +90,7 @@ def game():
     lista_esferas_generada = False
     slide_boss = 600
     dx_slide_boss = 20
-    texto = "Hola Mundo"
-    lista_letras = list(texto)
+    
     balloon_position = (200, 250)
     balloon_color = (255, 255, 255)
     text_color = (0, 0, 0)
@@ -105,7 +104,7 @@ def game():
     load_musica_battle = False
     load_music_intro = False
     path = "asset\jacky-pose.png"
-    print(lista_letras)
+    
     parte_final_2 = False
     contador_escena = 0
     flag_video_final = False
@@ -258,7 +257,7 @@ def game():
                 if(not load_musica_battle):
                     load_musica_battle = True
                     pygame.mixer.music.load("sonido\musica_resto_pelea.wav")
-                    pygame.mixer.music.play()
+                    pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(0.5)
                     parte_final_2 = True
         if(parte_final_2):
@@ -412,7 +411,7 @@ def video_pelea_final_2():
                 # main_menu()
         pygame.display.update()
 
-    pygame.quit()
+    
 
 # pygame.mixer.music.load("vid\intrio video epic.wav")
 # pygame.mixer.music.play()

@@ -34,8 +34,8 @@ class Kame:
         self.rect.x = pos_x
         self.rect.y = pos_y
         
-        self.caida_kame = 5
-        self.aumento_kame = 30
+        self.caida_kame = 5 # representa el poder de jaki su kame que viene hacia goku
+        self.aumento_kame = 40 #representa el contraresto del kame . goku contraresta el kame de jaki
         self.image_2 = pygame.Surface((self.ancho_bar_2, self.alto))
         self.image_2.fill((39, 117, 211))
         self.rect_2 = self.image_2.get_rect()

@@ -7,7 +7,7 @@ class Stage_2(StagePadre):
     def __init__(self, screen: pygame.Surface):
         super().__init__(screen)
         
-        self.bg = pygame.image.load("asset\game_background_1.png")
+        self.bg = pygame.image.load("asset\Prepper Creatures.png")
         self.bg = pygame.transform.scale(self.bg, (self.ancho_screen, self.alto_screen))
 
         self.bloque_img = pygame.image.load('asset\StoneBlock.png')
