@@ -1,5 +1,5 @@
 from utilidades import *
-
+import pygame
 class Proyectil:
     def __init__(self, orientacion_x_char, pos_char_x, pos_char_y) -> None:
         self.damage = 1
@@ -30,6 +30,8 @@ class Proyectil:
         self.dibijando_animacion_explocion = False
         self.delta_ms = 0
         self.colision = False
+        
+        self.sonido = pygame.mixer.Sound("sonido/086113_8-bit-cannonwav-40194.mp3")
     def update(self, delta_ms):
         self.dx = self.desplazamiento_x
     
@@ -98,3 +100,7 @@ class Proyectil:
                 self.proyectil_en_aire = False
                 self.fin_animacion_explocion = True
                 self.draw_explocion(screen)
+                self.sound()
+    def sound(self):
+            self.sonido.set_volume(0.5)
+            self.sonido.play()
