@@ -170,7 +170,9 @@ def game():
                 elif evento.key == pygame.K_w:
                     personaje.acciones("shot")
                 elif evento.key == pygame.K_TAB:
-                    cambiar_modo()    
+                    cambiar_modo()
+                elif evento.key == pygame.K_e:
+                    poder_kame.contra_poder()
 
         #Modo Dev
         if get_modo():
@@ -261,7 +263,7 @@ def game():
                     parte_final_2 = True
         if(parte_final_2):
             poder_final.update()
-            poder_kame.update()
+        poder_kame.update()
         print("contador esc ",contador_escena)
                 
         
