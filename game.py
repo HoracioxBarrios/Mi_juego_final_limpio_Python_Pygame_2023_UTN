@@ -48,7 +48,7 @@ def game():
 
     # time_stage instancia
     stage_run = False
-    index_stage = 3
+    index_stage = 0
     running = True
     stage_actual = None
     radar_on = False
@@ -58,9 +58,11 @@ def game():
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
+    slide_krillin = 800
     dx_slide_boss = 20
     
     balloon_position = (200, 250)
+    balloon_position_krillin = (250, 300)
     balloon_color = (255, 255, 255)
     text_color = (0, 0, 0)
     text = ["Has demostrado tu valentia\nllegando hasta aquí muchacho...", "Pero esta ves...\nno te sera tan facíl\npasar la prueba", "Asi que...\nPREPARATE!!", "A ver si puedes\ncontrarestar este ataque!!!"]
@@ -70,11 +72,15 @@ def game():
     text_index = 0
     load_musica_battle = False
     load_music_intro = False
-    path = "asset\jacky-pose.png"
-    
+    path_goku_final = "asset\goku_chico.png"
+    path_goku_intro = "asset\goku_intro_game_res.png"
+    path_jacky = "asset\jacky-pose.png"
+    path_krillin = "asset\krillin_intro_game.png"
+    path_por_defecto = path_krillin
     parte_final_2 = False
     contador_escena = 0
     flag_video_final = False
+    contador_escena_start_game = 0
     while running:
         # Estage
         if not stage_run:
@@ -172,8 +178,37 @@ def game():
                     lista_esferas = filter_es(esfera.return_ID, lista_esferas)
                     esfera.return_ID = None
                     personaje.contador_esferas += 1
-
-        ##################################################
+        #######################intro Inicio##########################
+        if(index_stage == 0 and contador_escena_start_game < 2):
+            if(not load_music_intro):
+                load_music_intro = True
+                cambiar_musica("sonido/intro.mp3")
+            #cargamos fuente para interaccion
+            font = pygame.font.Font(None, 36)
+            #cargamos imagen de la interaccion
+            image = pygame.image.load(path_por_defecto)
+            #oscurese la pantalla
+            oscurecer_pantalla(screen)
+            if(slide_krillin > 400):
+                slide_krillin -= dx_slide_boss
+                
+            draw_text_and_image(screen, image, slide_krillin, 300)
+            if(slide_krillin == 400):
+                if(time_text > 0 ):
+                    if(text_index < len(text) ):
+                        draw_text2(screen, text[text_index], font, text_color, balloon_position_krillin, balloon_color, max_width = 350 )
+                        time_text -= 1
+                else:
+                    time_text = time_text_limit
+                    text_index += 1
+            if(text_index >= len(text)):# voz goku
+                path_por_defecto = path_goku_intro
+                slide_krillin = 800
+                text_index = 0
+                text = text_goku
+                
+                contador_escena_start_game += 1
+        #######################Intro Final###########################
         if(index_stage == 3 and contador_escena < 2):
             if(not load_music_intro):
                 load_music_intro = True
@@ -181,7 +216,7 @@ def game():
             #cargamos fuente para interaccion
             font = pygame.font.Font(None, 36)
             #cargamos imagen de la interaccion
-            image = pygame.image.load(path)
+            image = pygame.image.load(path_por_defecto)
             #oscurese la pantalla
             oscurecer_pantalla(screen)
             if(slide_boss > 200):
@@ -197,7 +232,7 @@ def game():
                     time_text = time_text_limit
                     text_index += 1
             if(text_index >= len(text)):# voz goku
-                path = "asset\goku_chico.png"
+                path_por_defecto = "asset\goku_chico.png"
                 slide_boss = 600
                 text_index = 0
                 text = text_goku
@@ -224,10 +259,10 @@ def game():
         enemigo.delta_ms = delta_ms
         poder.delta_ms = delta_ms
 
-def draw_text_and_image(screen, image, slide_boss):
+def draw_text_and_image(screen, image, slide_boss, pos_y = 0):
     image_rect = image.get_rect()
     image_rect.x = slide_boss
-    image_rect.y = 0
+    image_rect.y = pos_y
     screen.blit(image, image_rect)
 def oscurecer_pantalla(screen):
     darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
