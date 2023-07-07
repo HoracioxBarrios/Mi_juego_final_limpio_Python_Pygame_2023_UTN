@@ -21,49 +21,17 @@ from class_game_over import GameOver
 pygame.init()
 
 def game():   
-
-    
     ancho_pantalla = ANCHO_PANTALLA
     alto_pantalla = ALTO_PANTALLA
-
     screen = pygame.display.set_mode((ancho_pantalla, alto_pantalla))
-
-    
     fps = FPS
-
     relog = pygame.time.Clock()
-
-
 
 # Instancias
     # Rutas de las imágenes de las esferas
-    
-
-
     # Dimensiones de la pantalla
     ancho_screen_para_esferas = 950
     alto_screen_para_esferas = 555
-
-    # Lista para almacenar las instancias de las esferas
-    
-
-    # for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
-    #     # Generar la ruta de la imagen de la esfera utilizando la variable 'i'
-    #     path_esfera = "asset/esferas/{i}.png".format(i=i)#i reemplaza a i en cada iteracion
-        
-    #     # Generar coordenadas aleatorias dentro del rango de la pantalla
-    #     x = random.randint(0, ancho_screen_para_esferas)
-    #     y = random.randint(0, alto_screen_para_esferas)
-        
-    #     # Crear instancia de la esfera con las coordenadas aleatorias
-    #     esfera = Esferas(screen, x, y, path_esfera, ancho=40, alto=40, id_propia = i)
-        
-    #     # Agregar la instancia a la lista de esferas
-    #     lista_esferas.append(esfera)
-    
-    
-
-
 
     #instancio el stage actual. luego podria tener varios stages en una lista y llamarlo segun elecion desde los indices
     stage_1 = Stage_1(screen)
@@ -79,9 +47,8 @@ def game():
 
 
     # time_stage instancia
-    game_over = False
     stage_run = False
-    index_stage = 0
+    index_stage = 3
     running = True
     stage_actual = None
     radar_on = False
@@ -96,13 +63,11 @@ def game():
     balloon_position = (200, 250)
     balloon_color = (255, 255, 255)
     text_color = (0, 0, 0)
-    text_position = (balloon_position[0] + 20, balloon_position[1] + 20)
     text = ["Has demostrado tu valentia\nllegando hasta aquí muchacho...", "Pero esta ves...\nno te sera tan facíl\npasar la prueba", "Asi que...\nPREPARATE!!", "A ver si puedes\ncontrarestar este ataque!!!"]
     text_goku = ["No te tengo miedo...", "Pero tampoco puedo confiarme...", "Dare todo en este ultimo ataque!!!"]
     time_text = 84
     time_text_limit = 84
     text_index = 0
-    boss_img = False
     load_musica_battle = False
     load_music_intro = False
     path = "asset\jacky-pose.png"
@@ -125,9 +90,6 @@ def game():
 
             poder_list.append(poder)
 
-             
-
-        
         if(personaje.contador_esferas >= 7):
             if(index_stage < len(stage_list) -1):
                 index_stage += 1
@@ -138,8 +100,6 @@ def game():
                 start_time = False
                 lista_esferas_generada = False
                
-
-
         if(enemigo.vida <= 0 and not radar_on and not enemigo.esta_muerto):
             radar = Radar(screen, enemigo.rect.x, enemigo.rect.y, "asset/radar.png", 50, 50, 10)
             radar_on = True
@@ -149,21 +109,11 @@ def game():
         
         stage_actual.draw()#pisos
         
-        #time_stage----
-        
-        #--------------
-        
-
-
-        
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 running = False
                 sys.exit()
-        #orden de verificación
-            #gravedad
-            #colision
-            #incremento o decrementos de los rect en y, x
+
             if evento.type == pygame.KEYDOWN:
 
                 if evento.key == pygame.K_SPACE:
@@ -223,18 +173,17 @@ def game():
                     esfera.return_ID = None
                     personaje.contador_esferas += 1
 
-
+        ##################################################
         if(index_stage == 3 and contador_escena < 2):
             if(not load_music_intro):
                 load_music_intro = True
-                pygame.mixer.music.load("sonido\intro_music.wav")
-                pygame.mixer.music.play()
-                pygame.mixer.music.set_volume(0.5)
+                cambiar_musica("sonido\intro_music.wav")
+            #cargamos fuente para interaccion
             font = pygame.font.Font(None, 36)
+            #cargamos imagen de la interaccion
             image = pygame.image.load(path)
-            darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
-            darken_surface.fill((0, 0, 0, 200))
-            screen.blit(darken_surface, (0, 0))
+            #oscurese la pantalla
+            oscurecer_pantalla(screen)
             if(slide_boss > 200):
                 slide_boss -= dx_slide_boss
            
@@ -266,9 +215,7 @@ def game():
         if(parte_final_2):
             poder_final.update()
             poder_kame.update()
-        print("contador esc ",contador_escena)
                 
-        
         pygame.display.flip()
         delta_ms = relog.tick(fps)
         
@@ -277,24 +224,19 @@ def game():
         enemigo.delta_ms = delta_ms
         poder.delta_ms = delta_ms
 
-    
-# def draw_text_and_image(screen, text, image, text_font, text_color, text_position, slide_boss):
-#     text_surface = text_font.render(text, True, text_color)
-#     screen.blit(text_surface, text_position)
-#     image_rect = image.get_rect()
-#     image_rect.x = slide_boss
-#     image_rect.y = 0
-#     screen.blit(image, image_rect)
-
 def draw_text_and_image(screen, image, slide_boss):
     image_rect = image.get_rect()
     image_rect.x = slide_boss
     image_rect.y = 0
     screen.blit(image, image_rect)
-    
-# def draw_text(screen, text, text_font, text_color, text_position):
-#     text_surface = text_font.render(text, True, text_color)
-#     screen.blit(text_surface, text_position)
+def oscurecer_pantalla(screen):
+    darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
+    darken_surface.fill((0, 0, 0, 200))
+    screen.blit(darken_surface, (0, 0))
+def cambiar_musica(path, vol= 0.5):
+    pygame.mixer.music.load(path)
+    pygame.mixer.music.play()
+    pygame.mixer.music.set_volume(vol)
 def draw_text2(screen, text, text_font, text_color, balloon_position, balloon_color, max_width):
     balloon_padding_top = 20  # Ajusta el valor del padding superior del globo
     balloon_padding_sides = 10  # Padding a los lados del globo
@@ -344,43 +286,6 @@ def filter_es(id, lista_esferas: list[Esferas]):
 
 #------------------------------------------------  vid
 
-
-
-
-
-def video_pelea_final_2():
-    pygame.init()
-    ancho = 1000
-    alto = 700
-    pygame.mixer.music.load("vid/video final goku vs roshi- cortado -parte 2.wav")
-    # vid_2 = Video("vid\goku vs roshi video con audio completo .mp4")#vid final con
-    # vid_2.set_size((ancho, alto))
-    pygame.mixer.music.play()
-    screen = pygame.display.set_mode((ancho, alto))
-    while True:
-        screen.fill("White")
-        
-        # if vid_2.active == True: # si es true cirre ek video
-        #         vid_2.draw(screen, (0, 0))
-        # else:
-        #     vid_2.close()
-            
-            # main_menu()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-            #     vid.close()
-                #llamada a main menu ()
-                # main_menu()
-        pygame.display.update()
-
-    
-
-# pygame.mixer.music.load("vid\intrio video epic.wav")
-# pygame.mixer.music.play()
-
 def video_pelea_final_1():
     pygame.init()
     ancho = 1000
@@ -400,23 +305,8 @@ def video_pelea_final_1():
                 vid_1.set_volume(0.5)
         else:
             vid_1.close()
-            # video_pelea_final_2()
             runnig = False
-            # main_menu()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-            #     vid.close()
-                #llamada a main menu ()
-                # main_menu()
     
-
-
-
-# video_pelea_final_1()
-
 #------------------------------------------------
 
 
