@@ -130,6 +130,14 @@ def intro():
 
 
 def preludio(screen):
+    
+    
+    background_main = pygame.image.load("asset\kamehouse.jpg")
+    background_main_rescalado = pygame.transform.scale(background_main, (ANCHO_PANTALLA, ALTO_PANTALLA))
+    cambiar_musica("sonido\intro_karaoke_dragonball_buscar_esferas (mp3cut.net).mp3", 0.2)
+    fps = 30
+    relog = pygame.time.Clock()
+    
     index_stage = 0
     text_color = (0, 0, 0)
     text_index = 0
@@ -137,11 +145,11 @@ def preludio(screen):
     balloon_color = (255, 255, 255)
     time_text_limit = 84
     path_goku_intro = "asset/goku_intro_game_res.png"
-    text = ["Has demostrado tu valentia\nllegando hasta aquí muchacho...",
-            "Pero esta vez...\nno te será tan fácil\npasar la prueba",
-            "Así que...\n¡PREPÁRATE!", "¡A ver si puedes\ncontrarrestar este ataque!"]
-    text_goku = ["No te tengo miedo...", "Pero tampoco puedo confiarme...",
-                 "¡Daré todo en este último ataque!"]
+    
+    
+    text = ["¡Bienvenido, Goku!\nEstoy emocionado de tener la\n oportunidad de ayudarte en \neste entrenamiento."]
+
+    text_goku = ["Gracias Krillin, \nnecesito prepararme para \nel Gran torno"]
     dx_slide_boss = 20
     slide_krillin = 800
     contador_escena_start_game = 0
@@ -149,11 +157,15 @@ def preludio(screen):
     path_por_defecto = path_krillin
     time_text = 84
     finished_animation = False  # Variable para indicar si la animación ha finalizado
-
     while not finished_animation:  # Salir del bucle cuando la animación haya terminado
+        SCREEN.blit(background_main_rescalado, (0, 0))
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
         if index_stage == 0 and contador_escena_start_game < 2:
-            load_music_intro = True
-            cambiar_musica("sonido/intro.mp3")
+            # load_music_intro = True
+            #cambiar musica estaba aca
             font = pygame.font.Font(None, 36)
             image = pygame.image.load(path_por_defecto)
             oscurecer_pantalla(screen)
@@ -179,6 +191,7 @@ def preludio(screen):
 
             if contador_escena_start_game >= 2:
                 finished_animation = True  # La animación ha finalizado
+        relog.tick(fps)
               
         pygame.display.update()
     play()

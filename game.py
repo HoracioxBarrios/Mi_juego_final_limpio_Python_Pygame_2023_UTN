@@ -242,10 +242,7 @@ def oscurecer_pantalla(screen):
     darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
     darken_surface.fill((0, 0, 0, 200))
     screen.blit(darken_surface, (0, 0))
-def cambiar_musica(path, vol= 0.5):
-    pygame.mixer.music.load(path)
-    pygame.mixer.music.play()
-    pygame.mixer.music.set_volume(vol)
+
 def draw_text2(screen, text, text_font, text_color, balloon_position, balloon_color, max_width):
     balloon_padding_top = 20  # Ajusta el valor del padding superior del globo
     balloon_padding_sides = 10  # Padding a los lados del globo
