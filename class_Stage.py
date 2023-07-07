@@ -8,6 +8,11 @@ class StagePadre:
         self.margen = 0
 
     def generar_coordenadas_mapa(self):
+        '''
+        Genera coordenadas para posicionar los pisos, paredes dentro del stage
+        recibe : no aplica
+        devuelve : no aplica
+        '''
         for row in self.mapa_list:
             col_count = 0
             for tile in row:

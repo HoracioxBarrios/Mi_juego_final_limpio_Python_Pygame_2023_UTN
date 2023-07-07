@@ -20,16 +20,18 @@ import random
 from class_game_over import GameOver
 pygame.init()
 
-def game():   
+def game(): 
+    
+    # Dimensiones de la pantalla  
     ancho_pantalla = ANCHO_PANTALLA
     alto_pantalla = ALTO_PANTALLA
     screen = pygame.display.set_mode((ancho_pantalla, alto_pantalla))
     fps = FPS
     relog = pygame.time.Clock()
 
-# Instancias
+    # Instancias
     # Rutas de las imágenes de las esferas
-    # Dimensiones de la pantalla
+    
     ancho_screen_para_esferas = 950
     alto_screen_para_esferas = 555
 
@@ -179,35 +181,7 @@ def game():
                     esfera.return_ID = None
                     personaje.contador_esferas += 1
         #######################intro Inicio##########################
-        if(index_stage == 0 and contador_escena_start_game < 2):
-            if(not load_music_intro):
-                load_music_intro = True
-                cambiar_musica("sonido/intro.mp3")
-            #cargamos fuente para interaccion
-            font = pygame.font.Font(None, 36)
-            #cargamos imagen de la interaccion
-            image = pygame.image.load(path_por_defecto)
-            #oscurese la pantalla
-            oscurecer_pantalla(screen)
-            if(slide_krillin > 400):
-                slide_krillin -= dx_slide_boss
-                
-            draw_text_and_image(screen, image, slide_krillin, 300)
-            if(slide_krillin == 400):
-                if(time_text > 0 ):
-                    if(text_index < len(text) ):
-                        draw_text2(screen, text[text_index], font, text_color, balloon_position_krillin, balloon_color, max_width = 350 )
-                        time_text -= 1
-                else:
-                    time_text = time_text_limit
-                    text_index += 1
-            if(text_index >= len(text)):# voz goku
-                path_por_defecto = path_goku_intro
-                slide_krillin = 800
-                text_index = 0
-                text = text_goku
-                
-                contador_escena_start_game += 1
+
         #######################Intro Final###########################
         if(index_stage == 3 and contador_escena < 2):
             if(not load_music_intro):
