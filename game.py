@@ -87,7 +87,7 @@ def game():
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 5 # relog limite time
+    time_limit = 35 # relog limite time
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
@@ -213,7 +213,7 @@ def game():
                     path_esfera = "asset/esferas/{i}.png".format(i=i)
                     x = random.randint(0, ancho_screen_para_esferas)
                     y = random.randint(0, alto_screen_para_esferas)
-                    esfera = Esferas(screen, x, y, path_esfera, ancho=40, alto=40, id_propia = i)
+                    esfera = Esferas(screen, x, y, path_esfera, ancho=45, alto=45, id_propia = i)
                     lista_esferas.append(esfera)
                     lista_esferas_generada = True
             for esfera in lista_esferas:
@@ -242,7 +242,7 @@ def game():
             if(slide_boss == 200):
                 if(time_text > 0 ):
                     if(text_index < len(text) ):
-                        draw_text2(screen, text[text_index], font, text_color, text_position, balloon_position, balloon_color, max_width = 350 )
+                        draw_text2(screen, text[text_index], font, text_color, balloon_position, balloon_color, max_width = 350 )
                         time_text -= 1
                 else:
                     time_text = time_text_limit
@@ -291,11 +291,11 @@ def draw_text_and_image(screen, image, slide_boss):
     image_rect.x = slide_boss
     image_rect.y = 0
     screen.blit(image, image_rect)
-    pygame.display.flip()
+    
 # def draw_text(screen, text, text_font, text_color, text_position):
 #     text_surface = text_font.render(text, True, text_color)
 #     screen.blit(text_surface, text_position)
-def draw_text2(screen, text, text_font, text_color, text_position, balloon_position, balloon_color, max_width):
+def draw_text2(screen, text, text_font, text_color, balloon_position, balloon_color, max_width):
     balloon_padding_top = 20  # Ajusta el valor del padding superior del globo
     balloon_padding_sides = 10  # Padding a los lados del globo
     balloon_margin = 10
@@ -333,32 +333,6 @@ def draw_text2(screen, text, text_font, text_color, text_position, balloon_posit
         text_rect.midtop = (balloon_rect.centerx, y)
         screen.blit(text_surface, text_rect)
         y += line_height
-def draw_text(screen, text, text_font, text_color, text_position, balloon_position, balloon_color):
-    text_surface = text_font.render(text, True, text_color)
-
-    text_rect = text_surface.get_rect()
-    text_rect.topleft = text_position
-
-    balloon_padding_top = 40  # Ajusta el valor del padding superior del globo
-
-    balloon_padding_sides = 10  # Padding a los lados del globo
-    balloon_margin = 10
-    balloon_width = text_surface.get_width() + balloon_padding_sides * 2
-    balloon_height = text_surface.get_height() + balloon_padding_top + balloon_padding_sides
-
-    balloon_rect = pygame.Rect(0, 0, balloon_width, balloon_height)
-    balloon_rect.topleft = balloon_position
-
-    balloon_radius = 10
-
-    pygame.draw.rect(screen, balloon_color, balloon_rect, border_radius=balloon_radius)
-    pygame.draw.polygon(screen, balloon_color, [(balloon_rect.bottomright[0], balloon_rect.bottomright[1] - balloon_padding_sides),
-                                                 (balloon_rect.bottomright[0] + balloon_margin, balloon_rect.bottomright[1]),
-                                                 (balloon_rect.bottomright[0], balloon_rect.bottomright[1] + balloon_padding_sides)])
-
-    screen.blit(text_surface, text_rect)
-
-# game over def
 
 
 def filter_es(id, lista_esferas: list[Esferas]):

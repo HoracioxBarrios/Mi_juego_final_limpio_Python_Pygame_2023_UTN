@@ -57,7 +57,6 @@ class GameOver:
             for button in [PLAY_BUTTON, QUIT_BUTTON]:#OPTIONS_BUTTON, 
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(self.screen)
-            
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()

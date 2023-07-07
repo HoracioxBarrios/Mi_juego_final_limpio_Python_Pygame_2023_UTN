@@ -115,7 +115,6 @@ def intro():
         else:
             vid.close()
             main_menu()
-        pygame.display.update()
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -126,6 +125,7 @@ def intro():
                 #llamada a main menu ()
                 main_menu()
 
+        pygame.display.update()
 
 
 

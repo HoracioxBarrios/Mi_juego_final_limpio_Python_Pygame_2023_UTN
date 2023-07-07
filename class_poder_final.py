@@ -8,7 +8,7 @@ class PoderFinalVid(pygame.sprite.Sprite):
         self.frame = 0
         self.screen = screen
         for i in range(43):
-            path_index = "asset/pelea_final_img/{0}.jpg".format(i)
+            path_index = "asset/pelea_final_img/{0}.png".format(i)
             image = get_surface_form_sprite_sheet(path_index, 1, 1, 0, 0, 0, False)
             image = pygame.transform.scale(image[0], (1000, 650))
             self.lista_animacion.append(image)
