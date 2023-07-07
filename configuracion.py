@@ -1,12 +1,19 @@
 
-color_blue = (0,0,255)
-color_rojo = (255,0,0)
-color_green = (0,255,0)
+#configuracion
+
+ANCHO_PANTALLA= 1000
+ALTO_PANTALLA= 700
+
+FPS = 30
 
 
-pos_init_x_personaje = 200
-pos_init_y_personaje = 0
-velocidad_caminar = 5
-speed_correr_personaje = 8
-gravedad = 1
-potencia_salto = -20
+
+
+
+BLANCO = (255, 255, 255)
+AZUL = (0,0,255)
+ROJO = (255,0,0)
+VERDE = (0,255,0)
+
+
+

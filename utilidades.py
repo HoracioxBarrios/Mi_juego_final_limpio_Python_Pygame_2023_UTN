@@ -9,7 +9,6 @@ def get_surface_form_sprite_sheet(path, columnas, filas, cortar_en_fila: int, co
     fotograma_alto = int(superficie_imagen.get_height()/filas)
 
     for columna in range(cortar_columna_desde, cortar_columna_hasta + 1):
-        print('draw char')
         x = fotograma_ancho * columna
         y = fotograma_alto * cortar_en_fila
         superficie_fotograma = superficie_imagen.subsurface(
@@ -33,7 +32,6 @@ def get_surface_individual_imagen(path, flip, cant_imagens):
         fotograma_alto = int(superficie_imagen.get_height()/1)
         x = fotograma_ancho
         y = fotograma_alto
-        print(fotograma_alto, fotograma_ancho, x, y)
         superficie_fotograma = superficie_imagen.subsurface(x, y, fotograma_ancho, fotograma_alto)
         # if flip:
         #     superficie_fotograma = pygame.transform.flip(
@@ -52,6 +50,8 @@ def obtener_rectangulos_colision(rectangulo_principal: pygame.Rect):
     dicc_rectangulos_lados["lado_arriba"]: dict[pygame.Rect] = pygame.Rect(
         rectangulo_principal.left, rectangulo_principal.top, rectangulo_principal.width, 10)
     return dicc_rectangulos_lados
+
+
 
 
 def obtener_ractangulo_principal(superficies, frame):
@@ -73,3 +73,19 @@ def leerJson(path):
     with open(path, 'r') as archivo:
         contenido = json.load(archivo)
     return contenido
+
+#---------------------------------- se reemplaza por la class
+# def show_game_over_screen(screen, width, height):
+#     game_over_font = pygame.font.Font(None, 64)  # Fuente y tamaño del texto "Game Over"
+#     game_over_text = game_over_font.render("Game Over", True, (255, 255, 255))  # Texto "Game Over" en blanco
+
+#     while True:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 pygame.quit()
+#                 return
+
+#         screen.fill((0, 0, 0, 0.5))  # Rellena la pantalla con negro
+#         screen.blit(game_over_text, (width/2 - game_over_text.get_width()/2, height/2 - game_over_text.get_height()/2))  # Dibuja el texto centrado en la pantalla
+
+#         pygame.display.flip()
