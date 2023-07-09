@@ -15,7 +15,7 @@ class Personaje(pygame.sprite.Sprite):
         self.shot_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, True)
         self.shot_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, False)
         self.gravity_vel_y = 0
-        self.velocidad_caminar = 9
+        self.velocidad_caminar = 5
         self.desplazamiento_x = 0
         self.potencia_salto = 20
         # self.time_limit_salto = 5

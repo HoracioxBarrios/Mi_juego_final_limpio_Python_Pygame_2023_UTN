@@ -18,10 +18,9 @@ class Personaje(pygame.sprite.Sprite):
         self.shot_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 5, 3, 5, False)
         self.estatico = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 2, 3, 3, True)
         self.gravity_vel_y = 0
-        self.velocidad_caminar = 9
+        self.velocidad_caminar = 11
         self.desplazamiento_x = 0
         self.potencia_salto = 19
-        # self.time_limit_salto = 5
         self.enemigo = enemigo
         self.limites_frames_por_segundo = 5
         self.time_frame = 5
@@ -41,13 +40,13 @@ class Personaje(pygame.sprite.Sprite):
         self.rect : pygame.Rect = self.image.get_rect()
         self.new_width = 70
 
-        # Calcular el desplazamiento horizontal para centrar el rectángulo
+        # Calcula el desplazamiento horizontal para centrar el rectángulo
         horizontal_offset = (self.rect.width - self.new_width) // 2
 
-        # Actualizar el ancho del rectángulo
+        # Actualiza el ancho del rectángulo
         self.rect.width = self.new_width
 
-        # Ajustar la posición horizontal del rectángulo
+        # Ajusta la posición horizontal del rectángulo
         self.rect.x += horizontal_offset
         #--------------------------------
         self.rect.x = pos_x

@@ -143,19 +143,20 @@ def preludio(screen):
     text_index = 0
     balloon_position_krillin = (250, 300)
     balloon_color = (255, 255, 255)
-    time_text_limit = 84
+    
     path_goku_intro = "asset/goku_intro_game_res.png"
     
     
-    text = ["¡Bienvenido, Goku!\nEstoy emocionado de tener la\n oportunidad de ayudarte en \neste entrenamiento."]
+    text = ["¡Hola, Goku!\nEstaba pensando que \n quizas seria bueno que practiqumos un poco."]
 
-    text_goku = ["Gracias Krillin, \nnecesito prepararme para \nel Gran torno"]
+    text_goku = ["Tenes mucha razon Krillin,\nprepararse para el gran torneo... 123 Empecemos!"]
     dx_slide_boss = 20
     slide_krillin = 800
     contador_escena_start_game = 0
     path_krillin = "asset/krillin_intro_game.png"
     path_por_defecto = path_krillin
-    time_text = 84
+    time_text = 180 
+    time_text_limit = 180
     finished_animation = False  # Variable para indicar si la animación ha finalizado
     while not finished_animation:  # Salir del bucle cuando la animación haya terminado
         SCREEN.blit(background_main_rescalado, (0, 0))

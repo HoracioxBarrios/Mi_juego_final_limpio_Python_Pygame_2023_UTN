@@ -9,7 +9,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.caminando_l = get_surface_form_sprite_sheet('asset\enemigo\spites_enemigo.png', 8, 1, 0, 0, 7, True)
         self.gravity_vel_y = 0
         self.frame = 5
-        self.velocidad_caminar = 10
+        self.velocidad_caminar = 15
         self.orientacion_x = -1
         self.esta_en_aire = True
         self.esta_caminando = False
