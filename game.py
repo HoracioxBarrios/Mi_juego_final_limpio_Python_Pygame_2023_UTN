@@ -101,8 +101,8 @@ def game():
 
         if(personaje.contador_esferas >= 7):
             if(index_stage < len(stage_list) -1):
-                intro_transition("vid/stage_1.avi", screen)
                 index_stage += 1
+                intro_transition("vid/stage_{0}.avi".format(index_stage), screen)
                 tiempo_stage = None
                 stage_run = False
                 crono_on = False

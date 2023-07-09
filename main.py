@@ -234,7 +234,7 @@ def preludio(screen):
               
         pygame.display.update()
     pygame.mixer.music.stop()
-    intro_2("vid/stage_1.avi", True)
+    intro_2("vid/stage_0.avi", True)
     
     
 
