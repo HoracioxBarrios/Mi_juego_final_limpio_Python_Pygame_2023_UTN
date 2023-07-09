@@ -127,8 +127,36 @@ def intro():
                 main_menu()
 
         pygame.display.update()
+def transicion_stages(path_vid_transicion, to_play):
+    vid = Video(path_vid_transicion)
+    vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
+    runnig = True
+    while runnig:
+        if vid.active:
+            vid.draw(SCREEN, (0, 0))
+        else:
+            print("se cerro e vid")
+            vid.close()
+        pygame.display.update()
+    if to_play:
+        print("entramos a game")
+        game()
 
+def intro_2():
+    vid = Video("vid\stage_1.avi")
+    vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
+    
+    while True:
+        if vid.active == True:
+            print(vid.active)
+            vid.draw(SCREEN, (0, 0))
+        else:
+            print(vid.active)
+            vid.close()
+            game()
 
+        pygame.display.update()
+    
 def preludio(screen):
     
     
@@ -157,8 +185,9 @@ def preludio(screen):
     path_por_defecto = path_krillin
     time_text = 180 
     time_text_limit = 180
+    running = True
     finished_animation = False  # Variable para indicar si la animación ha finalizado
-    while not finished_animation:  # Salir del bucle cuando la animación haya terminado
+    while running and not finished_animation:  # Salir del bucle cuando la animación haya terminado
         SCREEN.blit(background_main_rescalado, (0, 0))
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -192,10 +221,14 @@ def preludio(screen):
 
             if contador_escena_start_game >= 2:
                 finished_animation = True  # La animación ha finalizado
+                running = False
         relog.tick(fps)
               
         pygame.display.update()
-    play()
+    pygame.mixer.music.stop()
+    intro_2()
+    
+    
 
 
 
