@@ -16,6 +16,7 @@ class Esferas(pygame.sprite.Sprite):
         self.gravity_vel_y = 0
         self.dy = 0
         self.dx = 0
+        self.score = 1000
         self.id = id_propia
         self.return_ID = None
         self.sonido = pygame.mixer.Sound("sonido\item.wav")
@@ -38,10 +39,14 @@ class Esferas(pygame.sprite.Sprite):
                 self.return_ID = self.id
                 print(self.return_ID)
                 self.sound()
+                self.get_score(personaje)
 
     def sound(self):
         self.sonido.set_volume(0.5)
         self.sonido.play()
+
+    def get_score(self, pesonaje:Personaje):
+        pesonaje.score += self.score
         
 
 

@@ -1,6 +1,6 @@
 import pygame, sys
-from utilidades import *
-from configuracion import *
+from utilidades import intro_transition, cambiar_musica, dibujar_grid
+from configuracion import ANCHO_PANTALLA, ALTO_PANTALLA, FPS, BLANCO
 from class_personaje import Personaje
 from class_enemigo import Enemigo
 from class_proyectil import Proyectil
@@ -8,7 +8,7 @@ from levels.class_stage_1 import Stage_1
 from levels.class_stage_2 import Stage_2
 from levels.class_stage_3 import Stage_3
 from levels.class_stage_4 import Stage_4
-from modo.modo_dev import *
+from modo.modo_dev import get_modo, cambiar_modo
 from class_tiempo_stages import TiempoStages
 from class_esferas import Esferas
 from class_radar import Radar
@@ -18,7 +18,8 @@ from class_poder_final import PoderFinalVid
 from class_kame import Kame
 import random
 from class_game_over import GameOver
-
+from interface import main_menu
+from class_score import ScoreStage
 pygame.init()
 
 def game():
@@ -46,12 +47,13 @@ def game():
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
-    over_game = GameOver(screen, 5540) #score ejemplo
+    over_game = GameOver(screen) #score ejemplo
+    score = ScoreStage(screen , 0, 0, 0)
 
 
     # time_stage instancia
     stage_run = False
-    index_stage = 3
+    index_stage = 0
     running = True
     stage_actual = None
     radar_on = False
@@ -84,6 +86,7 @@ def game():
     contador_escena = 0
     flag_video_final = False
     contador_escena_start_game = 0
+    score_game = 0
     while running:
         # Estage
         if not stage_run:
@@ -93,13 +96,18 @@ def game():
                 enemigo = Enemigo(screen, 800, 200, stage_actual.tile_list)
             else:
                 enemigo = Boss(800, 570)
-            personaje = Personaje(150, 600, stage_actual.tile_list, screen, enemigo)
+            personaje = Personaje(150, 600, stage_actual.tile_list, screen, enemigo, 0)
             poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
             poder_list:list[Proyectil] = []
+            print('personaje',personaje.score)
+            print('score_game', score_game)
+            personaje.score = score_game
 
             poder_list.append(poder)
-
-        if(personaje.contador_esferas >= 7):
+        score_game = personaje.score
+        score.score = score_game
+        print(score_game)
+        if(personaje.contador_esferas >= 7): #backup de score del personaje
             if(index_stage < len(stage_list) -1):
                 index_stage += 1
                 intro_transition("vid/stage_{0}.avi".format(index_stage), screen)
@@ -168,7 +176,7 @@ def game():
             tiempo_stage.draw_time()
             if(tiempo_stage.elapsed_time >= time_limit):
                 # show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
-                over_game.show_game_over()
+                over_game.show_game_over(main_menu, screen)
         if(start_time):
             if(not lista_esferas_generada):
                 for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
@@ -191,6 +199,7 @@ def game():
             if(not load_music_intro):
                 load_music_intro = True
                 cambiar_musica("sonido\intro_music.wav")
+                path_por_defecto = path_jacky
             #cargamos fuente para interaccion
             font = pygame.font.Font(None, 36)
             #cargamos imagen de la interaccion
@@ -225,13 +234,19 @@ def game():
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(0.5)
                     parte_final_2 = True
+                    tiempo_stage_final_stage = TiempoStages(screen,420, 50, time_limit)
         if(parte_final_2):
             poder_final.update()
             poder_kame.update()
+            tiempo_stage_final_stage.update_time()
+            if(poder_kame.image_1.get_width() == 0):
+                over_game.show_game_over(main_menu, screen)
+                
 
+
+        score.update_score()
         pygame.display.flip()
         delta_ms = relog.tick(fps)
-
 
         personaje.delta_ms = delta_ms
         enemigo.delta_ms = delta_ms

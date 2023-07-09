@@ -1,8 +1,10 @@
 import pygame
 import sys
 from class_boton import Button
-from configuracion import *
-from game import *
+from game import game, oscurecer_pantalla, draw_text2, draw_text_and_image
+from utilidades import cambiar_musica
+from vid.pyvidplayer import Video
+from configuracion import ANCHO_PANTALLA, ALTO_PANTALLA
 from class_tiempo_stages import TiempoStages
 
 pygame.init()
@@ -97,7 +99,8 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    preludio(SCREEN)
+                    # preludio(SCREEN)
+                    game()
                 if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                     options()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):

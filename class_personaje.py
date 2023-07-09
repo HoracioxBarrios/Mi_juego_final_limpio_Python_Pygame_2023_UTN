@@ -6,7 +6,7 @@ from class_vida import BarraVida
 from class_enemigo import Enemigo
 
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo):
+    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo, score):
         super().__init__()
         self.quieto_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, True)
         self.quieto_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, False)
@@ -34,6 +34,7 @@ class Personaje(pygame.sprite.Sprite):
         self.dy = 0
         self.dx = 0
         self.frame = 0
+        self.score = score
         self.animacion = self.quieto_r
         self.image = self.animacion[self.frame]#el frame inicia arranca en 0, por ende se renderiza la pocision 0 de la lista de animaciones
         #--------------------------------
