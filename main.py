@@ -142,8 +142,8 @@ def transicion_stages(path_vid_transicion, to_play):
         print("entramos a game")
         game()
 
-def intro_2():
-    vid = Video("vid\stage_1.avi")
+def intro_2(path, go_game):
+    vid = Video(path)
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
     
     while True:
@@ -153,7 +153,15 @@ def intro_2():
         else:
             print(vid.active)
             vid.close()
-            game()
+            if(go_game):
+                game()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                vid.close()
+                game()
 
         pygame.display.update()
     
@@ -226,7 +234,7 @@ def preludio(screen):
               
         pygame.display.update()
     pygame.mixer.music.stop()
-    intro_2()
+    intro_2("vid/stage_1.avi", True)
     
     
 

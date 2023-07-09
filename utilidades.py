@@ -1,6 +1,7 @@
-import pygame
+import pygame, sys
 import json
 import re
+from vid.pyvidplayer import Video
 def get_surface_form_sprite_sheet(path, columnas, filas, cortar_en_fila: int, cortar_columna_desde=0, cortar_columna_hasta=0, flip=False):
     lista = []
     superficie_imagen = pygame.image.load(path)
@@ -78,3 +79,27 @@ def cambiar_musica(path, vol= 0.5):
     pygame.mixer.music.load(path)
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(vol)
+
+def intro_transition(path, screen):
+    vid = Video(path)
+    vid.set_size((screen.get_width(), screen.get_height()))
+    pygame.mixer.music.stop()
+    running = True
+    while running:
+        pygame.display.update()
+        if vid.active == True:
+            print(vid.active)
+            vid.draw(screen, (0, 0))
+        else:
+            print(vid.active)
+            vid.close()
+            running = False
+        # for event in pygame.event.get():
+        #     if event.type == pygame.QUIT:
+        #         pygame.quit()
+        #         sys.exit()
+        #     if event.type == pygame.MOUSEBUTTONDOWN:
+        #         vid.close()
+       
+        
+    

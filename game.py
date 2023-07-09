@@ -18,11 +18,12 @@ from class_poder_final import PoderFinalVid
 from class_kame import Kame
 import random
 from class_game_over import GameOver
+
 pygame.init()
 
-def game(): 
-    
-    # Dimensiones de la pantalla  
+def game():
+
+    # Dimensiones de la pantalla
     ancho_pantalla = ANCHO_PANTALLA
     alto_pantalla = ALTO_PANTALLA
     screen = pygame.display.set_mode((ancho_pantalla, alto_pantalla))
@@ -31,7 +32,7 @@ def game():
 
     # Instancias
     # Rutas de las imágenes de las esferas
-    
+
     ancho_screen_para_esferas = 950
     alto_screen_para_esferas = 555
 
@@ -45,7 +46,7 @@ def game():
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
-    over_game = GameOver(screen, 5540) #score ejemplo 
+    over_game = GameOver(screen, 5540) #score ejemplo
 
 
     # time_stage instancia
@@ -62,7 +63,7 @@ def game():
     slide_boss = 600
     slide_krillin = 800
     dx_slide_boss = 20
-    
+
     balloon_position = (200, 250)
     balloon_position_krillin = (250, 300)
     balloon_color = (255, 255, 255)
@@ -100,6 +101,7 @@ def game():
 
         if(personaje.contador_esferas >= 7):
             if(index_stage < len(stage_list) -1):
+                intro_transition("vid/stage_1.avi", screen)
                 index_stage += 1
                 tiempo_stage = None
                 stage_run = False
@@ -107,16 +109,16 @@ def game():
                 radar_on = False
                 start_time = False
                 lista_esferas_generada = False
-               
+
         if(enemigo.vida <= 0 and not radar_on and not enemigo.esta_muerto):
             radar = Radar(screen, enemigo.rect.x, enemigo.rect.y, "asset/radar.png", 50, 50, 10)
             radar_on = True
             enemigo.esta_muerto = True
-            
+
         screen.blit(stage_actual.bg, (0, 0))#bg
-        
+
         stage_actual.draw()#pisos
-        
+
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 running = False
@@ -141,12 +143,12 @@ def game():
             dibujar_grid(screen, BLANCO, stage_actual.tile_size, ancho_pantalla, alto_pantalla, 0)
 
 
-        #esfera 
+        #esfera
         # Dibujar todas las esferas en la pantalla
         personaje.update(screen, index_stage)
 
         if(not enemigo.esta_muerto):
-            enemigo.update(screen)   
+            enemigo.update(screen)
 
         if(radar_on):
             print('dibujando')
@@ -155,7 +157,7 @@ def game():
                 crono_on = True
                 radar_on = False
                 radar = None
-            
+
         if(crono_on):
             if(not start_time):
                 tiempo_stage = TiempoStages(screen,420, 50, time_limit)
@@ -195,7 +197,7 @@ def game():
             oscurecer_pantalla(screen)
             if(slide_boss > 200):
                 slide_boss -= dx_slide_boss
-           
+
             draw_text_and_image(screen, image, slide_boss)
             if(slide_boss == 200):
                 if(time_text > 0 ):
@@ -210,7 +212,7 @@ def game():
                 slide_boss = 600
                 text_index = 0
                 text = text_goku
-                
+
                 contador_escena += 1
             if contador_escena == 2 and not flag_video_final :
                 flag_video_final = True
@@ -224,11 +226,11 @@ def game():
         if(parte_final_2):
             poder_final.update()
             poder_kame.update()
-                
+
         pygame.display.flip()
         delta_ms = relog.tick(fps)
-        
-        
+
+
         personaje.delta_ms = delta_ms
         enemigo.delta_ms = delta_ms
         poder.delta_ms = delta_ms
@@ -304,7 +306,7 @@ def video_pelea_final_1():
 
     runnig = True
     while runnig:
-        
+
         pygame.display.update()
         if vid_1.active == True: # si es true cirre ek video
                 vid_1.draw(screen, (0, 0))
@@ -312,7 +314,7 @@ def video_pelea_final_1():
         else:
             vid_1.close()
             runnig = False
-    
+
 #------------------------------------------------
 
 
