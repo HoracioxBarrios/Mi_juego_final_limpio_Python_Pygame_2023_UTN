@@ -51,7 +51,7 @@ def game():
 
     # time_stage instancia
     stage_run = False
-    index_stage = 0
+    index_stage = 3
     running = True
     stage_actual = None
     radar_on = False
@@ -103,6 +103,8 @@ def game():
             if(index_stage < len(stage_list) -1):
                 index_stage += 1
                 intro_transition("vid/stage_{0}.avi".format(index_stage), screen)
+                if(index_stage < 3):
+                    cambiar_musica(path = "sonido\musica_stage_{0}.mp3".format(index_stage))
                 tiempo_stage = None
                 stage_run = False
                 crono_on = False
@@ -173,7 +175,7 @@ def game():
                     path_esfera = "asset/esferas/{i}.png".format(i=i)
                     x = random.randint(0, ancho_screen_para_esferas)
                     y = random.randint(0, alto_screen_para_esferas)
-                    esfera = Esferas(screen, x, y, path_esfera, ancho=45, alto=45, id_propia = i)
+                    esfera = Esferas(screen, x, y, path_esfera, ancho=50, alto=50, id_propia = i)
                     lista_esferas.append(esfera)
                     lista_esferas_generada = True
             for esfera in lista_esferas:
