@@ -236,12 +236,14 @@ def game():
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(0.5)
                     parte_final_2 = True
-                    tiempo_stage_final_stage = TiempoStages(screen,420, 50, time_limit)
+                    tiempo_stage_final_stage = TiempoStages(screen,420, 50, 40)
         if(parte_final_2):
             poder_final.update()
             poder_kame.update()
             tiempo_stage_final_stage.update_time()
-            if(poder_kame.image_1.get_width() == 0):
+            if(tiempo_stage_final_stage.elapsed_time > 5):
+                poder_kame.caida_kame = 15
+            if(poder_kame.image_1.get_width() <= 15):
                 over_game.score = score.score
                 over_game.show_game_over("Game Over")
             elif(poder_kame.image_1.get_width() >= poder_kame.limit_power_screen):
@@ -341,9 +343,10 @@ def video_pelea_final_1():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
+                # sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 vid_1.close()
+                runnig = False
 
     
 
