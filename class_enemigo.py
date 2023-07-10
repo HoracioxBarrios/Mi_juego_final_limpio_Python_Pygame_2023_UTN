@@ -101,7 +101,7 @@ class Enemigo(pygame.sprite.Sprite):
     
 
 
-    def update(self, screen):
+    def update(self, screen, personaje, fn: any, path):
         self.dx = self.desplazamiento_x
         self.dy = 0
        

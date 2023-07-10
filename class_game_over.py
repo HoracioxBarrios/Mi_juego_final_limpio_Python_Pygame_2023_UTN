@@ -33,7 +33,7 @@ class GameOver:
 
         
 
-    def show_game_over(self):
+    def show_game_over(self, msg):
         pygame.mixer.music.load('sonido/DRAGON BALL Z Cha-La Head Guitarra Christianvib.mp3')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.5)
@@ -42,7 +42,7 @@ class GameOver:
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-            MENU_TEXT = get_font(self.font_obtenida, 48).render("Game Over", True, (247, 35, 12))
+            MENU_TEXT = get_font(self.font_obtenida, 48).render(msg, True, (247, 35, 12))
             MENU_RECT = MENU_TEXT.get_rect(center=(self.ancho_screen / 2, 80))
 
             # PLAY_BUTTON = Button(image=pygame.image.load("asset/Play Rect.png"), pos=(self.ancho_screen/2, 170), 

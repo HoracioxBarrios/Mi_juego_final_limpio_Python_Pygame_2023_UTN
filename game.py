@@ -158,7 +158,7 @@ def game():
         personaje.update(screen, index_stage)
 
         if(not enemigo.esta_muerto):
-            enemigo.update(screen)
+            enemigo.update(screen, personaje, final_game_vid, "vid/credit_finales.avi")
 
         if(radar_on):
             print('dibujando')
@@ -177,7 +177,7 @@ def game():
             if(tiempo_stage.elapsed_time >= time_limit):
                 # show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
                 over_game.score = score.score
-                over_game.show_game_over()
+                over_game.show_game_over("Game Over")
         if(start_time):
             if(not lista_esferas_generada):
                 for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
@@ -243,13 +243,14 @@ def game():
             tiempo_stage_final_stage.update_time()
             if(poder_kame.image_1.get_width() == 0):
                 over_game.score = score.score
-                over_game.show_game_over()
+                over_game.show_game_over("Game Over")
             elif(poder_kame.image_1.get_width() >= poder_kame.limit_power_screen):
                 parte_final_2 = False
                 cambiar_musica("sonido/final_game.mp3")
                 personaje.control_personaje = True
+                enemigo.cambiar_imagen(screen)
                 
-                
+        
 
 
         score.update_score()
@@ -325,13 +326,11 @@ def video_pelea_final_1():
     alto = 700
     screen = pygame.display.set_mode((ancho, alto))
     pygame.display.set_caption("Epic Vid")
-
     vid_1 = Video("vid/video final goku vs roshi-coratodo-parte-1.avi")#vid final con
     vid_1.set_size((ancho, alto))
 
     runnig = True
     while runnig:
-
         pygame.display.update()
         if vid_1.active == True: # si es true cirre ek video
                 vid_1.draw(screen, (0, 0))
@@ -339,8 +338,41 @@ def video_pelea_final_1():
         else:
             vid_1.close()
             runnig = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                vid_1.close()
+
+    
+
 
 #------------------------------------------------
+def final_game_vid(SCREEN, path):
+    pygame.mixer.music.stop()
+    vid = Video(path)
+    vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
+    game_over = GameOver(SCREEN)
+    
+    while True:
+        if vid.active == True:
+            print(vid.active)
+            vid.draw(SCREEN, (0, 0))
+        else:
+            print(vid.active)
+            vid.close()
+            game_over.show_game_over("Congratulacion")
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                vid.close()
+                game_over.show_game_over("Congratulacion")
+
+
+        pygame.display.update()
 
 pygame.quit()
