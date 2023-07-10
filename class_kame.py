@@ -41,7 +41,7 @@ class Kame:
         self.rect_2 = self.image_2.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
-
+        self.limit_power_screen = screen.get_width()
         self.time_render = 5
         self.time_render_limit = 5
         self.color_texto = (238, 51, 10)

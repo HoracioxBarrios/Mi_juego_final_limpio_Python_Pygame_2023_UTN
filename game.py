@@ -53,13 +53,13 @@ def game():
 
     # time_stage instancia
     stage_run = False
-    index_stage = 0
+    index_stage = 3
     running = True
     stage_actual = None
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 35 # relog limite time
+    time_limit = 10 # relog limite time
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
@@ -176,7 +176,8 @@ def game():
             tiempo_stage.draw_time()
             if(tiempo_stage.elapsed_time >= time_limit):
                 # show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
-                over_game.show_game_over(main_menu, screen)
+                over_game.score = score.score
+                over_game.show_game_over()
         if(start_time):
             if(not lista_esferas_generada):
                 for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
@@ -196,6 +197,7 @@ def game():
 
         #######################Intro Final###########################
         if(index_stage == 3 and contador_escena < 2):
+            personaje.control_personaje = False
             if(not load_music_intro):
                 load_music_intro = True
                 cambiar_musica("sonido\intro_music.wav")
@@ -240,7 +242,13 @@ def game():
             poder_kame.update()
             tiempo_stage_final_stage.update_time()
             if(poder_kame.image_1.get_width() == 0):
-                over_game.show_game_over(main_menu, screen)
+                over_game.score = score.score
+                over_game.show_game_over()
+            elif(poder_kame.image_1.get_width() >= poder_kame.limit_power_screen):
+                parte_final_2 = False
+                cambiar_musica("sonido/final_game.mp3")
+                personaje.control_personaje = True
+                
                 
 
 

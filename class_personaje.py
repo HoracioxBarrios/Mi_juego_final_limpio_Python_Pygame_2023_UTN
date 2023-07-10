@@ -121,10 +121,9 @@ class Personaje(pygame.sprite.Sprite):
             self.descargar_poder()
             
         keys = pygame.key.get_pressed()
-        if(index_stage == 3):
+        if(index_stage == 3 and not self.control_personaje):
             print(index_stage)
             self.cambiar_animacion(self.estatico)
-            self.control_personaje = False
         if(self.control_personaje):
             if(keys[pygame.K_RIGHT]):
                 
