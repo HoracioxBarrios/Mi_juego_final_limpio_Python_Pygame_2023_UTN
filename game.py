@@ -53,7 +53,7 @@ def game():
 
     # time_stage instancia
     stage_run = False
-    index_stage = 3
+    index_stage = 0
     running = True
     stage_actual = None
     radar_on = False
@@ -106,7 +106,8 @@ def game():
             poder_list.append(poder)
         score_game = personaje.score
         score.score = score_game
-        print(score_game)
+        if(personaje.vida <= 0):
+            over_game.show_game_over("Game Over")
         if(personaje.contador_esferas >= 7): #backup de score del personaje
             if(index_stage < len(stage_list) -1):
                 index_stage += 1
@@ -124,6 +125,7 @@ def game():
             radar = Radar(screen, enemigo.rect.x, enemigo.rect.y, "asset/radar.png", 50, 50, 10)
             radar_on = True
             enemigo.esta_muerto = True
+            enemigo.rect.x = 1200
 
         screen.blit(stage_actual.bg, (0, 0))#bg
 

@@ -66,13 +66,14 @@ class Personaje(pygame.sprite.Sprite):
         
         self.vida = 1000
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
-        self.daño = 500
+        self.daño = 250
         self.delta_ms = 0
         self.poder = Proyectil(self.orientacion_x, self.rect.x, self.rect.y)
         self.poder_list: list[Proyectil] = []
 
         self.contador_esferas = 0
-
+        self.time_damage_recibido = 20
+        self.time_damage_recibido_limit = 20
     def add_gravity(self):
         #char representa a cualquier tipo de personaje
         #velocidad de caida final = 10
@@ -109,7 +110,7 @@ class Personaje(pygame.sprite.Sprite):
         self.verificar_frames()
         self.add_gravity()
         self.verificar_colision(self.lista_pisos)
-        
+        self.colison_enemigo()
         if(len(self.poder_list) > 0):
             self.poder_list[0].update(self.delta_ms)
             self.poder_list[0].verificar_colision(self.enemigo.rect, screen)
@@ -274,6 +275,17 @@ class Personaje(pygame.sprite.Sprite):
                 self.frame = 0
         else:
             self.time_frame -= self.delta_ms
+    def colison_enemigo(self):
+            if(self.time_damage_recibido <= 0):
+                if self.rect.colliderect(self.enemigo.rect):
+                    self.vida -= self.enemigo.damage
+                    self.time_damage_recibido = self.time_damage_recibido_limit
+                    if(self.score > 0):
+                        self.score -= 1000
+                    else:
+                        self.score = 0
+            else:
+                self.time_damage_recibido -= 1
     @property
     def get_dy(self):
         return self.dy

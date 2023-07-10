@@ -2,6 +2,7 @@ import pygame
 from utilidades import *
 from configuracion import *
 from class_vida import BarraVida
+
 class Enemigo(pygame.sprite.Sprite):  
     def __init__(self, screen, pos_x, pos_y, lista_pisos) -> None:
         super().__init__()
@@ -28,7 +29,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.limite_colision = 5
         self.time_frame = 5
         self.lista_pisos = lista_pisos
-
+        self.damage = 250
         self.vida = 1000
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
         self.delta_ms = 0
@@ -167,7 +168,6 @@ class Enemigo(pygame.sprite.Sprite):
         else:
             self.time_frame -= self.delta_ms      
   
-
     @property
     def get_rect(self):
         return self.rect
