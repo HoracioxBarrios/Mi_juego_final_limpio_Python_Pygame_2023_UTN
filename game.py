@@ -143,6 +143,7 @@ def game():
                 elif evento.key == pygame.K_TAB:
                     cambiar_modo()
                 elif evento.key == pygame.K_e:
+                    personaje.score += 2
                     poder_kame.contra_poder()
 
         #Modo Dev
@@ -241,7 +242,11 @@ def game():
             poder_final.update()
             poder_kame.update()
             tiempo_stage_final_stage.update_time()
-            if(tiempo_stage_final_stage.elapsed_time > 5):
+            if(tiempo_stage_final_stage.elapsed_time > 5 and tiempo_stage_final_stage.elapsed_time < 10):
+                poder_kame.caida_kame = 9
+            elif(tiempo_stage_final_stage.elapsed_time > 10 and tiempo_stage_final_stage.elapsed_time < 15):
+                poder_kame.caida_kame = 11
+            elif(tiempo_stage_final_stage.elapsed_time > 15 and tiempo_stage_final_stage.elapsed_time < 20):
                 poder_kame.caida_kame = 15
             if(poder_kame.image_1.get_width() <= 15):
                 over_game.score = score.score
