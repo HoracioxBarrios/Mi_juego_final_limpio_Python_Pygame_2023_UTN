@@ -59,7 +59,7 @@ def game():
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 10 # relog limite time
+    time_limit = 30 # relog limite time
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
@@ -136,15 +136,15 @@ def game():
                 running = False
                 sys.exit()
 
-            if evento.type == pygame.KEYDOWN:
-
-                if evento.key == pygame.K_SPACE:
+            if evento.type == pygame.KEYDOWN :
+                
+                if evento.key == pygame.K_SPACE and personaje.control_personaje:
                     personaje.acciones("saltar")
-                elif evento.key == pygame.K_w:
+                elif evento.key == pygame.K_w and personaje.control_personaje:
                     personaje.acciones("shot")
-                elif evento.key == pygame.K_TAB:
+                elif evento.key == pygame.K_TAB and personaje.control_personaje:
                     cambiar_modo()
-                elif evento.key == pygame.K_e:
+                elif evento.key == pygame.K_e and parte_final_2:
                     personaje.score += 2
                     poder_kame.contra_poder()
 
@@ -245,9 +245,9 @@ def game():
             poder_kame.update()
             tiempo_stage_final_stage.update_time()
             if(tiempo_stage_final_stage.elapsed_time > 5 and tiempo_stage_final_stage.elapsed_time < 10):
-                poder_kame.caida_kame = 9
+                poder_kame.caida_kame = 7
             elif(tiempo_stage_final_stage.elapsed_time > 10 and tiempo_stage_final_stage.elapsed_time < 15):
-                poder_kame.caida_kame = 11
+                poder_kame.caida_kame = 9
             elif(tiempo_stage_final_stage.elapsed_time > 15 and tiempo_stage_final_stage.elapsed_time < 20):
                 poder_kame.caida_kame = 15
             if(poder_kame.image_1.get_width() <= 15):
@@ -255,7 +255,7 @@ def game():
                 over_game.show_game_over("Game Over")
             elif(poder_kame.image_1.get_width() >= poder_kame.limit_power_screen):
                 parte_final_2 = False
-                cambiar_musica("sonido/final_game.mp3")
+                # cambiar_musica("sonido/final_game.mp3")
                 personaje.control_personaje = True
                 enemigo.cambiar_imagen(screen)
                 
