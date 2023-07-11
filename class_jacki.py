@@ -12,9 +12,9 @@ class Boss(pygame.sprite.Sprite):
         self.vida = 5000
         self.esta_muerto = False
 
-    def update(self, screen, personaje: Personaje, fn: any, path):
+    def update(self, screen, personaje: Personaje, fn: any, path, credits_finished):
         self.draw(screen)
-        self.colison_personaje(personaje, fn, path, screen)
+        self.colison_personaje(personaje, fn, path, screen, credits_finished)
     def draw(self, screen):
         screen.blit(self.image, self.rect)  
     def cambiar_imagen(self, screen):
@@ -25,6 +25,9 @@ class Boss(pygame.sprite.Sprite):
         self.rect.x = screen.get_width() / 2
         self.rect.y = (screen.get_height() / 2 )+ 200 
 
-    def colison_personaje(self, personaje: Personaje, fn:any, path, screen):
-            if self.rect.colliderect(personaje.rect):
-                fn(screen, path)
+    def colison_personaje(self, personaje: Personaje,fn, path, screen,  credits_finished: bool):
+        if self.rect.colliderect(personaje.rect) and not credits_finished:
+            game_over_win = fn(screen, path)
+            if game_over_win:
+                self.esta_muerto = True
+                personaje.score += 1

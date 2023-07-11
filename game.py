@@ -17,12 +17,10 @@ from vid.pyvidplayer import Video
 from class_poder_final import PoderFinalVid
 from class_kame import Kame
 import random
-from class_game_over import GameOver
-from interface import main_menu
 from class_score import ScoreStage
 pygame.init()
 
-def game():
+def game()-> str:
 
     # Dimensiones de la pantalla
     ancho_pantalla = ANCHO_PANTALLA
@@ -47,13 +45,11 @@ def game():
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.5)
     poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
-    over_game = GameOver(screen) #score ejemplo
+    # over_game = GameOver(screen) #score ejemplo
     score = ScoreStage(screen , 0, 0, 0)
-
-
     # time_stage instancia
     stage_run = False
-    index_stage = 0
+    index_stage = 0 #define el stage inicial
     running = True
     stage_actual = None
     radar_on = False
@@ -63,11 +59,10 @@ def game():
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
-    slide_krillin = 800
+    
     dx_slide_boss = 20
 
     balloon_position = (200, 250)
-    balloon_position_krillin = (250, 300)
     balloon_color = (255, 255, 255)
     text_color = (0, 0, 0)
     text = ["Has demostrado tu valentia\nllegando hasta aquí muchacho...", "Pero esta ves...\nno te sera tan facíl\npasar la prueba", "Asi que...\nPREPARATE!!", "A ver si puedes\ncontrarestar este ataque!!!"]
@@ -77,17 +72,21 @@ def game():
     text_index = 0
     load_musica_battle = False
     load_music_intro = False
-    path_goku_final = "asset\goku_chico.png"
-    path_goku_intro = "asset\goku_intro_game_res.png"
     path_jacky = "asset\jacky-pose.png"
     path_krillin = "asset\krillin_intro_game.png"
     path_por_defecto = path_krillin
     parte_final_2 = False
     contador_escena = 0
     flag_video_final = False
-    contador_escena_start_game = 0
     score_game = 0
-    while running:
+    
+    
+    
+    game_over_win = False
+    game_over_defeat = False
+    credits_finished = False
+    
+    while running and not game_over_win and not game_over_defeat:
         # Estage
         if not stage_run:
             stage_run = True
@@ -107,7 +106,8 @@ def game():
         score_game = personaje.score
         score.score = score_game
         if(personaje.vida <= 0):
-            over_game.show_game_over("Game Over")
+            # over_game.show_game_over("Game Over")
+            game_over_defeat = True
         if(personaje.contador_esferas >= 7): #backup de score del personaje
             if(index_stage < len(stage_list) -1):
                 index_stage += 1
@@ -134,6 +134,7 @@ def game():
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 running = False
+                pygame.quit()
                 sys.exit()
 
             if evento.type == pygame.KEYDOWN :
@@ -156,15 +157,18 @@ def game():
             dibujar_grid(screen, BLANCO, stage_actual.tile_size, ancho_pantalla, alto_pantalla, 0)
 
 
-        #esfera
-        # Dibujar todas las esferas en la pantalla
+       
+        
         personaje.update(screen, index_stage)
 
         if(not enemigo.esta_muerto):
-            enemigo.update(screen, personaje, final_game_vid, "vid/credit_finales.avi")
+            enemigo.update(screen, personaje, final_game_vid, "vid/credit_finales.avi", credits_finished)
+            
 
-        if(radar_on):
-            print('dibujando')
+        
+
+
+        if(radar_on):# Dibujar todas las esferas en la pantalla
             radar.update(screen, personaje)
             if(radar.catch_radar):
                 crono_on = True
@@ -177,12 +181,12 @@ def game():
                 start_time = True
             tiempo_stage.update_time()
             tiempo_stage.draw_time()
-            if(tiempo_stage.elapsed_time >= time_limit):
-                # show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
-                over_game.score = score.score
-                over_game.show_game_over("Game Over")
+            if(tiempo_stage.elapsed_time >= time_limit):# show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
+                # over_game.score = score.score
+                # over_game.show_game_over("Game Over")
+                game_over_defeat = True
         if(start_time):
-            if(not lista_esferas_generada):
+            if(not lista_esferas_generada):# genera las esferas
                 for i in range(1, 8):  # El rango debe ser de 1 a 8 para generar las rutas correctas
                     path_esfera = "asset/esferas/{i}.png".format(i=i)
                     x = random.randint(0, ancho_screen_para_esferas)
@@ -197,7 +201,7 @@ def game():
                     esfera.return_ID = None
                     personaje.contador_esferas += 1
         #######################intro Inicio##########################
-
+        #resulto en main
         #######################Intro Final###########################
         if(index_stage == 3 and contador_escena < 2):
             personaje.control_personaje = False
@@ -207,14 +211,14 @@ def game():
                 path_por_defecto = path_jacky
             #cargamos fuente para interaccion
             font = pygame.font.Font(None, 36)
-            #cargamos imagen de la interaccion
+            #cargamos imagen de la interaccion - de gou, jacky
             image = pygame.image.load(path_por_defecto)
-            #oscurese la pantalla
+            #oscurese la pantalla - le damos un efecto mate
             oscurecer_pantalla(screen)
             if(slide_boss > 200):
                 slide_boss -= dx_slide_boss
 
-            draw_text_and_image(screen, image, slide_boss)
+            draw_text_and_image(screen, image, slide_boss)# coversacion entre goku y jacky
             if(slide_boss == 200):
                 if(time_text > 0 ):
                     if(text_index < len(text) ):
@@ -223,24 +227,24 @@ def game():
                 else:
                     time_text = time_text_limit
                     text_index += 1
-            if(text_index >= len(text)):# voz goku
-                path_por_defecto = "asset\goku_chico.png"
+            if(text_index >= len(text)):# text voz goku
+                path_por_defecto = "asset\goku_chico.png" # por defecto antes era jacky
                 slide_boss = 600
                 text_index = 0
                 text = text_goku
 
                 contador_escena += 1
-            if contador_escena == 2 and not flag_video_final :
-                flag_video_final = True
+            if contador_escena == 2 and not flag_video_final :# finaliza la coversacion entre goku y jacky 
+                flag_video_final = True 
                 video_pelea_final_1()
-                if(not load_musica_battle):
+                if(not load_musica_battle):# preparamos la pelea final en stage final
                     load_musica_battle = True
                     pygame.mixer.music.load("sonido\musica_resto_pelea.wav")
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(0.5)
                     parte_final_2 = True
                     tiempo_stage_final_stage = TiempoStages(screen,420, 50, 40)
-        if(parte_final_2):
+        if(parte_final_2):# lucha Kame, incrementa con el tiempo el poder del boss
             poder_final.update()
             poder_kame.update()
             tiempo_stage_final_stage.update_time()
@@ -250,14 +254,21 @@ def game():
                 poder_kame.caida_kame = 9
             elif(tiempo_stage_final_stage.elapsed_time > 15 and tiempo_stage_final_stage.elapsed_time < 20):
                 poder_kame.caida_kame = 15
+                
+                
             if(poder_kame.image_1.get_width() <= 15):
-                over_game.score = score.score
-                over_game.show_game_over("Game Over")
+                # over_game.score = score.score
+                # over_game.show_game_over("Game Over")
+                game_over_defeat = True
             elif(poder_kame.image_1.get_width() >= poder_kame.limit_power_screen):
                 parte_final_2 = False
                 # cambiar_musica("sonido/final_game.mp3")
                 personaje.control_personaje = True
                 enemigo.cambiar_imagen(screen)
+              
+                if final_game_vid(screen, "vid/credit_finales.avi"):# me seguro que consega juntar las 7 esferas al final
+                    game_over_win = True
+                        # ver si funca
                 
         
 
@@ -269,6 +280,12 @@ def game():
         personaje.delta_ms = delta_ms
         enemigo.delta_ms = delta_ms
         poder.delta_ms = delta_ms
+
+    # Para volver al menu principal
+    if game_over_defeat:
+        return "defeat"
+    elif game_over_win:
+        return "win"
 
 def draw_text_and_image(screen, image, slide_boss, pos_y = 0):
     image_rect = image.get_rect()
@@ -334,7 +351,7 @@ def video_pelea_final_1():
     ancho = 1000
     alto = 700
     screen = pygame.display.set_mode((ancho, alto))
-    pygame.display.set_caption("Epic Vid")
+    pygame.display.set_caption("Dragon Ball Sprite")
     vid_1 = Video("vid/video final goku vs roshi-coratodo-parte-1.avi")#vid final con
     vid_1.set_size((ancho, alto))
 
@@ -354,35 +371,37 @@ def video_pelea_final_1():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 vid_1.close()
                 runnig = False
+    
 
     
 
 
 #------------------------------------------------
+# vid Creditos
 def final_game_vid(SCREEN, path):
     pygame.mixer.music.stop()
     vid = Video(path)
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
-    game_over = GameOver(SCREEN)
-    
     while True:
         if vid.active == True:
-            print(vid.active)
             vid.draw(SCREEN, (0, 0))
         else:
-            print(vid.active)
             vid.close()
-            game_over.show_game_over("Congratulacion")
+            credits_finished = True
+            return  credits_finished # Actualiza la variable de bandera
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 vid.close()
-                game_over.show_game_over("Congratulacion")
-
+                credits_finished = True
+                return  credits_finished
 
         pygame.display.update()
+      
 
-pygame.quit()
+
+        
+
+# ver si esta bien lo de la linea 270

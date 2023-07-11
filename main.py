@@ -5,7 +5,7 @@ from game import game, oscurecer_pantalla, draw_text2, draw_text_and_image
 from utilidades import cambiar_musica
 from vid.pyvidplayer import Video
 from configuracion import ANCHO_PANTALLA, ALTO_PANTALLA
-from class_tiempo_stages import TiempoStages
+from class_game_over import GameOver
 
 pygame.init()
 
@@ -15,7 +15,9 @@ pygame.display.set_caption("Dragon Ball Sprite")
 
 background_main = pygame.image.load("asset/Kid Goku Wallpaper.png")
 background_main_rescalado = pygame.transform.scale(background_main, (ANCHO_PANTALLA, ALTO_PANTALLA))
+game_over_respuesta = None
 
+over_game = GameOver(SCREEN) #score ejemplo
 
 def get_font(size):
     return pygame.font.Font(font_obtenida, size)
@@ -32,7 +34,12 @@ def play():
 
         PLAY_BACK.changeColor(PLAY_MOUSE_POS)
         PLAY_BACK.update(SCREEN)
-        game()
+       
+        game_over_respuesta = game()
+        if game_over_respuesta == "defeat":
+            over_game.show_game_over("Game Over", main_menu)
+        else:
+            over_game.show_game_over("Win", main_menu)
 
         pygame.display.update()
 
@@ -141,8 +148,12 @@ def transicion_stages(path_vid_transicion, to_play):
             vid.close()
         pygame.display.update()
     if to_play:
-        print("entramos a game")
-        game()
+        
+        game_over_respuesta = game()
+        if game_over_respuesta == "defeat":
+            over_game.show_game_over("Game Over", main_menu)
+        else:
+            over_game.show_game_over("Win", main_menu)
 
 def intro_2(path, go_game):
     vid = Video(path)
@@ -156,14 +167,22 @@ def intro_2(path, go_game):
             print(vid.active)
             vid.close()
             if(go_game):
-                game()
+                game_over_respuesta = game()
+                if game_over_respuesta == "defeat":
+                    over_game.show_game_over("Game Over", main_menu)
+                else:
+                    over_game.show_game_over("Win", main_menu)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 vid.close()
-                game()
+                game_over_respuesta = game()
+                if game_over_respuesta == "defeat":
+                    over_game.show_game_over("Game Over", main_menu)
+                else:
+                    over_game.show_game_over("Win", main_menu)
 
         pygame.display.update()
     
@@ -185,9 +204,9 @@ def preludio(screen):
     path_goku_intro = "asset/goku_intro_game_res.png"
     
     
-    text = ["¡Hola, Goku!\nEstaba pensando que \n quizas seria bueno que practiqumos un poco."]
+    text = ["¡Hola, Goku!\nEstaba pensando que \n quizas seria bueno que practiquemos para el gran torneo."]
 
-    text_goku = ["Tenes mucha razon Krillin,\nprepararse para el gran torneo... 123 Empecemos!"]
+    text_goku = ["Es verdad tenes  mucha razon Krillin,\n hay prepararse... Empecemos!"]
     dx_slide_boss = 20
     slide_krillin = 800
     contador_escena_start_game = 0

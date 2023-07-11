@@ -75,8 +75,7 @@ class Personaje(pygame.sprite.Sprite):
         self.time_damage_recibido = 20
         self.time_damage_recibido_limit = 20
     def add_gravity(self):
-        #char representa a cualquier tipo de personaje
-        #velocidad de caida final = 10
+     
         self.gravity_vel_y += 1
         if(self.gravity_vel_y > 10):
             self.gravity_vel_y = 10

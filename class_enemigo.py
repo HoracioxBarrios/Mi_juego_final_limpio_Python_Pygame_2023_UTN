@@ -102,12 +102,12 @@ class Enemigo(pygame.sprite.Sprite):
     
 
 
-    def update(self, screen, personaje, fn: any, path):
+    def update(self, screen, personaje, fn: any, path, credits_finished):
         self.dx = self.desplazamiento_x
         self.dy = 0
        
  
-        # print(self.orientacion_x)
+        
         if(self.orientacion_x != 1):
             self.acciones('caminar_l')
         elif(self.orientacion_x == 1):
@@ -116,7 +116,6 @@ class Enemigo(pygame.sprite.Sprite):
         self.verificar_frames()
         self.add_gravity()
         self.verificar_colision(self.lista_pisos)
-        # print(self.dx)
 
         self.rect.x += self.dx
         self.rect.y += self.dy
@@ -138,13 +137,13 @@ class Enemigo(pygame.sprite.Sprite):
                     self.orientacion_x = 1
                     self.cambiar_animacion(self.caminando_r)
                     self.desplazamiento_x = self.velocidad_caminar
-                    # print(self.desplazamiento_x)
+                   
                     self.esta_caminando = True
                 else:
                     self.orientacion_x = -1
                     self.cambiar_animacion(self.caminando_l)
                     self.desplazamiento_x = -self.velocidad_caminar
-                    # print(self.desplazamiento_x)
+                   
                     self.esta_caminando = True
 
     def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
