@@ -34,6 +34,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.barra_vida = BarraVida(screen,self.vida, 100, 5 , self.rect.x, self.rect.y -10)
         self.delta_ms = 0
         self.esta_muerto = False
+        self.game_over_win = False
     def add_gravity(self):
     #char representa a cualquier tipo de personaje
     #velocidad de caida final = 10
