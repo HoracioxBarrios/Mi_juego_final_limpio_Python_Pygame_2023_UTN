@@ -54,14 +54,14 @@ def play():
 
 
 def options():
-    background_main = pygame.image.load("asset\game over.jpg")
+    background_main = pygame.image.load("asset\creditos pygame.jpg")
     background_main_rescalado = pygame.transform.scale(background_main, (ANCHO_PANTALLA, ALTO_PANTALLA))
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
         SCREEN.blit(background_main_rescalado, (0, 0))
 
-        OPTIONS_TEXT = get_font(20).render("Creditos", True, "White")
+        OPTIONS_TEXT = get_font(20).render("Creditos", True, "Red")
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_PANTALLA / 2, 260))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
