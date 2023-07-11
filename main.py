@@ -1,5 +1,6 @@
 import pygame
 import sys
+import sqlite3
 from class_boton import Button
 from game import game, oscurecer_pantalla, draw_text2, draw_text_and_image
 from utilidades import cambiar_musica
@@ -23,6 +24,11 @@ over_game = GameOver(SCREEN) #score ejemplo
 def get_font(size):
     return pygame.font.Font(font_obtenida, size)
 
+# Crear una conexión a la base de datos utilizando el manejador de contexto
+with sqlite3.connect('scores.db') as conn:
+    c = conn.cursor()
+    # Crear la tabla si no existe
+    c.execute('''CREATE TABLE IF NOT EXISTS scores (score INTEGER)''')
 
 def play():
     while True:
@@ -55,7 +61,7 @@ def options():
 
         SCREEN.blit(background_main_rescalado, (0, 0))
 
-        OPTIONS_TEXT = get_font(20).render("Estas en la pantalla de Opciones", True, "White")
+        OPTIONS_TEXT = get_font(20).render("Opciones", True, "White")
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_PANTALLA / 2, 260))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
@@ -141,6 +147,8 @@ def intro():
                 main_menu()
 
         pygame.display.update()
+
+
 def transicion_stages(path_vid_transicion, to_play):
     vid = Video(path_vid_transicion)
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
@@ -153,7 +161,6 @@ def transicion_stages(path_vid_transicion, to_play):
             vid.close()
         pygame.display.update()
     if to_play:
-        
         lista_game_over_respuesta = game()
         resp_game_over = lista_game_over_respuesta[0]
         list_resp_score_game = lista_game_over_respuesta[1]
@@ -161,6 +168,7 @@ def transicion_stages(path_vid_transicion, to_play):
             over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
         else:# Win
             over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
+
 
 def intro_2(path, go_game):
     vid = Video(path)
@@ -198,8 +206,6 @@ def intro_2(path, go_game):
         pygame.display.update()
     
 def preludio(screen):
-    
-    
     background_main = pygame.image.load("asset\kamehouse.jpg")
     background_main_rescalado = pygame.transform.scale(background_main, (ANCHO_PANTALLA, ALTO_PANTALLA))
     cambiar_musica("sonido\intro_karaoke_dragonball_buscar_esferas (mp3cut.net).mp3", 0.2)
@@ -215,9 +221,9 @@ def preludio(screen):
     path_goku_intro = "asset/goku_intro_game_res.png"
     
     
-    text = ["¡Hola, Goku!\nEstaba pensando que \n quizas seria bueno que practiquemos para el gran torneo."]
+    text = ["¡Hola, Goku!\nEstaba pensando que \n quizas seria bueno que practiquemos para el Gran Torneo."]
 
-    text_goku = ["Es verdad tenes  mucha razon Krillin,\n hay prepararse... Empecemos!"]
+    text_goku = ["Es verdad tenes  mucha razon Krillin,\n hay que prepararse... Empecemos!"]
     dx_slide_boss = 20
     slide_krillin = 800
     contador_escena_start_game = 0
@@ -267,9 +273,57 @@ def preludio(screen):
         pygame.display.update()
     pygame.mixer.music.stop()
     intro_2("vid/stage_0.avi", True)
-    
-    
 
+
+def load_scores():
+    # Cargar los puntajes anteriores desde la base de datos
+    with sqlite3.connect('scores.db') as conn:
+        c = conn.cursor()
+        c.execute("SELECT score FROM scores")
+        previous_scores = c.fetchall()
+        return previous_scores
+
+
+def show_game_over(score_game_over, main_menu):
+    SCREEN.fill((0, 0, 0))
+    game_over_text = get_font(100).render("Game Over", True, "Red")
+    game_over_rect = game_over_text.get_rect(center=(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2 - 50))
+    SCREEN.blit(game_over_text, game_over_rect)
+
+    # Cargar los puntajes anteriores
+    previous_scores = load_scores()
+
+    if previous_scores:
+        # Ordenar los puntajes de mayor a menor
+        previous_scores.sort(reverse=True)
+        scores_text = get_font(40).render("Previous Scores:", True, "White")
+        scores_rect = scores_text.get_rect(center=(ANCHO_PANTALLA / 2, ALTO_PANTALLA / 2 + 50))
+        SCREEN.blit(scores_text, scores_rect)
+
+        # Mostrar los puntajes anteriores
+        y_pos = ALTO_PANTALLA / 2 + 100
+        for score in previous_scores:
+            score_text = get_font(30).render(str(score[0]), True, "White")
+            score_rect = score_text.get_rect(center=(ANCHO_PANTALLA / 2, y_pos))
+            SCREEN.blit(score_text, score_rect)
+            y_pos += 40
+
+    # Botón de regreso al menú principal
+    BACK_BUTTON = Button(image=None, pos=(ANCHO_PANTALLA / 2, ALTO_PANTALLA - 150),
+                         text_input="Back to Menu", font=get_font(40), base_color="White",
+                         hovering_color="Green")
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if BACK_BUTTON.checkForInput(pygame.mouse.get_pos()):
+                    main_menu()
+
+        BACK_BUTTON.changeColor(pygame.mouse.get_pos())
+        BACK_BUTTON.update(SCREEN)
+        pygame.display.update()
 
 
 intro()

@@ -1,5 +1,6 @@
 import pygame
 import sys
+import sqlite3
 from class_boton import Button
 
 
@@ -17,6 +18,12 @@ class GameOver:
         self.alto_screen = screen.get_height()
         self.font_obtenida = "fonts/font.ttf"
 
+        # Crear una conexión a la base de datos utilizando el manejador de contexto
+        with sqlite3.connect('scores.db') as conn:
+            c = conn.cursor()
+            # Crear la tabla si no existe
+            c.execute('''CREATE TABLE IF NOT EXISTS scores (score INTEGER)''')
+
     def draw_score(self, scores):
         score_gap = 50
         font = pygame.font.SysFont("Arial", 48)
@@ -28,7 +35,7 @@ class GameOver:
             score_rect = score_text.get_rect(midtop=(self.ancho_screen // 2, self.score_ubi_y + score_gap * (i + 1)))
             self.screen.blit(score_text, score_rect)
 
-    def show_game_over(self, msg, fn: any, score):
+    def show_game_over(self, msg, fn: any, list_score):
         pygame.mixer.music.load('sonido/DRAGON BALL Z Cha-La Head Guitarra Christianvib.mp3')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.5)
@@ -37,16 +44,28 @@ class GameOver:
             self.back_groung_game_over = pygame.transform.scale(self.back_groung_game_over,
                                                                  (self.ancho_screen, self.alto_screen))
         else:  # Win
-            self.back_groung_game_over = pygame.image.load("asset\win.jpg")
+            self.back_groung_game_over = pygame.image.load("asset/win.jpg")
             self.back_groung_game_over = pygame.transform.scale(self.back_groung_game_over,
                                                                  (self.ancho_screen, self.alto_screen))
 
-        if isinstance(score, list):
-            scores = score + [0] * (3 - len(score))
+        if isinstance(list_score, list):
+            scores = list_score + [0] * (3 - len(list_score))
         else:
-            scores = [score] + [0] * 2
+            scores = [list_score] + [0] * 2
 
         scores.sort(reverse=True)
+
+        # Guardar el puntaje en la base de datos utilizando el manejador de contexto
+        list_score = scores[0]  # Suponiendo que el puntaje se encuentra en la primera posición de la lista
+        with sqlite3.connect('scores.db') as conn:
+            c = conn.cursor()
+            c.execute("INSERT INTO scores VALUES (?)", (list_score,))
+
+        # Cargar los puntajes anteriores desde la base de datos y ordenarlos de mayor a menor
+        with sqlite3.connect('scores.db') as conn:
+            c = conn.cursor()
+            c.execute("SELECT score FROM scores ORDER BY score DESC LIMIT 5")
+            previous_scores = c.fetchall()
 
         while True:
             self.screen.blit(self.back_groung_game_over, (0, 0))
@@ -64,7 +83,7 @@ class GameOver:
                                 hovering_color=(248, 209, 5))
 
             self.screen.blit(MENU_TEXT, MENU_RECT)
-            self.draw_score(scores)
+            self.draw_score(previous_scores)
             for button in [QUIT_BUTTON, PLAY_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(self.screen)
@@ -79,5 +98,3 @@ class GameOver:
                             pygame.quit()
                             sys.exit()
             pygame.display.update()
-
-
