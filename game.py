@@ -20,7 +20,12 @@ import random
 from class_score import ScoreStage
 pygame.init()
 
-def game()-> str:
+def game()-> list:
+    '''
+    corre el juego con lasinstancias de los obj
+    recibe : None
+    Devuelve : any
+    '''
 
     # Dimensiones de la pantalla
     ancho_pantalla = ANCHO_PANTALLA
@@ -281,11 +286,20 @@ def game()-> str:
         enemigo.delta_ms = delta_ms
         poder.delta_ms = delta_ms
 
-    # Para volver al menu principal
+
+    # volver al menu principal y (llevar el score y el game over) 
+    lista_game_over_score = []
+    lista_scores = []
     if game_over_defeat:
-        return "defeat"
+        lista_game_over_score.append("Game Over")
+        lista_scores.append(score_game)
+        lista_game_over_score.append(lista_scores)
+        return lista_game_over_score
     elif game_over_win:
-        return "win"
+        lista_game_over_score.append("Win")
+        lista_scores.append(score_game)
+        lista_game_over_score.append(lista_scores)
+        return lista_game_over_score
 
 def draw_text_and_image(screen, image, slide_boss, pos_y = 0):
     image_rect = image.get_rect()

@@ -16,6 +16,7 @@ pygame.display.set_caption("Dragon Ball Sprite")
 background_main = pygame.image.load("asset/Kid Goku Wallpaper.png")
 background_main_rescalado = pygame.transform.scale(background_main, (ANCHO_PANTALLA, ALTO_PANTALLA))
 game_over_respuesta = None
+list_resp_score_game = []
 
 over_game = GameOver(SCREEN) #score ejemplo
 
@@ -35,27 +36,31 @@ def play():
         PLAY_BACK.changeColor(PLAY_MOUSE_POS)
         PLAY_BACK.update(SCREEN)
        
-        game_over_respuesta = game()
-        if game_over_respuesta == "defeat":
-            over_game.show_game_over("Game Over", main_menu)
-        else:
-            over_game.show_game_over("Win", main_menu)
+        lista_game_over_respuesta = game()
+        resp_game_over = lista_game_over_respuesta[0]
+        list_resp_score_game = lista_game_over_respuesta[1]
+        if resp_game_over == "Game Over":
+            over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
+        else:# Win
+            over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
 
         pygame.display.update()
 
 
 def options():
+    background_main = pygame.image.load("asset\game over.jpg")
+    background_main_rescalado = pygame.transform.scale(background_main, (ANCHO_PANTALLA, ALTO_PANTALLA))
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
-        SCREEN.fill("white")
+        SCREEN.blit(background_main_rescalado, (0, 0))
 
-        OPTIONS_TEXT = get_font(20).render("Estas en la pantalla de Opciones", True, "Black")
+        OPTIONS_TEXT = get_font(20).render("Estas en la pantalla de Opciones", True, "White")
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_PANTALLA / 2, 260))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
         OPTIONS_BACK = Button(image=None, pos=(ANCHO_PANTALLA / 2, 460),
-                              text_input="BACK", font=get_font(40), base_color="Black", hovering_color="Green")
+                              text_input="BACK", font=get_font(40), base_color="White", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
@@ -149,11 +154,13 @@ def transicion_stages(path_vid_transicion, to_play):
         pygame.display.update()
     if to_play:
         
-        game_over_respuesta = game()
-        if game_over_respuesta == "defeat":
-            over_game.show_game_over("Game Over", main_menu)
-        else:
-            over_game.show_game_over("Win", main_menu)
+        lista_game_over_respuesta = game()
+        resp_game_over = lista_game_over_respuesta[0]
+        list_resp_score_game = lista_game_over_respuesta[1]
+        if resp_game_over == "Game Over":
+            over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
+        else:# Win
+            over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
 
 def intro_2(path, go_game):
     vid = Video(path)
@@ -167,22 +174,26 @@ def intro_2(path, go_game):
             print(vid.active)
             vid.close()
             if(go_game):
-                game_over_respuesta = game()
-                if game_over_respuesta == "defeat":
-                    over_game.show_game_over("Game Over", main_menu)
-                else:
-                    over_game.show_game_over("Win", main_menu)
+                lista_game_over_respuesta = game()
+                resp_game_over = lista_game_over_respuesta[0]
+                list_resp_score_game = lista_game_over_respuesta[1]
+                if resp_game_over == "Game Over":
+                    over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
+                else:# Win
+                    over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 vid.close()
-                game_over_respuesta = game()
-                if game_over_respuesta == "defeat":
-                    over_game.show_game_over("Game Over", main_menu)
-                else:
-                    over_game.show_game_over("Win", main_menu)
+                lista_game_over_respuesta = game()
+                resp_game_over = lista_game_over_respuesta[0]
+                list_resp_score_game = lista_game_over_respuesta[1]
+                if resp_game_over == "Game Over":
+                    over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
+                else:# Win
+                    over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
 
         pygame.display.update()
     
