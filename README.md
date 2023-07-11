@@ -1,7 +1,7 @@
 
 Dragon Ball Sprite
 
-![Imagen del Menu del Juego](asset\A_Imagen_Game.PNG)
+![Imagen del Menu del Juego](asset/A_Imagen_Game.PNG)
 
 
 
