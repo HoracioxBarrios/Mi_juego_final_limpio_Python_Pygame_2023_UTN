@@ -271,7 +271,7 @@ def game()-> list:
                 personaje.control_personaje = True
                 enemigo.cambiar_imagen(screen)
               
-                if final_game_vid(screen, "vid/credit_finales.avi"):# me seguro que consega juntar las 7 esferas al final
+                if final_game_vid(screen, "vid\proyecto final creditos -v2.avi"):# me seguro que consega juntar las 7 esferas al final
                     game_over_win = True
                         # ver si funca
                 
