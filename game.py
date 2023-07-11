@@ -1,6 +1,6 @@
 import pygame, sys
 from utilidades import intro_transition, cambiar_musica, dibujar_grid
-from configuracion import ANCHO_PANTALLA, ALTO_PANTALLA, FPS, BLANCO
+from configuracion import *
 from class_personaje import Personaje
 from class_enemigo import Enemigo
 from class_proyectil import Proyectil
@@ -60,7 +60,7 @@ def game()-> list:
     radar_on = False
     crono_on = False
     start_time = False
-    time_limit = 30 # relog limite time
+    
     lista_esferas = []
     lista_esferas_generada = False
     slide_boss = 600
@@ -183,11 +183,11 @@ def game()-> list:
 
         if(crono_on):
             if(not start_time):
-                tiempo_stage = TiempoStages(screen,420, 50, time_limit)
+                tiempo_stage = TiempoStages(screen,420, 50, time_limit_stages)
                 start_time = True
             tiempo_stage.update_time()
             tiempo_stage.draw_time()
-            if(tiempo_stage.elapsed_time >= time_limit):# show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
+            if(tiempo_stage.elapsed_time >= time_limit_stages):# show_game_over_screen(screen, ancho_pantalla, alto_pantalla)
                 # over_game.score = score.score
                 # over_game.show_game_over("Game Over")
                 game_over_defeat = True

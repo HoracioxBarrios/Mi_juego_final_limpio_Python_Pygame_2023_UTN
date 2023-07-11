@@ -6,7 +6,7 @@ ALTO_PANTALLA= 700
 
 FPS = 30
 
-
+time_limit_stages = 20 # relog limite time
 
 
 
