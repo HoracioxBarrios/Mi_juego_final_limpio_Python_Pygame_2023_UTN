@@ -61,12 +61,12 @@ def options():
 
         SCREEN.blit(background_main_rescalado, (0, 0))
 
-        OPTIONS_TEXT = get_font(20).render("Opciones", True, "White")
+        OPTIONS_TEXT = get_font(20).render("Creditos", True, "White")
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_PANTALLA / 2, 260))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
         OPTIONS_BACK = Button(image=None, pos=(ANCHO_PANTALLA / 2, 460),
-                              text_input="BACK", font=get_font(40), base_color="White", hovering_color="Green")
+                              text_input="BACK", font=get_font(40), base_color="White", hovering_color="Orange")
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
@@ -99,7 +99,7 @@ def main_menu():
                              text_input="Jugar", font=get_font(20), base_color="White",
                              hovering_color=(248, 209, 5))
         OPTIONS_BUTTON = Button(image=pygame.image.load("asset/Options Rect.png"), pos=(ANCHO_PANTALLA / 2, 350),
-                                text_input="Opciones", font=get_font(20), base_color="White",
+                                text_input="Creditos", font=get_font(20), base_color="White",
                                 hovering_color=(248, 209, 5))
         QUIT_BUTTON = Button(image=pygame.image.load("asset/Quit Rect.png"), pos=(ANCHO_PANTALLA / 2, 500),
                              text_input="Salir", font=get_font(20), base_color="White",

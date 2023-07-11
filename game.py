@@ -252,7 +252,7 @@ def game()-> list:
         if(parte_final_2):# lucha Kame, incrementa con el tiempo el poder del boss
             poder_final.update()
             poder_kame.update()
-            tiempo_stage_final_stage.update_time()
+            tiempo_stage_final_stage.update_time(final=True)
             if(tiempo_stage_final_stage.elapsed_time > 5 and tiempo_stage_final_stage.elapsed_time < 10):
                 poder_kame.caida_kame = 7
             elif(tiempo_stage_final_stage.elapsed_time > 10 and tiempo_stage_final_stage.elapsed_time < 15):

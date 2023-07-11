@@ -40,7 +40,7 @@ class GameOver:
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.5)
         if msg == "Game Over":
-            self.back_groung_game_over = pygame.image.load("asset/game over.jpg")
+            self.back_groung_game_over = pygame.image.load("asset\game_over_2.jpg")
             self.back_groung_game_over = pygame.transform.scale(self.back_groung_game_over,
                                                                  (self.ancho_screen, self.alto_screen))
         else:  # Win
