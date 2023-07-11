@@ -11,7 +11,8 @@ class Boss(pygame.sprite.Sprite):
         self.rect.y = pos_y
         self.vida = 5000
         self.esta_muerto = False
-
+        self.final_win = False
+        self.game_over_win = False
     def update(self, screen, personaje: Personaje, fn: any, path, credits_finished):
         self.draw(screen)
         self.colison_personaje(personaje, fn, path, screen, credits_finished)
@@ -27,7 +28,7 @@ class Boss(pygame.sprite.Sprite):
 
     def colison_personaje(self, personaje: Personaje,fn, path, screen,  credits_finished: bool):
         if self.rect.colliderect(personaje.rect) and not credits_finished:
-            game_over_win = fn(screen, path)
-            if game_over_win:
+            self.game_over_win = fn(screen, path)# muestra el video de jacky derrotado y retorna true
+            if self.game_over_win:
                 self.esta_muerto = True
                 personaje.score += 1

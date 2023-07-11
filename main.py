@@ -128,7 +128,7 @@ def main_menu():
 
 
 def intro():
-    vid = Video("vid/intro.mp4")
+    vid = Video("vid\INTRO GAME UTN V2.avi")
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
 
     while True:

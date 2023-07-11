@@ -167,8 +167,9 @@ def game()-> list:
         personaje.update(screen, index_stage)
 
         if(not enemigo.esta_muerto):
-            enemigo.update(screen, personaje, final_game_vid, "vid/credit_finales.avi", credits_finished)
-            
+            enemigo.update(screen, personaje, final_game_vid ,"vid\proyecto final creditos -v2.avi", credits_finished)
+            if enemigo.game_over_win:# termina el video y el enemigo avisa si ganamos.
+                game_over_win = True
 
         
 
@@ -241,7 +242,7 @@ def game()-> list:
                 contador_escena += 1
             if contador_escena == 2 and not flag_video_final :# finaliza la coversacion entre goku y jacky 
                 flag_video_final = True 
-                video_pelea_final_1()
+                correr_video("vid/video final goku vs roshi-coratodo-parte-1.avi", ancho_pantalla, alto_pantalla)
                 if(not load_musica_battle):# preparamos la pelea final en stage final
                     load_musica_battle = True
                     pygame.mixer.music.load("sonido\musica_resto_pelea.wav")
@@ -264,15 +265,19 @@ def game()-> list:
             if(poder_kame.image_1.get_width() <= 15):
                 # over_game.score = score.score
                 # over_game.show_game_over("Game Over")
+                pygame.mixer.music.stop()
+                correr_video("vid\goku resultado_explosion.avi", ancho_pantalla, alto_pantalla)
                 game_over_defeat = True
             elif(poder_kame.image_1.get_width() >= poder_kame.limit_power_screen):
+                pygame.mixer.music.stop()
+                correr_video("vid\jacki resultado_explosion.avi", ancho_pantalla, alto_pantalla)
                 parte_final_2 = False
                 # cambiar_musica("sonido/final_game.mp3")
                 personaje.control_personaje = True
                 enemigo.cambiar_imagen(screen)
               
-                if final_game_vid(screen, "vid\proyecto final creditos -v2.avi"):# me seguro que consega juntar las 7 esferas al final
-                    game_over_win = True
+                # if final_game_vid(screen, "vid\proyecto final creditos -v2.avi"):# me seguro que consega juntar las 7 esferas al final
+                #     game_over_win = True
                         # ver si funca
                 
         
@@ -360,13 +365,11 @@ def filter_es(id, lista_esferas: list[Esferas]):
 
 #------------------------------------------------  vid
 
-def video_pelea_final_1():
+def correr_video(path, ancho, alto):
     pygame.init()
-    ancho = 1000
-    alto = 700
     screen = pygame.display.set_mode((ancho, alto))
     pygame.display.set_caption("Dragon Ball Sprite")
-    vid_1 = Video("vid/video final goku vs roshi-coratodo-parte-1.avi")#vid final con
+    vid_1 = Video(path)#vid final
     vid_1.set_size((ancho, alto))
 
     runnig = True
