@@ -61,8 +61,8 @@ def options():
 
         SCREEN.blit(background_main_rescalado, (0, 0))
 
-        OPTIONS_TEXT = get_font(20).render("Creditos", True, "Red")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_PANTALLA / 2, 260))
+        OPTIONS_TEXT = get_font(20).render("Creditos", True, "Grey")
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(ANCHO_PANTALLA / 2, 150))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
         OPTIONS_BACK = Button(image=None, pos=(ANCHO_PANTALLA / 2, 460),
