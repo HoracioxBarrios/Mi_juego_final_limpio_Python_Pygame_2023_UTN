@@ -371,6 +371,7 @@ def correr_video(path, ancho, alto):
     pygame.display.set_caption("Dragon Ball Sprite")
     vid_1 = Video(path)#vid final
     vid_1.set_size((ancho, alto))
+    vid_1.set_volume(0.3)
 
     runnig = True
     while runnig:
