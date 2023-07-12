@@ -75,7 +75,7 @@ def leerJson(path):
         contenido = json.load(archivo)
     return contenido
 
-def cambiar_musica(path, vol= 0.5):
+def cambiar_musica(path, vol= 0.4):
     pygame.mixer.music.load(path)
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(vol)
@@ -83,6 +83,7 @@ def cambiar_musica(path, vol= 0.5):
 def intro_transition(path, screen):
     vid = Video(path)
     vid.set_size((screen.get_width(), screen.get_height()))
+    vid.set_volume(0.5)
     pygame.mixer.music.stop()
     running = True
     while running:

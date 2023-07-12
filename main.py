@@ -85,7 +85,7 @@ def options():
 def main_menu():
     pygame.mixer.music.load('sonido/DRAGON BALL Z Cha-La Head Guitarra Christianvib.mp3')
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.set_volume(0.3)
 
     while True:
         SCREEN.blit(background_main_rescalado, (0, 0))
@@ -130,7 +130,7 @@ def main_menu():
 def intro():
     vid = Video("vid\INTRO GAME UTN V2.avi")
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
-
+    vid.set_volume(0.5)
     while True:
         if vid.active:
             vid.draw(SCREEN, (0, 0))
@@ -178,6 +178,7 @@ def intro_2(path, go_game):
         if vid.active == True:
             print(vid.active)
             vid.draw(SCREEN, (0, 0))
+            vid.set_volume(0.5)
         else:
             print(vid.active)
             vid.close()

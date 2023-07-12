@@ -48,7 +48,7 @@ def game()-> list:
     stage_list = [stage_1, stage_2, stage_3, stage_4]
     poder_final = PoderFinalVid(0,0, screen)
     pygame.mixer.music.play()
-    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.set_volume(0.4)
     poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
     # over_game = GameOver(screen) #score ejemplo
     score = ScoreStage(screen , 0, 0, 0)
@@ -399,6 +399,7 @@ def final_game_vid(SCREEN, path):
     pygame.mixer.music.stop()
     vid = Video(path)
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
+    vid.set_volume(0.5)
     while True:
         if vid.active == True:
             vid.draw(SCREEN, (0, 0))
