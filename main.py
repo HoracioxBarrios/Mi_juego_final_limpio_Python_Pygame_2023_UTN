@@ -14,7 +14,7 @@ font_obtenida = "fonts/font.ttf"
 SCREEN = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
 pygame.display.set_caption("Dragon Ball Sprite")
 
-background_main = pygame.image.load("asset/Kid Goku Wallpaper.png")
+background_main = pygame.image.load("asset/5795524.jpg")
 background_main_rescalado = pygame.transform.scale(background_main, (ANCHO_PANTALLA, ALTO_PANTALLA))
 game_over_respuesta = None
 list_resp_score_game = []
