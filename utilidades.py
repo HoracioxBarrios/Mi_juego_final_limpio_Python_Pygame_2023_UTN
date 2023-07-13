@@ -201,9 +201,7 @@ def intro_transition(path : str, screen : pygame.Surface)-> None:
 
 
 
-
-
-def transicion_stages(path_vid_transicion : str, to_play : bool)-> None:
+def transicion_stages(path_vid_transicion, to_play):
     '''
     Realiza una transición entre etapas mostrando un video de transición.
     Recibe :
@@ -231,3 +229,4 @@ def transicion_stages(path_vid_transicion : str, to_play : bool)-> None:
     #         over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
     #     else:# Win
     #         over_game.show_game_over(resp_game_over, main_menu, list_resp_score_game)
+

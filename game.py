@@ -20,11 +20,13 @@ import random
 from class_score import ScoreStage
 pygame.init()
 
-def game()-> list:
+def game()-> list[str and [list[int]]]:
     '''
-    corre el juego con lasinstancias de los obj
+    corre el juego principal
     recibe : None
-    Devuelve : any
+    Devuelve : list[str and list[int]] 
+    Win o Game over : str
+    Scores : list[int]
     '''
 
     # Dimensiones de la pantalla
@@ -34,13 +36,13 @@ def game()-> list:
     fps = FPS
     relog = pygame.time.Clock()
 
-    # Instancias
-    # Rutas de las imágenes de las esferas
-
+    
+    
+    #rango de aparicion en screen esferas del dragon
     ancho_screen_para_esferas = 950
     alto_screen_para_esferas = 555
 
-    #instancio el stage actual. luego podria tener varios stages en una lista y llamarlo segun elecion desde los indices
+    #instancio el stage actual. se append en una lista y se eligue el stage segun index
     stage_1 = Stage_1(screen)
     stage_2 = Stage_2(screen)
     stage_3 = Stage_3(screen)
@@ -50,11 +52,11 @@ def game()-> list:
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.4)
     poder_kame = Kame(screen, ANCHO_PANTALLA,50, 1000, 1000, 0, 620)
-    # over_game = GameOver(screen) #score ejemplo
+    
     score = ScoreStage(screen , 0, 0, 0)
-    # time_stage instancia
+    
     stage_run = False
-    index_stage = 0 #define el stage inicial
+    index_stage = 3 #define el stage inicial
     running = True
     stage_actual = None
     radar_on = False
@@ -157,7 +159,7 @@ def game()-> list:
                     personaje.score += 2
                     poder_kame.contra_poder()
 
-        #Modo Dev
+        #Modo Dev - press Tab
         if get_modo():
             pygame.draw.rect(screen, (255, 255, 255), personaje.get_rect, 2)
             pygame.draw.rect(screen, (255, 255, 255), enemigo.get_rect, 2)
@@ -308,17 +310,54 @@ def game()-> list:
         lista_game_over_score.append(lista_scores)
         return lista_game_over_score
 
-def draw_text_and_image(screen, image, slide_boss, pos_y = 0):
+def draw_text_and_image(screen, image, slide_boss, pos_y = 0)-> None:
+    '''
+    Dibuja una imagen en la pantalla con un desplazamiento horizontal dado y una posición vertical opcional.
+    Recibe:
+    Args:
+        screen (Surface): Superficie de la pantalla de Pygame donde se dibujará la imagen.
+        image (Surface): Imagen que se desea dibujar.
+        slide_boss (int): Posición horizontal de la imagen.
+        pos_y (int, opcional): Posición vertical de la imagen. Por defecto es 0.
+
+    Returns:
+        None
+    '''
     image_rect = image.get_rect()
     image_rect.x = slide_boss
     image_rect.y = pos_y
     screen.blit(image, image_rect)
-def oscurecer_pantalla(screen):
+    
+def oscurecer_pantalla(screen)-> None:
+    '''
+    Crea una superficie oscura semitransparente y la dibuja en la pantalla para oscurecerla.
+    Recibe:
+    Args:
+        screen (Surface): Superficie de la pantalla de Pygame donde se dibujará la superficie oscura.
+
+    Returns:
+        None
+    '''
     darken_surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
     darken_surface.fill((0, 0, 0, 200))
     screen.blit(darken_surface, (0, 0))
 
-def draw_text2(screen, text, text_font, text_color, balloon_position, balloon_color, max_width):
+def draw_text2(screen, text, text_font, text_color, balloon_position, balloon_color, max_width)-> None:
+    '''
+    Dibuja un globo de texto con un texto dentro en la pantalla.
+    Recibe:
+    Args:
+        screen (Surface): Superficie de la pantalla de Pygame donde se dibujará el globo de texto.
+        text (str): El texto que se desea mostrar en el globo.
+        text_font (Font): Fuente utilizada para el texto.
+        text_color (Tuple[int]): Color del texto en formato (R, G, B).
+        balloon_position (Tuple[int]): Posición del globo de texto en la pantalla en formato (x, y).
+        balloon_color (Tuple[int]): Color del globo de texto en formato (R, G, B).
+        max_width (int): Ancho máximo del globo de texto.
+
+    Returns:
+        None
+    '''
     balloon_padding_top = 20  # Ajusta el valor del padding superior del globo
     balloon_padding_sides = 10  # Padding a los lados del globo
     balloon_margin = 10
@@ -358,7 +397,17 @@ def draw_text2(screen, text, text_font, text_color, balloon_position, balloon_co
         y += line_height
 
 
-def filter_es(id, lista_esferas: list[Esferas]):
+def filter_es(id, lista_esferas: list[Esferas])-> list:
+    '''
+    Filtra una lista de objetos "Esferas" y elimina aquellos que tienen un ID específico.
+
+    Args:
+        id (int): El ID que se utilizará para filtrar la lista.
+        lista_esferas (list[Esferas]): La lista de objetos "Esferas" que se desea filtrar.
+
+    Returns:
+        list[Esferas]: Nueva lista que contiene los elementos filtrados.
+    '''
     new_list = []
     for esf in lista_esferas:
         if(esf.id != id):
@@ -367,7 +416,18 @@ def filter_es(id, lista_esferas: list[Esferas]):
 
 #------------------------------------------------  vid
 
-def correr_video(path, ancho, alto):
+def correr_video(path, ancho, alto)-> None:
+    '''
+    Reproduce un video en la pantalla de Pygame con un tamaño y volumen específicos.
+
+    Args:
+        path (str): Ruta del archivo de video.
+        ancho (int): Ancho deseado del video.
+        alto (int): Alto deseado del video.
+
+    Returns:
+        None
+    '''
     pygame.init()
     screen = pygame.display.set_mode((ancho, alto))
     pygame.display.set_caption("Dragon Ball Sprite")
@@ -398,7 +458,17 @@ def correr_video(path, ancho, alto):
 
 #------------------------------------------------
 # vid Creditos
-def final_game_vid(SCREEN, path):
+def final_game_vid(SCREEN, path)-> bool:
+    '''
+    Reproduce un video de créditos en la pantalla de Pygame con un tamaño específico.
+
+    Args:
+        SCREEN (Surface): Superficie de la pantalla de Pygame donde se reproducirá el video.
+        path (str): Ruta del archivo de video.
+
+    Returns:
+        bool: Indica si los créditos del video han terminado.
+    '''
     pygame.mixer.music.stop()
     vid = Video(path)
     vid.set_size((ANCHO_PANTALLA, ALTO_PANTALLA))
@@ -422,7 +492,3 @@ def final_game_vid(SCREEN, path):
         pygame.display.update()
       
 
-
-        
-
-# ver si esta bien lo de la linea 270
