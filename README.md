@@ -23,6 +23,7 @@ https://github.com/HoracioxBarrios/mi_juego_final_limpio.git
 Instala las dependencias ejecutando el siguiente comando en tu terminal:
 pip install pygame pyvidplayer ffpyplayer
 
+Link del video : https://youtu.be/wl7AXXmFNi0
 
 
 
