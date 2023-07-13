@@ -99,8 +99,7 @@ class Kame:
             self.image_2.fill((39, 117, 211))
         self.caida_poder()
         self.draw(self.screen) 
-        print('WIDTH',self.image_1.get_width())
-        print('self.ancho',self.ancho)
+
         
        
     def caida_poder(self)-> None:

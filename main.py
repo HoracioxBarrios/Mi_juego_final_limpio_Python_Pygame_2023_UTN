@@ -190,11 +190,11 @@ def intro_2(path : str, go_game: bool)-> None:
     
     while True:
         if vid.active == True:
-            print(vid.active)
+            
             vid.draw(SCREEN, (0, 0))
             vid.set_volume(0.5)
         else:
-            print(vid.active)
+            
             vid.close()
             if(go_game):
                 lista_game_over_respuesta = game()

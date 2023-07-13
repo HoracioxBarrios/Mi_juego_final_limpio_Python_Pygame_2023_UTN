@@ -84,7 +84,6 @@ class Esferas(pygame.sprite.Sprite):
         """
         if self.rect.colliderect(personaje.rect):
             self.return_ID = self.id
-            print(self.return_ID)
             self.sound()
             self.get_score(personaje)
 

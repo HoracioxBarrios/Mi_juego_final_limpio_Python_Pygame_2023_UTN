@@ -56,7 +56,7 @@ def game()-> list[str and [list[int]]]:
     score = ScoreStage(screen , 0, 0, 0)
     
     stage_run = False
-    index_stage = 3 #define el stage inicial
+    index_stage = 0 #define el stage inicial
     running = True
     stage_actual = None
     radar_on = False

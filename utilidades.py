@@ -184,10 +184,10 @@ def intro_transition(path : str, screen : pygame.Surface)-> None:
     while running:
         pygame.display.update()
         if vid.active == True:
-            print(vid.active)
+   
             vid.draw(screen, (0, 0))
         else:
-            print(vid.active)
+
             vid.close()
             running = False
         for event in pygame.event.get():
@@ -218,7 +218,7 @@ def transicion_stages(path_vid_transicion, to_play):
     #     if vid.active:
     #         vid.draw(SCREEN, (0, 0))
     #     else:
-    #         print("se cerro e vid")
+    #         
     #         vid.close()
     #     pygame.display.update()
     # if to_play:

@@ -157,7 +157,7 @@ class Personaje(pygame.sprite.Sprite):
             
         keys = pygame.key.get_pressed()
         if(index_stage == 3 and not self.control_personaje):
-            print(index_stage)
+
             self.cambiar_animacion(self.estatico)
         if(self.control_personaje):
             if(keys[pygame.K_RIGHT]):
