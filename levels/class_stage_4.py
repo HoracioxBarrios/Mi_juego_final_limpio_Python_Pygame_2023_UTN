@@ -5,6 +5,18 @@ from class_Stage import *
 
 class Stage_4(StagePadre):
     def __init__(self, screen: pygame.Surface):
+        """
+        Inicializa la etapa 1 del juego. el stage 1
+        Recibe:
+        Args:
+        - screen: pygame.Surface
+            Superficie de la pantalla del juego.
+        Utiliza el metodo generar coordenadas_ mapa que hereda del StagePadre
+        lo que genera coordenadas donde van a ubicarse unos rectangulos que representan
+        al piso, pared, etc.
+        
+        devuelve: None
+        """
         super().__init__(screen)
         
         self.bg = pygame.image.load("asset/torneo_2.jpg")

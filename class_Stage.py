@@ -16,7 +16,9 @@ class StagePadre:
 
     def generar_coordenadas_mapa(self)-> None:
         '''
-        Genera coordenadas para posicionar los pisos, paredes dentro del stage
+        Genera coordenadas para posicionar los pisos, paredes dentro del stage.
+        cuando se instancia, el stage hijo. genera una lista con la coordendas
+        y hubica los pisos, pared en estas posiciones.
         recibe : no aplica
         devuelve : no aplica
         '''
