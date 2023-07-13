@@ -6,7 +6,19 @@ from class_vida import BarraVida
 from class_enemigo import Enemigo
 
 class Personaje(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, lista_pisos, screen, enemigo: Enemigo, score):
+    def __init__(self, pos_x :int, pos_y : int, lista_pisos : list, screen : pygame.Surface, enemigo: Enemigo, score : int)-> None:
+        """
+        Clase que representa al personaje del juego.
+        Recibe:
+            Args:
+            pos_x (int): Posición inicial en el eje x del personaje.
+            pos_y (int): Posición inicial en el eje y del personaje.
+            lista_pisos (list): Lista de pisos en el juego.
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+            enemigo (Enemigo): Instancia del enemigo en el juego.
+            score (int): Puntuación del jugador.
+        Devuelve: None
+        """
         super().__init__()
         self.quieto_r = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, True)
         self.quieto_l = get_surface_form_sprite_sheet("asset\goku2.png", 9, 6, 0, 0, 2, False)
@@ -36,7 +48,7 @@ class Personaje(pygame.sprite.Sprite):
         self.frame = 0
         self.score = score
         self.animacion = self.quieto_r
-        self.image = self.animacion[self.frame]#el frame inicia arranca en 0, por ende se renderiza la pocision 0 de la lista de animaciones
+        self.image = self.animacion[self.frame]#el frame inicia arranca en 0, por ende se renderiza la posicion 0 de la lista de animaciones
         #--------------------------------
         self.rect : pygame.Rect = self.image.get_rect()
         self.new_width = 70
@@ -44,7 +56,7 @@ class Personaje(pygame.sprite.Sprite):
         # Calcula el desplazamiento horizontal para centrar el rectángulo
         horizontal_offset = (self.rect.width - self.new_width) // 2
 
-        # Actualiza el ancho del rectángulo
+        # ajusta el ancho del rectángulo
         self.rect.width = self.new_width
 
         # Ajusta la posición horizontal del rectángulo
@@ -74,14 +86,29 @@ class Personaje(pygame.sprite.Sprite):
         self.contador_esferas = 0
         self.time_damage_recibido = 20
         self.time_damage_recibido_limit = 20
-    def add_gravity(self):
-     
+        
+        
+    def add_gravity(self)-> None:
+        """
+        Aplica la gravedad al personaje, incrementando su velocidad vertical.
+        Limita la velocidad máxima de caída a 10 píxeles por frame.
+        Recibe: None
+        Devuelve: None
+        """
         self.gravity_vel_y += 1
         if(self.gravity_vel_y > 10):
             self.gravity_vel_y = 10
         self.dy = self.gravity_vel_y
 
-    def verificar_colision(self, lista_pisos):
+    def verificar_colision(self, lista_pisos : list)-> None:
+        """
+        Verifica si el personaje colisiona con alguno de los pisos en la lista proporcionada.
+        Actualiza la posición del personaje en función de la colisión.
+        Recibe:
+            Args:
+            lista_pisos (list): Lista de pisos en el juego.
+        Devuelve: None
+        """
         for piso in lista_pisos:
             piso : list[pygame.Rect]
             if piso[1].colliderect(self.rect.x + self.dx , self.rect.y, self.imagen_width // 1.5, self.imagen_height):# que no detecte teniendo el ancho de la img sino menos  :self.imagen_width // 1.5
@@ -101,7 +128,15 @@ class Personaje(pygame.sprite.Sprite):
         elif self.rect.right + self.dx > ANCHO_PANTALLA:
             self.dx = 0
 
-    def update(self, screen, index_stage):
+    def update(self, screen : pygame.Surface, index_stage : int)-> None:
+        """
+        Actualiza el estado del personaje.
+        Recibe:
+            Args:
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+            index_stage (int): Índice de la etapa actual del juego.
+        Devuelve: None
+        """
         self.controlar_sonido_caminar()
         self.dx = self.desplazamiento_x
         self.dy = 0
@@ -143,15 +178,33 @@ class Personaje(pygame.sprite.Sprite):
         self.rect.y += self.dy
 
         self.barra_vida.update(self.rect.x -2, self.rect.y, self.vida)
-        if(index_stage != 3):
+        if(index_stage != 3):# a escepcion al ultimo stage pinto la barra
             self.barra_vida.draw(screen)
         self.draw(screen)
 
-    def draw(self, screen):
+
+
+
+
+    def draw(self, screen : pygame.Surface)-> None:
+        """
+        Dibuja el personaje en la pantalla.
+        Recibe:
+            Args:
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+        Devuekve: None
+        """
         screen.blit(self.image, self.rect)
 
-    def acciones(self, accion: str, shot_en_aire = False):
-
+    def acciones(self, accion: str, shot_en_aire = False)-> None:
+        """
+        Realiza las acciones correspondientes según la acción recibida.
+        Recibe:
+            Args:
+            accion (str): Acción a realizar.
+            shot_en_aire (bool): Indica si el disparo está en el aire. Opcional
+        Devuelve: None
+        """
         match(accion):
             case "caminar_r":
                 self.caminar(accion)
@@ -163,8 +216,17 @@ class Personaje(pygame.sprite.Sprite):
                 self.quieto()
             case "shot":
                 self.shot()
+                
 
-    def caminar(self, accion):
+    def caminar(self, accion : str)-> None:
+        """
+        Realiza el movimiento de caminar del personaje en la dirección 
+        indicada.
+        Recibe:
+            Args:
+            accion (str): Dirección del movimiento (caminar_r o caminar_l).
+        Devuelve: None
+        """
         if(not self.esta_en_aire and self.control_personaje):
             if(accion == "caminar_r"):
                 self.orientacion_x = 1
@@ -176,8 +238,14 @@ class Personaje(pygame.sprite.Sprite):
                 self.cambiar_animacion(self.corriendo_l)
                 self.desplazamiento_x = -self.velocidad_caminar
                 self.esta_caminando = True
+                
 
-    def controlar_sonido_caminar(self):
+    def controlar_sonido_caminar(self)-> None:
+        """
+        Controla la reproducción del sonido de pasos al caminar.
+        Recibe . None
+        Devuelve: None
+        """
         if(self.esta_caminando and self.time_sound <= 0 and not self.esta_en_aire):
                 self.sonido_pasos.set_volume(0.3)
                 self.sonido_pasos.play()
@@ -185,9 +253,21 @@ class Personaje(pygame.sprite.Sprite):
         else:
             self.time_sound -= 1
 
-    def hacer_daño(self):
+    def hacer_daño(self)-> None:
+        """
+        Reduce la vida del enemigo al hacerle daño con un ataque.
+        Recibe: None
+        Devuelve: None
+        """
         self.enemigo.vida -= self.daño
-    def saltar(self):
+        
+        
+    def saltar(self)-> None:
+        """
+        Realiza el salto del personaje.
+        Recibe: None
+        Devuelve: None
+        """
         if(not self.esta_en_aire and self.control_personaje):
             self.esta_en_aire = True
             self.sonido_salto_grito.play()
@@ -201,15 +281,36 @@ class Personaje(pygame.sprite.Sprite):
             else:
                 self.gravity_vel_y  = -self.potencia_salto
                 self.cambiar_animacion(self.saltando_l)
-    def cargar_poder(self):
+                
+                
+    def cargar_poder(self)-> None:
+        """
+        Carga el poder del personaje para realizar un disparo.
+        Recibe: None
+        Devuelve: None
+        """
         if(len(self.poder_list) < 1):
             self.poder_list.append(self.poder)
+            
+            
 
-    def descargar_poder(self):
+    def descargar_poder(self)-> None:
+        """
+        Descarga el poder del personaje después de realizar un disparo.
+        Recibe: None
+        Devuelve: None
+        """
         if(len(self.poder_list) > 0):
             self.poder_list.pop(0)
+            
+            
 
-    def shot(self):
+    def shot(self)-> None:
+        """
+        Realiza el disparo del personaje.
+        Recibe: None
+        Devuelve: None
+        """
         if(not self.esta_en_aire):
             self.cargar_poder()
             self.poder_list[0].rect.x = self.rect.x + 15 
@@ -226,8 +327,15 @@ class Personaje(pygame.sprite.Sprite):
                 self.cambiar_animacion(self.shot_r)
             else:
                 self.cambiar_animacion(self.shot_l)
+                
+                
 
-    def shotTimeState(self):
+    def shotTimeState(self)-> None:
+        """
+        Controla el estado del tiempo de disparo del personaje.
+        Recibe: None
+        Devuelve: None
+        """
         if(self.shot_on and self.shot_time > 0):
             self.shot_time -= 1
             if self.shot_time <= 0:
@@ -242,7 +350,12 @@ class Personaje(pygame.sprite.Sprite):
     
 
 
-    def quieto(self):
+    def quieto(self)-> None:
+        """
+        Realiza la animación y acciones correspondientes al estar quieto.
+        Recibe: None
+        Devuelve: None
+        """
         if(not self.esta_en_aire and not self.shot_on):
             self.esta_caminando = False
             if(self.orientacion_x == 1):
@@ -254,17 +367,23 @@ class Personaje(pygame.sprite.Sprite):
 
     
 
-    def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
+    def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect])-> None:
+        """
+        Cambia la animación actual del personaje.
+        Recibe: 
+            Args:
+            nueva_lista_animaciones (list): Nueva lista de animaciones.
+        Devuelve: None
+        """
         self.animacion = nueva_lista_animaciones    
 
 
     def verificar_frames(self):
-        '''
-        El personaje se moverá y se animará correctamente con respecto 
-        al tiempo transcurrido, lo que resultará en un movimiento más suave 
-        y consistente sin depender de la tasa de cuadros (FPS) del juego
-        
-        '''
+        """
+        Verifica y actualiza los frames de animación del personaje.
+        Recibe . None
+        Devuelve: None
+        """
         if(self.time_frame <= 0):
             if(self.frame < len(self.animacion)):
                 self.image = self.animacion[self.frame]
@@ -274,52 +393,121 @@ class Personaje(pygame.sprite.Sprite):
                 self.frame = 0
         else:
             self.time_frame -= self.delta_ms
-    def colison_enemigo(self):
-            if(self.time_damage_recibido <= 0):
-                if self.rect.colliderect(self.enemigo.rect):
-                    self.vida -= self.enemigo.damage
-                    self.time_damage_recibido = self.time_damage_recibido_limit
-                    if(self.score > 0):
-                        self.score -= 1000
-                    else:
-                        self.score = 0
-            else:
-                self.time_damage_recibido -= 1
+            
+            
+    def colison_enemigo(self)-> None:
+        """
+        Verifica y maneja la colisión del personaje con el enemigo.
+        Recibe . None
+        Devuelve. None
+        """
+        if(self.time_damage_recibido <= 0):
+            if self.rect.colliderect(self.enemigo.rect):
+                self.vida -= self.enemigo.damage
+                self.time_damage_recibido = self.time_damage_recibido_limit
+                if(self.score > 0):
+                    self.score -= 1000
+                else:
+                    self.score = 0
+        else:
+            self.time_damage_recibido -= 1
+            
+            
     @property
-    def get_dy(self):
+    def get_dy(self)-> int:
+        """
+        Getter para el valor de la velocidad vertical del personaje.
+
+        Devuelve:
+            int: Velocidad vertical del personaje.
+        """
         return self.dy
     
     @get_dy.setter
-    def set_dy(self, nuevo_valor_y):
+    def set_dy(self, nuevo_valor_y)-> None:
+        """
+        Setter para el valor de la velocidad vertical del personaje.
+        Recibe:
+            Args:
+            nuevo_valor_y (int): Nuevo valor de la velocidad vertical.
+        """
         self.dy = nuevo_valor_y
         self.rect.y += self.dy
+        
+        
 
     @property
-    def get_dx(self):
+    def get_dx(self)-> int:
+        """
+        Getter para el valor del desplazamiento horizontal del personaje.
+
+        Devuelve:
+            int: Desplazamiento horizontal del personaje.
+        """
         return self.dx
     
     @get_dx.setter
-    def set_dx(self, nuevo_valor_x):
+    def set_dx(self, nuevo_valor_x)-> None:
+        """
+        Setter para el valor del desplazamiento horizontal del personaje.
+        Recibe:
+            Args:
+            nuevo_valor_x (int): Nuevo valor del desplazamiento horizontal.
+        """
         self.dx = nuevo_valor_x
         self.rect.x = self.dx
 
 
     @property
-    def get_rect(self):
+    def get_rect(self)-> int:
+        """
+        Getter para el rectángulo de colisión del personaje.
+
+        Devuelve:
+            pygame.Rect: Rectángulo de colisión del personaje.
+        """
         return self.rect
     
     @property
-    def get_width(self):
+    def get_width(self)-> int:
+        """
+        Getter para el ancho de la imagen del personaje.
+
+        Devuelve:
+            int: Ancho de la imagen del personaje.
+        """
         return self.imagen_width
+    
     @property
-    def get_height(self):
+    def get_height(self)-> int:
+        """
+        Getter para la altura de la imagen del personaje.
+
+        Devuelve:
+            int: Altura de la imagen del personaje.
+        """
         return self.imagen_height
+    
+    
     @property
-    def get_gravity_vel_y(self):
+    def get_gravity_vel_y(self)-> int:
+        """
+        Getter para el valor de la velocidad vertical debido a la gravedad.
+
+        Devuelve:
+            int: Velocidad vertical debido a la gravedad.
+        """
         return self.gravity_vel_y
     
+    
     @get_gravity_vel_y.setter
-    def set_gravity_vel_y(self, nuevo_valor_gravedad):
+    def set_gravity_vel_y(self, nuevo_valor_gravedad)-> None:
+        """
+        Setter para el valor de la velocidad vertical debido a la gravedad.
+
+        Args:
+            nuevo_valor_gravedad (int): Nuevo valor de la velocidad vertical debido a la gravedad.
+        """
         self.gravity_vel_y = nuevo_valor_gravedad
 
     

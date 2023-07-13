@@ -4,7 +4,19 @@ from configuracion import *
 from class_vida import BarraVida
 
 class Enemigo(pygame.sprite.Sprite):  
-    def __init__(self, screen, pos_x, pos_y, lista_pisos) -> None:
+    def __init__(self, screen : pygame.Surface, pos_x : int, pos_y :int, lista_pisos: list) -> None:
+        """
+        Constructor de la clase Enemigo.
+        Hereda de :pygame.sprite.Sprite para aprobechar funcionalidades 
+        de sprite.
+        Args:
+            screen (pygame.Surface): La pantalla del juego donde se mostrará 
+            el enemigo.
+            pos_x (int): La posición inicial en el eje x del enemigo.
+            pos_y (int): La posición inicial en el eje y del enemigo.
+            lista_pisos (list): Lista de pisos en el juego.
+        Devuelve: None
+        """
         super().__init__()
         self.caminando_r = get_surface_form_sprite_sheet('asset\enemigo\spites_enemigo.png', 8, 1, 0, 0, 7, False)
         self.caminando_l = get_surface_form_sprite_sheet('asset\enemigo\spites_enemigo.png', 8, 1, 0, 0, 7, True)
@@ -35,16 +47,28 @@ class Enemigo(pygame.sprite.Sprite):
         self.delta_ms = 0
         self.esta_muerto = False
         self.game_over_win = False
-    def add_gravity(self):
-    #char representa a cualquier tipo de personaje
-    #velocidad de caida final = 10
+        
+        
+    def add_gravity(self)-> None:
+        """
+        Aplica gravedad al enemigo. Aumenta su velocidad vertical hacia abajo.
+        incrementa la velocidad en y hasta un maximo de 10
+        Recibe : None
+        Devuelve: None
+        """
         self.gravity_vel_y += 1
         if(self.gravity_vel_y > 10):
             self.gravity_vel_y = 10
         self.dy = self.gravity_vel_y
         
-    def verificar_colision(self, lista_pisos):
-        
+    def verificar_colision(self, lista_pisos : list)-> None:
+        """
+        Verifica la colisión del enemigo con los pisos, pared de la screen.
+
+        Args:
+            lista_pisos (list): Lista de pisos en el juego.
+        Devuelve: None
+        """
         for piso in lista_pisos:
             #x
             if piso[1].colliderect(self.rect.x + self.dx, self.rect.y, self.imagen_width, self.imagen_height):
@@ -69,7 +93,6 @@ class Enemigo(pygame.sprite.Sprite):
                 else:
                     self.time_colision = self.limite_colision
                 
-            
             #y        
             if piso[1].colliderect(self.rect.x, self.rect.y + self.dy, self.imagen_width, self.imagen_height):
                 if self.gravity_vel_y < 0:
@@ -79,8 +102,7 @@ class Enemigo(pygame.sprite.Sprite):
                     self.dy = piso[1].top - self.rect.bottom
                     self.gravity_vel_y = 0
                     self.esta_en_aire = False
-                    
-        # Dentro de la función de colisión del enemigo:
+        #contra screen          
         if self.rect.left + self.dx < 0:
             self.dx = 0
             if self.time_colision == 5:
@@ -100,14 +122,23 @@ class Enemigo(pygame.sprite.Sprite):
                 self.time_colision = self.limite_colision
 
 
-    
+    def update(self, screen, personaje :any, fn : any, path : str, credits_finished : bool)-> None:
+        """
+        Actualiza el enemigo en el juego.
 
+        Args:
+            screen (pygame.Surface): La pantalla del juego donde se mostrará 
+            el enemigo.
+            personaje (objeto): El personaje principal del juego.
+            fn (function): Función de animación.
+            path (str): Ruta de la imagen.
+            credits_finished (bool): Estado del juego (si los créditos han 
+            terminado).
+        Devuelve: None
+        """
 
-    def update(self, screen, personaje, fn: any, path, credits_finished):
         self.dx = self.desplazamiento_x
         self.dy = 0
-       
- 
         
         if(self.orientacion_x != 1):
             self.acciones('caminar_l')
@@ -126,36 +157,67 @@ class Enemigo(pygame.sprite.Sprite):
         self.draw(screen)
 
     def acciones(self, accion: str):
+        """
+        Ejecuta las acciones del enemigo.
+
+        Args:
+            accion (str): Acción a ejecutar ('caminar_r' o 'caminar_l').
+        Devuelve: Nome
+        """
         match(accion):
             case "caminar_r":
                 self.caminar(accion)
             case "caminar_l":
                 self.caminar(accion)
 
-    def caminar(self, accion):
-            if(not self.esta_en_aire):
-                if(accion == "caminar_r"):
-                    self.orientacion_x = 1
-                    self.cambiar_animacion(self.caminando_r)
-                    self.desplazamiento_x = self.velocidad_caminar
-                   
-                    self.esta_caminando = True
-                else:
-                    self.orientacion_x = -1
-                    self.cambiar_animacion(self.caminando_l)
-                    self.desplazamiento_x = -self.velocidad_caminar
-                   
-                    self.esta_caminando = True
+    def caminar(self, accion : str)-> None:
+        """
+        Hace que el enemigo camine en la dirección especificada.
 
-    def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
+        Args:
+            accion (str): Acción de caminar ('caminar_r' o 'caminar_l').
+        Devuelve: None
+        """
+        
+        if(not self.esta_en_aire):
+            if(accion == "caminar_r"):
+                self.orientacion_x = 1
+                self.cambiar_animacion(self.caminando_r)
+                self.desplazamiento_x = self.velocidad_caminar
+                
+                self.esta_caminando = True
+            else:
+                self.orientacion_x = -1
+                self.cambiar_animacion(self.caminando_l)
+                self.desplazamiento_x = -self.velocidad_caminar
+                
+                self.esta_caminando = True
+
+    def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect])-> None:
+        """
+        Cambia la animación del enemigo.
+
+        Args:
+            nueva_lista_animaciones (list): Nueva lista de animaciones del enemigo.
+        Devuelve: None
+        """
         self.animacion = nueva_lista_animaciones  
-    def draw(self, screen):
+        
+    def draw(self, screen)-> None:
+        """
+        Dibuja el enemigo en la pantalla del juego.
+
+        Args:
+            screen (pygame.Surface): La pantalla del juego donde se mostrará el enemigo.
+        Devuelve: None
+        """
         screen.blit(self.image, self.rect)
-    def verificar_frames(self):
+        
+    def verificar_frames(self)-> None:
         '''
-        El personaje se moverá y se animará correctamente con respecto 
-        al tiempo transcurrido, lo que resultará en un movimiento más suave 
-        y consistente sin depender de la tasa de cuadros (FPS) del juego
+        Verifica los frames para animar al enemigo.        
+        Recibe: None
+        Devuelve: None
         
         '''
         if(self.time_frame <= 0):
@@ -170,6 +232,13 @@ class Enemigo(pygame.sprite.Sprite):
   
     @property
     def get_rect(self):
+        """
+        Obtiene el rectángulo del enemigo.
+        Recibe: None
+
+        Devuelve:
+            pygame.Rect: Rectángulo del enemigo.
+        """
         return self.rect
  
     

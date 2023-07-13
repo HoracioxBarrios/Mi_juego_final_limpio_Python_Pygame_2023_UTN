@@ -2,12 +2,19 @@ import pygame
 from utilidades import leerJson
 
 class StagePadre:
-    def __init__(self, screen: pygame.Surface):
+    def __init__(self, screen: pygame.Surface)-> None:
+        """
+        Clase padre que representa un escenario en el juego.
+
+        Args:
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+        """
         self.screen = screen
         self.tile_list = []
         self.margen = 0
+        
 
-    def generar_coordenadas_mapa(self):
+    def generar_coordenadas_mapa(self)-> None:
         '''
         Genera coordenadas para posicionar los pisos, paredes dentro del stage
         recibe : no aplica
@@ -26,14 +33,33 @@ class StagePadre:
             self.row_count += 1
 
     @property
-    def ancho_screen(self):
+    def ancho_screen(self)-> int:
+        """
+        Ancho de la pantalla del juego.
+
+        Devuelve:
+            int: Ancho de la pantalla.
+        """
         return self.screen.get_width()
 
     @property
-    def alto_screen(self):
+    def alto_screen(self)-> int:
+        """
+        Alto de la pantalla del juego.
+
+        Devuelve:
+            int: Alto de la pantalla.
+        """
         return self.screen.get_height()
 
     def draw(self):
+        """
+        Dibuja el escenario en la pantalla.
+        Recibe: None
+        Devuelve:
+            list: Lista de imágenes y rectángulos de los elementos del 
+            escenario.
+        """
         for tile in self.tile_list:
             self.screen.blit(tile[0], tile[1])
         return self.tile_list

@@ -92,7 +92,8 @@ def game()-> list:
     credits_finished = False
     
     while running and not game_over_win and not game_over_defeat:
-        # Estage
+        
+        # Stage
         if not stage_run:
             stage_run = True
             stage_actual = stage_list[index_stage]
@@ -103,8 +104,6 @@ def game()-> list:
             personaje = Personaje(150, 600, stage_actual.tile_list, screen, enemigo, 0)
             poder = Proyectil(1, personaje.rect.x, personaje.rect.y)
             poder_list:list[Proyectil] = []
-            print('personaje',personaje.score)
-            print('score_game', score_game)
             personaje.score = score_game
 
             poder_list.append(poder)
@@ -125,16 +124,20 @@ def game()-> list:
                 radar_on = False
                 start_time = False
                 lista_esferas_generada = False
+        #------- correcion       
+        pygame.display.flip() # ORDEN 1ro
 
+        screen.blit(stage_actual.bg, (0, 0))#bg ORDEN 2do
+        personaje.update(screen, index_stage) # ORDEN 3rO
+        stage_actual.draw()#pisos ORDEN 4to
+        #---------------
         if(enemigo.vida <= 0 and not radar_on and not enemigo.esta_muerto):
             radar = Radar(screen, enemigo.rect.x, enemigo.rect.y, "asset/radar.png", 50, 50, 10)
             radar_on = True
             enemigo.esta_muerto = True
             enemigo.rect.x = 1200
 
-        screen.blit(stage_actual.bg, (0, 0))#bg
 
-        stage_actual.draw()#pisos
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -164,7 +167,6 @@ def game()-> list:
 
        
         
-        personaje.update(screen, index_stage)
 
         if(not enemigo.esta_muerto):
             enemigo.update(screen, personaje, final_game_vid ,"vid\proyecto final creditos -v2.avi", credits_finished)
@@ -284,7 +286,7 @@ def game()-> list:
 
 
         score.update_score()
-        pygame.display.flip()
+        
         delta_ms = relog.tick(fps)
 
         personaje.delta_ms = delta_ms

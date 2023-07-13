@@ -1,7 +1,19 @@
 from utilidades import *
 import pygame
 class Proyectil:
-    def __init__(self, orientacion_x_char, pos_char_x, pos_char_y) -> None:
+    def __init__(self, orientacion_x_char : bool, pos_char_x : int, pos_char_y : int) -> None:
+        """
+        Clase que representa un proyectil en el juego.
+        Recibe:
+            Args:
+            orientacion_x_char (bool): Orientación en el eje x del personaje 
+            que dispara el proyectil.
+            pos_char_x (int): Posición en el eje x del personaje que dispara 
+            el proyectil.
+            pos_char_y (int): Posición en el eje y del personaje que dispara 
+            el proyectil.
+        Devuelve: None
+        """
         self.damage = 1
         self.vel_y = 0
         self.vel_x = 5
@@ -32,7 +44,18 @@ class Proyectil:
         self.colision = False
         
         self.sonido = pygame.mixer.Sound("sonido/086113_8-bit-cannonwav-40194.mp3")
-    def update(self, delta_ms):
+        
+        
+        
+    def update(self, delta_ms : int)-> None:
+        """
+        Actualiza el proyectil en función del tiempo transcurrido.
+        Recibe:
+            Args:
+            delta_ms (int): Tiempo transcurrido desde la última actualización 
+            en milisegundos.
+        Devuelve: None
+        """
         self.dx = self.desplazamiento_x
     
         if(self.impacto):
@@ -44,12 +67,32 @@ class Proyectil:
 
         self.verificar_frames(delta_ms)
         self.rect.x += self.dx
-    def start_proyectile(self):
+        
+        
+        
+    def start_proyectile(self)-> None:
+        """
+        Inicia el proyectil, estableciendo la animación inicial según la 
+        orientación del personaje.
+        Recibe . None
+        Devuelve: None
+        """
         if(self.orientacion_x_char):
             self.animacion = self.imagen_r
         else:
             self.animacion = self.imagen_l
-    def draw_proyectil(self, screen : pygame.surface.Surface, orientacion_personaje_x):
+            
+            
+            
+    def draw_proyectil(self, screen : pygame.surface.Surface, orientacion_personaje_x)-> None:
+        """
+        Dibuja el proyectil en la pantalla.
+        Recibe:
+            Args:
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+            orientacion_personaje_x (int): Orientación en el eje x del personaje.
+        Devuelve: None
+        """
         if self.proyectil_en_aire:
             if(self.rect.x < screen.get_width() and self.rect.x > 0):
                 if orientacion_personaje_x == 1 and not self.dibujando:
@@ -64,10 +107,28 @@ class Proyectil:
                 self.proyectil_en_aire = False
                 self.dibujando = False
                 
-    def set_animacion(self, num_frame):
+                
+    def set_animacion(self, num_frame : int)-> None:
+        """
+        Establece la animación del proyectil a partir del número de frame.
+        Recibe:
+            Args:
+            num_frame (int): Número de frame.
+        Devuelve: None
+        """
         self.frame = num_frame
                 
-    def verificar_frames(self, delta_ms):
+                
+                
+    def verificar_frames(self, delta_ms : int)-> None:
+        """
+        Verifica y actualiza los frames de animación del proyectil.
+        Recibe:
+            Args:
+            delta_ms (int): Tiempo transcurrido desde la última actualización 
+            en milisegundos.
+        Devuelve: None
+        """
         if(self.time_frame <= 0):
             if(self.frame < len(self.animacion)):
                 self.image = self.animacion[self.frame]
@@ -77,11 +138,29 @@ class Proyectil:
                 self.frame = 0
         else:
             self.time_frame -= delta_ms
+            
+            
 
-    def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect]):
+    def cambiar_animacion(self, nueva_lista_animaciones: list[pygame.Rect])-> None:
+        """
+        Cambia la animación actual del proyectil.
+        Recibe:
+            Args:
+            nueva_lista_animaciones (list): Nueva lista de animaciones.
+        Devuelve: None
+        """
         self.animacion = nueva_lista_animaciones
+        
+        
 
-    def draw_explocion(self, screen):
+    def draw_explocion(self, screen : pygame.Surface)-> None:
+        """
+        Dibuja la animación de explosión en la pantalla.
+        Recibe:
+            Args:
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+        Devuelve: None
+        """
         if(self.tiempo_explocion > 0):
             self.cambiar_animacion(self.explocion)
             screen.blit(self.image, self.rect)
@@ -90,7 +169,15 @@ class Proyectil:
             self.tiempo_explocion = self.limite_tiempo_explocion
             
         
-    def verificar_colision(self, char, screen):
+    def verificar_colision(self, char : pygame.Rect, screen : pygame.Surface)-> None:
+        """
+        Verifica la colisión del proyectil con el personaje.
+        Recibe:
+            Args:
+            char : (Enemigo) Rectángulo de colisión del enemigo .
+            screen (pygame.Surface): Superficie de la pantalla del juego.
+        Devuelve: None
+        """
         if self.rect.colliderect(char):
             self.desplazamiento_x = 0
             if(self.time_explocion > 0):
@@ -101,6 +188,14 @@ class Proyectil:
                 self.fin_animacion_explocion = True
                 self.draw_explocion(screen)
                 self.sound()
+                
+                
+                
     def sound(self):
-            self.sonido.set_volume(0.5)
-            self.sonido.play()
+        """
+        Reproduce el sonido de impacto del proyectil.
+        Recibe: None
+        Devuelve: None
+        """
+        self.sonido.set_volume(0.5)
+        self.sonido.play()

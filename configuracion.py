@@ -16,4 +16,8 @@ ROJO = (255,0,0)
 VERDE = (0,255,0)
 
 
+# medidas de las esferas del dragon
+ancho_screen_para_esferas = 950
+alto_screen_para_esferas = 555
+
 
