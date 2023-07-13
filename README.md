@@ -3,7 +3,10 @@ Dragon Ball Sprite
 
 ![Imagen del Menu del Juego](asset/A_Imagen_Game.PNG)
 
+```bash
+py -m pip install -r requirements.txt
 
+```
 
 Descripción
 Dragon Ball Sprite es un juego desarrollado en Python utilizando la libreria Pygame.
@@ -22,6 +25,8 @@ Clona o descarga este repositorio desde:  https://github.com
 https://github.com/HoracioxBarrios/mi_juego_final_limpio.git
 Instala las dependencias ejecutando el siguiente comando en tu terminal:
 pip install pygame pyvidplayer ffpyplayer
+
+py -m pip install -r requirements.txt
 
 Link del video : https://youtu.be/wl7AXXmFNi0
 
