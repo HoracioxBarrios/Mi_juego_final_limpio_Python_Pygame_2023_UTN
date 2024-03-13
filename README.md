@@ -69,3 +69,9 @@ cuatrimenstre de las materias Programacion y Laboratorio.
 Licencia
 Este proyecto se encuentra bajo la licencia MIT License.
 
+
+Juego Seleccionado dentro de los 3 Mejores entre mas de 60 que fueron entregados al final de la cursada 2023.
+![Texto alternativo](Captura%20pygame%20awards%202023%201.jpg)
+![Texto alternativo](Captura%20pygame%20awards%202023%202.jpg)
+![Texto alternativo](Captura%20pygame%20awards%202023%203.jpg)
+
