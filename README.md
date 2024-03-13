@@ -71,7 +71,7 @@ Este proyecto se encuentra bajo la licencia MIT License.
 
 
 Juego Seleccionado dentro de los 3 Mejores entre mas de 60 que fueron entregados al final de la cursada 2023.
-![Texto alternativo](Captura%20pygame%20awards%202023%201.png)
-![Texto alternativo](Captura%20pygame%20awards%202023%202.png)
-![Texto alternativo](Captura%20pygame%20awards%202023%203.png)
+![Texto alternativo](Captura%20pygame%20awards%202023%201.PNG)
+![Texto alternativo](Captura%20pygame%20awards%202023%202.PNG)
+![Texto alternativo](Captura%20pygame%20awards%202023%203.PNG)
 
